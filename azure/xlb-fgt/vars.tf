@@ -12,9 +12,9 @@ variable "prefix" {
 
 // Azure resourcers tags
 variable "tags" {
-  type    = map(any)
-  default =  {
-      deploy = "module-xlb"
+  type = map(any)
+  default = {
+    deploy = "module-xlb"
   }
 }
 
@@ -29,9 +29,9 @@ variable "location" {
 variable "subnet_private" {
   type = map(any)
   default = {
-    cidr      = "172.31.3.0/24"
-    id        = ""
-    vnet_id   = ""
+    cidr    = "172.31.3.0/24"
+    id      = ""
+    vnet_id = ""
   }
 }
 
@@ -39,10 +39,10 @@ variable "subnet_private" {
 variable "fgt-ni_ids" {
   type = map(any)
   default = {
-    fgt1_private    = "ni-xx"
-    fgt2_private    = "ni-xx"
-    fgt1_public     = "ni-xx"
-    fgt2_public     = "ni-xx"
+    fgt1_private = "ni-xx"
+    fgt2_private = "ni-xx"
+    fgt1_public  = "ni-xx"
+    fgt2_public  = "ni-xx"
   }
 }
 
@@ -50,8 +50,8 @@ variable "fgt-ni_ids" {
 variable "fgt-ni_ips" {
   type = map(any)
   default = {
-    fgt1_private    = "172.31.3.10"
-    fgt2_private    = "172.31.3.11"
+    fgt1_private = "172.31.3.10"
+    fgt2_private = "172.31.3.11"
   }
 }
 
@@ -59,10 +59,10 @@ variable "fgt-ni_ips" {
 variable "gwlb-vxlan" {
   type = map(any)
   default = {
-    vdi_ext    = "800"
-    vdi_int    = "801"
-    port_ext   = "10800"
-    port_int   = "10801"
+    vdi_ext  = "800"
+    vdi_int  = "801"
+    port_ext = "10800"
+    port_int = "10801"
   }
 }
 

@@ -7,28 +7,28 @@
 variable "fgt-active-ni_ids" {
   type = list(string)
   default = [
-    "ni-port1_id", 
-    "ni-port2_id", 
-    "ni-port3_id", 
+    "ni-port1_id",
+    "ni-port2_id",
+    "ni-port3_id",
     "ni-port4_id"
   ]
 }
 variable "fgt-passive-ni_ids" {
   type = list(string)
   default = [
-    "ni-port1_id", 
-    "ni-port2_id", 
-    "ni-port3_id", 
+    "ni-port1_id",
+    "ni-port2_id",
+    "ni-port3_id",
     "ni-port4_id"
   ]
 }
 
-variable "fgt-subnet_cidrs"{
+variable "fgt-subnet_cidrs" {
   type = map(any)
   default = {
-    mgmt      = "172.30.1.0/24"
-    public    = "172.30.2.0/24"
-    private   = "172.30.3.0/24"
+    mgmt    = "172.30.1.0/24"
+    public  = "172.30.2.0/24"
+    private = "172.30.3.0/24"
   }
 }
 

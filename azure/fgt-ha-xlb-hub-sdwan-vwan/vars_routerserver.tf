@@ -9,16 +9,16 @@ variable "rs_bgp-asn" {
 }
 
 // Defalut values for Azure Route Server
-variable "rs_peers"{
+variable "rs_peers" {
   type = list(any)
   default = [
-    ["172.30.17.132","172.30.17.133"],
-    ["172.30.19.132","172.30.19.133"]
+    ["172.30.17.132", "172.30.17.133"],
+    ["172.30.19.132", "172.30.19.133"]
   ]
 }
 
 // Defualt value for vHUB RouteServer
-variable "vhub_peer"{
-  type = list(any)
-  default = ["10.0.252.68","10.0.252.69"]
+variable "vhub_peer" {
+  type    = list(any)
+  default = ["10.0.252.68", "10.0.252.69"]
 }

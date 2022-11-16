@@ -6,32 +6,32 @@
 // Create VNETs spoke
 module "vnet-spoke" {
   depends_on = [module.vnet-fgt]
-  source = "../"
+  source     = "../"
 
-  prefix                = var.prefix
-  location              = var.location
-  resourcegroup_name    = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
-  tags                  = var.tags
-  
-  vnet-spoke_cidrs      = var.vnet-spoke_cidrs
-  vnet-fgt              = {
-    id    = module.vnet-fgt.vnet["id"]
-    name  = module.vnet-fgt.vnet["name"] 
+  prefix             = var.prefix
+  location           = var.location
+  resourcegroup_name = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
+  tags               = var.tags
+
+  vnet-spoke_cidrs = var.vnet-spoke_cidrs
+  vnet-fgt = {
+    id   = module.vnet-fgt.vnet["id"]
+    name = module.vnet-fgt.vnet["name"]
   }
 }
 
 // Deploy VNET, Subnets, Interfaces and NSG for Fortigate cluster
 // - Need for peering with VNET FGT if not provided as variable
 module "vnet-fgt" {
-    source =  "../../vnet-fgt"
+  source = "../../vnet-fgt"
 
-    prefix                = var.prefix
-    location              = var.location
-    resourcegroup_name    = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
+  prefix             = var.prefix
+  location           = var.location
+  resourcegroup_name = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
 
-    vnet-fgt_cidr         = var.vnet-fgt_cidr
-    admin_port            = var.admin_port
-    admin_cidr            = var.admin_cidr
+  vnet-fgt_cidr = var.vnet-fgt_cidr
+  admin_port    = var.admin_port
+  admin_cidr    = var.admin_cidr
 }
 
 ###################################################################

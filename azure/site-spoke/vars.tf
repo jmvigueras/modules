@@ -15,10 +15,10 @@ variable "prefix" {
 
 // Azure resourcers tags
 variable "tags" {
-  type    = map(any)
-  default =  {
-      Deploy  = "module-vnet-spoke"
-      Project = "terraform-fortinet"
+  type = map(any)
+  default = {
+    Deploy  = "module-vnet-spoke"
+    Project = "terraform-fortinet"
   }
 }
 

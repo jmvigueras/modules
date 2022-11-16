@@ -18,10 +18,10 @@ variable "prefix" {
 
 // Azure resourcers tags
 variable "tags" {
-  type    = map(any)
-  default =  {
-      Deploy = "module-xlb"
-      Project = "terraform-fortinet"
+  type = map(any)
+  default = {
+    Deploy  = "module-xlb"
+    Project = "terraform-fortinet"
   }
 }
 

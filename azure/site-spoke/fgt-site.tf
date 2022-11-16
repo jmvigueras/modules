@@ -1,10 +1,10 @@
 // Create Fortgate VM site1
 resource "azurerm_virtual_machine" "fgt-site" {
-  name                         = "${var.prefix}-fgt-site"
-  location                     = var.location
-  resource_group_name          = var.resourcegroup_name
+  name                = "${var.prefix}-fgt-site"
+  location            = var.location
+  resource_group_name = var.resourcegroup_name
 
-  network_interface_ids        = [
+  network_interface_ids = [
     azurerm_network_interface.ni-site-port1.id,
     azurerm_network_interface.ni-site-port2.id,
     azurerm_network_interface.ni-site-port3.id
@@ -70,37 +70,37 @@ resource "azurerm_virtual_machine" "fgt-site" {
 data "template_file" "siteFortiGate" {
   template = file("${path.module}/fgt.conf")
   vars = {
-    type            = var.license_type
-    license_file    = var.license-site
-    admin_port      = var.admin_port
-    admin_cidr      = var.admin_cidr
-    site_id         = var.site["site_id"]
-    
-    port1_ip   = cidrhost(cidrsubnet(var.site["cidr"],4,1),10)
-    port1_mask = cidrnetmask(cidrsubnet(var.site["cidr"],4,1))
-    port1_net  = cidrsubnet(var.site["cidr"],4,1)
-    port1_gw   = cidrhost(cidrsubnet(var.site["cidr"],4,1),1)
+    type         = var.license_type
+    license_file = var.license-site
+    admin_port   = var.admin_port
+    admin_cidr   = var.admin_cidr
+    site_id      = var.site["site_id"]
 
-    port2_ip   = cidrhost(cidrsubnet(var.site["cidr"],4,2),10)
-    port2_mask = cidrnetmask(cidrsubnet(var.site["cidr"],4,2))
-    port2_net  = cidrsubnet(var.site["cidr"],4,2)
-    port2_gw   = cidrhost(cidrsubnet(var.site["cidr"],4,2),1)
+    port1_ip   = cidrhost(cidrsubnet(var.site["cidr"], 4, 1), 10)
+    port1_mask = cidrnetmask(cidrsubnet(var.site["cidr"], 4, 1))
+    port1_net  = cidrsubnet(var.site["cidr"], 4, 1)
+    port1_gw   = cidrhost(cidrsubnet(var.site["cidr"], 4, 1), 1)
 
-    port3_ip   = cidrhost(cidrsubnet(var.site["cidr"],4,3),10)
-    port3_mask = cidrnetmask(cidrsubnet(var.site["cidr"],4,3))
-    port3_net  = cidrsubnet(var.site["cidr"],4,3)
-    port3_gw   = cidrhost(cidrsubnet(var.site["cidr"],4,3),1)
+    port2_ip   = cidrhost(cidrsubnet(var.site["cidr"], 4, 2), 10)
+    port2_mask = cidrnetmask(cidrsubnet(var.site["cidr"], 4, 2))
+    port2_net  = cidrsubnet(var.site["cidr"], 4, 2)
+    port2_gw   = cidrhost(cidrsubnet(var.site["cidr"], 4, 2), 1)
 
-    spoke1-net           = cidrsubnet(var.site["cidr"],4,8)
+    port3_ip   = cidrhost(cidrsubnet(var.site["cidr"], 4, 3), 10)
+    port3_mask = cidrnetmask(cidrsubnet(var.site["cidr"], 4, 3))
+    port3_net  = cidrsubnet(var.site["cidr"], 4, 3)
+    port3_gw   = cidrhost(cidrsubnet(var.site["cidr"], 4, 3), 1)
 
-    site_bgp-asn         = var.site["bgp-asn"]
-    site_advpn-ip1       = var.site["advpn-ip1"]
+    spoke1-net = cidrsubnet(var.site["cidr"], 4, 8)
 
-    hub1_bgp-asn         = var.hub["bgp-asn"]
-    hub1_public-ip1      = var.hub["public-ip1"]
-    hub1_advpn-ip1       = var.hub["advpn-ip1"]
-    hub1_cidr            = var.hub["cidr"]
-    hub1_advpn-psk       = var.hub["advpn-psk"]
+    site_bgp-asn   = var.site["bgp-asn"]
+    site_advpn-ip1 = var.site["advpn-ip1"]
+
+    hub1_bgp-asn    = var.hub["bgp-asn"]
+    hub1_public-ip1 = var.hub["public-ip1"]
+    hub1_advpn-ip1  = var.hub["advpn-ip1"]
+    hub1_cidr       = var.hub["cidr"]
+    hub1_advpn-psk  = var.hub["advpn-psk"]
   }
 }
 

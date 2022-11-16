@@ -18,9 +18,9 @@ variable "prefix" {
 
 // Azure resourcers tags
 variable "tags" {
-  type    = map(any)
-  default =  {
-      deploy = "module-vnet-fgt"
+  type = map(any)
+  default = {
+    deploy = "module-vnet-fgt"
   }
 }
 

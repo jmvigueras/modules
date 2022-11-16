@@ -56,10 +56,10 @@ variable "location" {
 
 // Azure resourcers tags
 variable "tags" {
-  type    = map(any)
-  default =  {
-      Deploy = "module-fgt-ha-xlb"
-      Project = "terraform-fortinet"
+  type = map(any)
+  default = {
+    Deploy  = "module-fgt-ha-xlb"
+    Project = "terraform-fortinet"
   }
 }
 

@@ -7,5 +7,5 @@ output "default-route-table_id" {
 }
 
 output "virtual_router_ips" {
-  value = azurerm_virtual_hub.vhub.virtual_router_ips 
+  value = azurerm_virtual_hub.vhub.virtual_router_ips
 }

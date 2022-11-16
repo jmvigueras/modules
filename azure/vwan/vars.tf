@@ -2,10 +2,10 @@ variable "resourcegroup_name" {}
 
 // Azure resourcers tags
 variable "tags" {
-  type    = map(any)
-  default =  {
-      Deploy  = "module-azure_vhub"
-      Project = "terraform-fortinet"
+  type = map(any)
+  default = {
+    Deploy  = "module-azure_vhub"
+    Project = "terraform-fortinet"
   }
 }
 

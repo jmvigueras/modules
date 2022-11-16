@@ -66,36 +66,36 @@ resource "azurerm_virtual_machine" "fgt-passive" {
 data "template_file" "fgt-passive_all-config" {
   template = file("${path.module}/templates/fgt-all.conf")
   vars = {
-    type            = var.license_type
-    license_file    = var.license-active
-    fgt_id          = "${var.hub["id"]}-passive"
-    fgt_priority    = 100
-    api_key         = random_string.api_key.result
+    type         = var.license_type
+    license_file = var.license-active
+    fgt_id       = "${var.hub["id"]}-passive"
+    fgt_priority = 100
+    api_key      = random_string.api_key.result
 
-    port1_ip        = cidrhost(var.fgt-subnet_cidrs["mgmt"],11)
-    port1_mask      = cidrnetmask(var.fgt-subnet_cidrs["mgmt"])
-    port1_gw        = cidrhost(var.fgt-subnet_cidrs["mgmt"],1)
-    port2_ip        = cidrhost(var.fgt-subnet_cidrs["public"],11)
-    port2_mask      = cidrnetmask(var.fgt-subnet_cidrs["public"])
-    port2_gw        = cidrhost(var.fgt-subnet_cidrs["public"],1)
-    port3_ip        = cidrhost(var.fgt-subnet_cidrs["private"],11)
-    port3_mask      = cidrnetmask(var.fgt-subnet_cidrs["private"])
-    port3_gw        = cidrhost(var.fgt-subnet_cidrs["private"],1)
-    peerip          = cidrhost(var.fgt-subnet_cidrs["mgmt"],10)
+    port1_ip   = cidrhost(var.fgt-subnet_cidrs["mgmt"], 11)
+    port1_mask = cidrnetmask(var.fgt-subnet_cidrs["mgmt"])
+    port1_gw   = cidrhost(var.fgt-subnet_cidrs["mgmt"], 1)
+    port2_ip   = cidrhost(var.fgt-subnet_cidrs["public"], 11)
+    port2_mask = cidrnetmask(var.fgt-subnet_cidrs["public"])
+    port2_gw   = cidrhost(var.fgt-subnet_cidrs["public"], 1)
+    port3_ip   = cidrhost(var.fgt-subnet_cidrs["private"], 11)
+    port3_mask = cidrnetmask(var.fgt-subnet_cidrs["private"])
+    port3_gw   = cidrhost(var.fgt-subnet_cidrs["private"], 1)
+    peerip     = cidrhost(var.fgt-subnet_cidrs["mgmt"], 10)
 
-    tenant          = var.tenant_id
-    subscription    = var.subscription_id
-    clientid        = var.client_id
-    clientsecret    = var.client_secret
-    admin_port      = var.admin_port
-    admin_cidr      = var.admin_cidr
-    rsg             = var.resourcegroup_name
+    tenant       = var.tenant_id
+    subscription = var.subscription_id
+    clientid     = var.client_id
+    clientsecret = var.client_secret
+    admin_port   = var.admin_port
+    admin_cidr   = var.admin_cidr
+    rsg          = var.resourcegroup_name
 
-    spoke_cidr_vnet     = var.spoke_cidr_vnet
+    spoke_cidr_vnet = var.spoke_cidr_vnet
 
-    fgt_advpn-config    = data.template_file.fgt_advpn-config.rendered
-    fgt_vxlan-config    = data.template_file.fgt_vxlan-config.rendered
-    fgt_bgp-config      = data.template_file.fgt_bgp-config.rendered
-    fgt_policy-config   = data.template_file.fgt_policy-config.rendered
+    fgt_advpn-config  = data.template_file.fgt_advpn-config.rendered
+    fgt_vxlan-config  = data.template_file.fgt_vxlan-config.rendered
+    fgt_bgp-config    = data.template_file.fgt_bgp-config.rendered
+    fgt_policy-config = data.template_file.fgt_policy-config.rendered
   }
 }

@@ -2,17 +2,17 @@
 
 # Create new random API key to be provisioned in FortiGates.
 resource "random_string" "api_key" {
-  length                 = 30
-  special                = false
-  numeric                = true
+  length  = 30
+  special = false
+  numeric = true
 }
 
 resource "azurerm_virtual_machine" "fgt-site" {
-  name                         = "${var.prefix}-fgt-site-${var.site["site_id"]}"
-  location                     = var.location
-  resource_group_name          = var.resourcegroup_name
+  name                = "${var.prefix}-fgt-site-${var.site["site_id"]}"
+  location            = var.location
+  resource_group_name = var.resourcegroup_name
 
-  network_interface_ids        = [
+  network_interface_ids = [
     azurerm_network_interface.ni-site-port1.id,
     azurerm_network_interface.ni-site-port2.id,
     azurerm_network_interface.ni-site-port3.id
@@ -76,49 +76,49 @@ resource "azurerm_virtual_machine" "fgt-site" {
 data "template_file" "siteFortiGate" {
   template = file("${path.module}/fgt.conf")
   vars = {
-    type            = var.license_type
-    license_file    = var.license-site
-    admin_port      = var.admin_port
-    admin_cidr      = var.admin_cidr
-    site_id         = var.site["site_id"]
-    api_key         = random_string.api_key.result
-    
-    port1_ip   = cidrhost(cidrsubnet(var.site["cidr"],4,1),10)
-    port1_mask = cidrnetmask(cidrsubnet(var.site["cidr"],4,1))
-    port1_net  = cidrsubnet(var.site["cidr"],4,1)
-    port1_gw   = cidrhost(cidrsubnet(var.site["cidr"],4,1),1)
+    type         = var.license_type
+    license_file = var.license-site
+    admin_port   = var.admin_port
+    admin_cidr   = var.admin_cidr
+    site_id      = var.site["site_id"]
+    api_key      = random_string.api_key.result
 
-    port2_ip   = cidrhost(cidrsubnet(var.site["cidr"],4,2),10)
-    port2_mask = cidrnetmask(cidrsubnet(var.site["cidr"],4,2))
-    port2_net  = cidrsubnet(var.site["cidr"],4,2)
-    port2_gw   = cidrhost(cidrsubnet(var.site["cidr"],4,2),1)
+    port1_ip   = cidrhost(cidrsubnet(var.site["cidr"], 4, 1), 10)
+    port1_mask = cidrnetmask(cidrsubnet(var.site["cidr"], 4, 1))
+    port1_net  = cidrsubnet(var.site["cidr"], 4, 1)
+    port1_gw   = cidrhost(cidrsubnet(var.site["cidr"], 4, 1), 1)
 
-    port3_ip   = cidrhost(cidrsubnet(var.site["cidr"],4,3),10)
-    port3_mask = cidrnetmask(cidrsubnet(var.site["cidr"],4,3))
-    port3_net  = cidrsubnet(var.site["cidr"],4,3)
-    port3_gw   = cidrhost(cidrsubnet(var.site["cidr"],4,3),1)
+    port2_ip   = cidrhost(cidrsubnet(var.site["cidr"], 4, 2), 10)
+    port2_mask = cidrnetmask(cidrsubnet(var.site["cidr"], 4, 2))
+    port2_net  = cidrsubnet(var.site["cidr"], 4, 2)
+    port2_gw   = cidrhost(cidrsubnet(var.site["cidr"], 4, 2), 1)
 
-    spoke1-net           = cidrsubnet(var.site["cidr"],4,8)
+    port3_ip   = cidrhost(cidrsubnet(var.site["cidr"], 4, 3), 10)
+    port3_mask = cidrnetmask(cidrsubnet(var.site["cidr"], 4, 3))
+    port3_net  = cidrsubnet(var.site["cidr"], 4, 3)
+    port3_gw   = cidrhost(cidrsubnet(var.site["cidr"], 4, 3), 1)
 
-    site_bgp-asn         = var.site["bgp-asn"]
-    site_advpn-ip1       = var.site["advpn-ip1"]
-    site_advpn-ip2       = var.site["advpn-ip2"]
+    spoke1-net = cidrsubnet(var.site["cidr"], 4, 8)
 
-    hub1_bgp-asn         = var.hub1["bgp-asn"]
-    hub1_public-ip1      = var.hub1["public-ip1"]
-    hub1_advpn-ip1       = var.hub1["advpn-ip1"]
-    hub1_hck-srv-ip1     = var.hub1["hck-srv-ip1"]
-    hub1_hck-srv-ip2     = var.hub1["hck-srv-ip2"]
-    hub1_cidr            = var.hub1["cidr"]
-    hub1_advpn-psk       = var.hub1["advpn-psk"]
+    site_bgp-asn   = var.site["bgp-asn"]
+    site_advpn-ip1 = var.site["advpn-ip1"]
+    site_advpn-ip2 = var.site["advpn-ip2"]
 
-    hub2_bgp-asn         = var.hub2["bgp-asn"]
-    hub2_public-ip1      = var.hub2["public-ip1"]
-    hub2_advpn-ip1       = var.hub2["advpn-ip1"]
-    hub2_hck-srv-ip1     = var.hub2["hck-srv-ip1"]
-    hub2_hck-srv-ip2     = var.hub2["hck-srv-ip2"]
-    hub2_cidr            = var.hub2["cidr"]
-    hub2_advpn-psk       = var.hub2["advpn-psk"]
+    hub1_bgp-asn     = var.hub1["bgp-asn"]
+    hub1_public-ip1  = var.hub1["public-ip1"]
+    hub1_advpn-ip1   = var.hub1["advpn-ip1"]
+    hub1_hck-srv-ip1 = var.hub1["hck-srv-ip1"]
+    hub1_hck-srv-ip2 = var.hub1["hck-srv-ip2"]
+    hub1_cidr        = var.hub1["cidr"]
+    hub1_advpn-psk   = var.hub1["advpn-psk"]
+
+    hub2_bgp-asn     = var.hub2["bgp-asn"]
+    hub2_public-ip1  = var.hub2["public-ip1"]
+    hub2_advpn-ip1   = var.hub2["advpn-ip1"]
+    hub2_hck-srv-ip1 = var.hub2["hck-srv-ip1"]
+    hub2_hck-srv-ip2 = var.hub2["hck-srv-ip2"]
+    hub2_cidr        = var.hub2["cidr"]
+    hub2_advpn-psk   = var.hub2["advpn-psk"]
   }
 }
 

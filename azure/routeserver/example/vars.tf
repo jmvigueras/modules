@@ -18,10 +18,10 @@ variable "prefix" {
 
 // Azure resourcers tags
 variable "tags" {
-  type    = map(any)
-  default =  {
-      Deploy = "module-vnet-spoke"
-      Project = "terraform-fortinet"
+  type = map(any)
+  default = {
+    Deploy  = "module-vnet-spoke"
+    Project = "terraform-fortinet"
   }
 }
 
@@ -53,7 +53,7 @@ variable "fgt2_peer-ip" {
 
 // Variable need for module vnet-spoke
 variable "vnet-spoke_cidrs" {
-  type    = list(string)
+  type = list(string)
   default = [
     "172.30.16.0/23",
     "172.30.18.0/23"

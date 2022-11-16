@@ -3,22 +3,22 @@
 # (Module will create as many VM as NI defined in vm_nis)
 ##################################################################
 // Create virtual machines
-module vms {
+module "vms" {
   source = "../"
 
-  prefix                    = var.prefix
-  location                  = var.location
-  resourcegroup_name        = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
-  tags                      = var.tags
-  storage-account_endpoint  = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
-  adminusername             = "azureadmin"
-  adminpassword             = "my-secret-pass#"
+  prefix                   = var.prefix
+  location                 = var.location
+  resourcegroup_name       = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
+  tags                     = var.tags
+  storage-account_endpoint = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
+  adminusername            = "azureadmin"
+  adminpassword            = "my-secret-pass#"
 
-  vm_ni_ids   = [
-    "/subscriptions/cf72478e-c3b0-4072-8f60-41d037c1d9e9/resourceGroups/module-vnet-spoke-rg/providers/Microsoft.Network/networkInterfaces/subnet-1_ni-1",
-    "/subscriptions/cf72478e-c3b0-4072-8f60-41d037c1d9e9/resourceGroups/module-vnet-spoke-rg/providers/Microsoft.Network/networkInterfaces/subnet-1_ni-2"
+  vm_ni_ids = [
+    "/subscriptions/xxxxx/resourceGroups/module-vnet-spoke-rg/providers/Microsoft.Network/networkInterfaces/subnet-1_ni-1",
+    "/subscriptions/xxxxx/resourceGroups/module-vnet-spoke-rg/providers/Microsoft.Network/networkInterfaces/subnet-1_ni-2"
   ]
-  vm_size     = "Standard_B1ms"
+  vm_size = "Standard_B1ms"
 }
 
 

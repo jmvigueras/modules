@@ -1,17 +1,17 @@
 
-output "vnet_ids"{
+output "vnet_ids" {
   value = azurerm_virtual_network.vnet-spoke.*.id
 }
 
-output "vnet_names"{
+output "vnet_names" {
   value = azurerm_virtual_network.vnet-spoke.*.name
-}  
-
-output "vnet_cidrs"{
-  value = azurerm_virtual_network.vnet-spoke.*.address_space[0] 
 }
 
-output "subnet_ids"{
+output "vnet_cidrs" {
+  value = azurerm_virtual_network.vnet-spoke.*.address_space[0]
+}
+
+output "subnet_ids" {
   value = {
     subnet_1    = azurerm_subnet.vnet-spoke_subnet_1.*.id
     subnet_2    = azurerm_subnet.vnet-spoke_subnet_2.*.id
@@ -22,7 +22,7 @@ output "subnet_ids"{
   }
 }
 
-output "subnet_names"{
+output "subnet_names" {
   value = {
     subnet_1    = azurerm_subnet.vnet-spoke_subnet_1.*.name
     subnet_2    = azurerm_subnet.vnet-spoke_subnet_2.*.name
@@ -33,7 +33,7 @@ output "subnet_names"{
   }
 }
 
-output "subnet_cidrs"{
+output "subnet_cidrs" {
   value = {
     subnet_1    = azurerm_subnet.vnet-spoke_subnet_1.*.address_prefixes[0]
     subnet_2    = azurerm_subnet.vnet-spoke_subnet_2.*.address_prefixes[0]
@@ -44,8 +44,8 @@ output "subnet_cidrs"{
   }
 }
 
-output "nsg_ids"{
-  value =  azurerm_network_security_group.nsg-hub-spoke.id
+output "nsg_ids" {
+  value = azurerm_network_security_group.nsg-hub-spoke.id
 }
 
 output "ni_ids" {

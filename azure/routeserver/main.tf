@@ -1,7 +1,7 @@
 // Create public IP for RS
 resource "azurerm_public_ip" "public-ip-rs" {
   count               = length(var.subnet_ids)
-  name                = "${var.prefix}-rs-${count.index+1}-pip"
+  name                = "${var.prefix}-rs-${count.index + 1}-pip"
   resource_group_name = var.resourcegroup_name
   location            = var.location
   allocation_method   = "Static"
@@ -12,13 +12,13 @@ resource "azurerm_public_ip" "public-ip-rs" {
 
 // Create RS resource
 resource "azurerm_route_server" "rs" {
-  count                   = length(var.subnet_ids)
-  name                    = "${var.prefix}-rs-${count.index+1}"
-  resource_group_name     = var.resourcegroup_name
-  location                = var.location
-  sku                     = "Standard"
-  public_ip_address_id    = azurerm_public_ip.public-ip-rs[count.index].id
-  subnet_id               = var.subnet_ids[count.index]
+  count                = length(var.subnet_ids)
+  name                 = "${var.prefix}-rs-${count.index + 1}"
+  resource_group_name  = var.resourcegroup_name
+  location             = var.location
+  sku                  = "Standard"
+  public_ip_address_id = azurerm_public_ip.public-ip-rs[count.index].id
+  subnet_id            = var.subnet_ids[count.index]
 }
 
 // Create BGP connections

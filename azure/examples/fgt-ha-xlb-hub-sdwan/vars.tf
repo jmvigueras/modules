@@ -42,6 +42,27 @@ variable "prefix" {
   default = "terraform"
 }
 
+###################################################################################
+# Update this variables if you want to change ADVPN config
+###################################################################################
+// FGT data for configure ADVPN
+variable "hub" {
+  type = map(any)
+  default = {
+    "id"        = "HubAazure"
+    "bgp-asn"   = "65001"
+    "advpn-net" = "10.10.10.0/24"
+  }
+}
+
+// BGP ASN for site FGT
+variable "spoke_bgp-asn" {
+  type    = string
+  default = "65011"
+}
+
+###################################################################################
+
 //  For HA, choose instance size that support 4 nics at least
 //  Check : https://docs.microsoft.com/en-us/azure/virtual-machines/linux/sizes
 variable "size" {
@@ -56,10 +77,10 @@ variable "location" {
 
 // Azure resourcers tags
 variable "tags" {
-  type    = map(any)
-  default =  {
-      Deploy = "module-fgt-ha-xlb"
-      Project = "terraform-fortinet"
+  type = map(any)
+  default = {
+    Deploy  = "module-fgt-ha-xlb"
+    Project = "terraform-fortinet"
   }
 }
 

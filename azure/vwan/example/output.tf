@@ -7,5 +7,5 @@ output "vhub_default-route-table_id" {
 }
 
 output "vhub_virtual_router_ips" {
-  value = module.vwan.virtual_router_ips 
+  value = module.vwan.virtual_router_ips
 }

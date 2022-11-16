@@ -18,10 +18,10 @@ variable "prefix" {
 
 // Azure resourcers tags
 variable "tags" {
-  type    = map(any)
-  default =  {
-      Deploy = "module-vnet-spoke"
-      Project = "terraform-fortinet"
+  type = map(any)
+  default = {
+    Deploy  = "module-vnet-spoke"
+    Project = "terraform-fortinet"
   }
 }
 
@@ -34,7 +34,7 @@ variable "location" {
 // List of CIDR ranges for vnets spoke (it will create as much VNET as ranges)
 // (module will deploy as much VNETs as CIDRS appears)
 variable "vnet-spoke_cidrs" {
-  type    = list(string)
+  type = list(string)
   default = [
     "172.30.16.0/23",
     "172.30.18.0/23"
@@ -43,7 +43,7 @@ variable "vnet-spoke_cidrs" {
 
 // VNET ID of FGT VNET for peering
 variable "vnet-fgt" {
-  type    = map(any)
+  type = map(any)
   default = {
     name = "vnet-fgt",
     id   = "vnet-id"

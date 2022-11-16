@@ -1,29 +1,29 @@
 
-output "vnet_ids"{
-  value = module.vnet-spoke.vnet_ids  
+output "vnet_ids" {
+  value = module.vnet-spoke.vnet_ids
 }
 
-output "vnet_names"{
+output "vnet_names" {
   value = module.vnet-spoke.vnet_names
 }
 
-output "vnet_cidrs"{
+output "vnet_cidrs" {
   value = module.vnet-spoke.vnet_cidrs
 }
 
-output "subnet_ids"{
+output "subnet_ids" {
   value = module.vnet-spoke.subnet_ids
 }
 
-output "subnet_names"{
+output "subnet_names" {
   value = module.vnet-spoke.subnet_names
 }
 
-output "subnet_cidrs"{
+output "subnet_cidrs" {
   value = module.vnet-spoke.subnet_cidrs
 }
 
-output "nsg_ids"{
+output "nsg_ids" {
   value = module.vnet-spoke.nsg_ids
 }
 

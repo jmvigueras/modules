@@ -15,35 +15,35 @@ resource "azurerm_subnet" "subnet-hamgmt" {
   name                 = "${var.prefix}-subnet-hamgmt"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr,4,1)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 4, 1)]
 }
 
 resource "azurerm_subnet" "subnet-public" {
   name                 = "${var.prefix}-subnet-public"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr,4,2)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 4, 2)]
 }
 
 resource "azurerm_subnet" "subnet-private" {
   name                 = "${var.prefix}-subnet-private"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr,4,3)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 4, 3)]
 }
 
 resource "azurerm_subnet" "subnet-vgw" {
   name                 = "GatewaySubnet"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr,5,12)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 5, 12)]
 }
 
 resource "azurerm_subnet" "subnet-routeserver" {
   name                 = "RouteServerSubnet"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr,5,13)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 5, 13)]
 }
 
 ######################################################################
@@ -95,7 +95,7 @@ resource "azurerm_network_interface" "ni-activeport1" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-hamgmt.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-hamgmt.address_prefixes[0],10)
+    private_ip_address            = cidrhost(azurerm_subnet.subnet-hamgmt.address_prefixes[0], 10)
     primary                       = true
     public_ip_address_id          = azurerm_public_ip.active-mgmt-ip.id
   }
@@ -114,7 +114,7 @@ resource "azurerm_network_interface" "ni-activeport2" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-public.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0],10)
+    private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0], 10)
     public_ip_address_id          = azurerm_public_ip.cluster-public-ip.id
   }
 
@@ -132,7 +132,7 @@ resource "azurerm_network_interface" "ni-activeport3" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-private.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-private.address_prefixes[0],10)
+    private_ip_address            = cidrhost(azurerm_subnet.subnet-private.address_prefixes[0], 10)
   }
 
   tags = var.tags
@@ -149,7 +149,7 @@ resource "azurerm_network_interface" "ni-passiveport1" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-hamgmt.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-hamgmt.address_prefixes[0],11)
+    private_ip_address            = cidrhost(azurerm_subnet.subnet-hamgmt.address_prefixes[0], 11)
     primary                       = true
     public_ip_address_id          = azurerm_public_ip.passive-mgmt-ip.id
   }
@@ -168,7 +168,7 @@ resource "azurerm_network_interface" "ni-passiveport2" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-public.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0],11)
+    private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0], 11)
   }
 
   tags = var.tags
@@ -185,7 +185,7 @@ resource "azurerm_network_interface" "ni-passiveport3" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-private.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-private.address_prefixes[0],11)
+    private_ip_address            = cidrhost(azurerm_subnet.subnet-private.address_prefixes[0], 11)
   }
 
   tags = var.tags

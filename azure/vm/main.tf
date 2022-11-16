@@ -3,19 +3,19 @@
 # (Module will create as many VM as NI defined in vm_nis)
 ##################################################################
 resource "azurerm_virtual_machine" "vm" {
-  count                           = var.vm_ni_ids == null ? 0 : length(var.vm_ni_ids) 
-  name                            = "${var.prefix}-vm-${count.index+1}"
-  resource_group_name             = var.resourcegroup_name
-  location                        = var.location
-  vm_size                         = var.vm_size
-  network_interface_ids           = [var.vm_ni_ids[count.index]]
+  count                 = var.vm_ni_ids == null ? 0 : length(var.vm_ni_ids)
+  name                  = "${var.prefix}-vm-${count.index + 1}"
+  resource_group_name   = var.resourcegroup_name
+  location              = var.location
+  vm_size               = var.vm_size
+  network_interface_ids = [var.vm_ni_ids[count.index]]
 
   storage_os_disk {
-    name                 = "${var.prefix}-disk-vm-${count.index+1}"
-    caching              = "ReadWrite"
-    managed_disk_type    = "Standard_LRS"
-    create_option        = "FromImage"
-  } 
+    name              = "${var.prefix}-disk-vm-${count.index + 1}"
+    caching           = "ReadWrite"
+    managed_disk_type = "Standard_LRS"
+    create_option     = "FromImage"
+  }
 
   storage_image_reference {
     publisher = "Canonical"
@@ -25,7 +25,7 @@ resource "azurerm_virtual_machine" "vm" {
   }
 
   os_profile {
-    computer_name  = "${var.prefix}-vm-${count.index+1}"
+    computer_name  = "${var.prefix}-vm-${count.index + 1}"
     admin_username = var.adminusername
     admin_password = var.adminpassword
     custom_data    = data.template_file.lnx_custom_data.rendered

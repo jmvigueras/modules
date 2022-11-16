@@ -3,7 +3,7 @@ resource "azurerm_network_security_group" "nsg-mgmt-ha" {
   name                = "${var.prefix}-nsg-mgmt-ha"
   location            = var.location
   resource_group_name = var.resourcegroup_name
-  
+
   tags = var.tags
 }
 
@@ -15,8 +15,8 @@ resource "azurerm_network_security_rule" "nsr-ingress-mgmt-ha-sync" {
   protocol                    = "*"
   source_port_range           = "*"
   destination_port_range      = "*"
-  source_address_prefix       = "${azurerm_subnet.subnet-hamgmt.address_prefixes[0]}"
-  destination_address_prefix  = "${azurerm_subnet.subnet-hamgmt.address_prefixes[0]}"
+  source_address_prefix       = azurerm_subnet.subnet-hamgmt.address_prefixes[0]
+  destination_address_prefix  = azurerm_subnet.subnet-hamgmt.address_prefixes[0]
   resource_group_name         = var.resourcegroup_name
   network_security_group_name = azurerm_network_security_group.nsg-mgmt-ha.name
 }
@@ -29,7 +29,7 @@ resource "azurerm_network_security_rule" "nsr-ingress-mgmt-ha-ssh" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "22"
-  source_address_prefix       = "${var.admin_cidr}"
+  source_address_prefix       = var.admin_cidr
   destination_address_prefix  = "*"
   resource_group_name         = var.resourcegroup_name
   network_security_group_name = azurerm_network_security_group.nsg-mgmt-ha.name
@@ -42,8 +42,8 @@ resource "azurerm_network_security_rule" "nsr-ingress-mgmt-ha-https" {
   access                      = "Allow"
   protocol                    = "Tcp"
   source_port_range           = "*"
-  destination_port_range      = "${var.admin_port}"
-  source_address_prefix       = "${var.admin_cidr}"
+  destination_port_range      = var.admin_port
+  source_address_prefix       = var.admin_cidr
   destination_address_prefix  = "*"
   resource_group_name         = var.resourcegroup_name
   network_security_group_name = azurerm_network_security_group.nsg-mgmt-ha.name
@@ -68,7 +68,7 @@ resource "azurerm_network_security_group" "nsg-public" {
   name                = "${var.prefix}-nsg-public"
   location            = var.location
   resource_group_name = var.resourcegroup_name
-  
+
   tags = var.tags
 }
 

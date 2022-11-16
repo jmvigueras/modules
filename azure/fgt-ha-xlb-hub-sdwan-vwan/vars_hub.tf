@@ -4,9 +4,9 @@
 variable "hub" {
   type = map(any)
   default = {
-    "id"             = "HubAazure"
-    "bgp-asn"        = "65001"
-    "advpn-net"      = "10.10.10.0/24"
+    "id"        = "HubAazure"
+    "bgp-asn"   = "65001"
+    "advpn-net" = "10.10.10.0/24"
   }
 }
 

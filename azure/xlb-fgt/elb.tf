@@ -25,8 +25,8 @@ resource "azurerm_lb" "elb" {
 }
 
 resource "azurerm_lb_backend_address_pool" "elbbackend" {
-  loadbalancer_id     = azurerm_lb.elb.id
-  name                = "BackEndPool"
+  loadbalancer_id = azurerm_lb.elb.id
+  name            = "BackEndPool"
 }
 
 resource "azurerm_lb_probe" "elbprobe" {
@@ -34,41 +34,41 @@ resource "azurerm_lb_probe" "elbprobe" {
   name                = "lbprobe"
   port                = var.backend-probe_port
   interval_in_seconds = 5
-  number_of_probes = 2
-  protocol = "Tcp"
+  number_of_probes    = 2
+  protocol            = "Tcp"
 }
 
 resource "azurerm_lb_rule" "lbrule-tcp80" {
-    loadbalancer_id                = azurerm_lb.elb.id
-    name                           = "PublicLBRule-FE1-http"
-    protocol                       = "Tcp"
-    frontend_port                  = 80
-    backend_port                   = 80
-    frontend_ip_configuration_name = "${var.prefix}-elb-front-pip"
-    probe_id                       = azurerm_lb_probe.elbprobe.id
-    backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elbbackend.id]
+  loadbalancer_id                = azurerm_lb.elb.id
+  name                           = "PublicLBRule-FE1-http"
+  protocol                       = "Tcp"
+  frontend_port                  = 80
+  backend_port                   = 80
+  frontend_ip_configuration_name = "${var.prefix}-elb-front-pip"
+  probe_id                       = azurerm_lb_probe.elbprobe.id
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elbbackend.id]
 }
-  
+
 resource "azurerm_lb_rule" "lbrule-upd500" {
-    loadbalancer_id                = azurerm_lb.elb.id
-    name                           = "PublicLBRule-FE1-udp500"
-    protocol                       = "Udp"
-    frontend_port                  = 500
-    backend_port                   = 500
-    frontend_ip_configuration_name = "${var.prefix}-elb-front-pip"
-    probe_id                       = azurerm_lb_probe.elbprobe.id
-    backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elbbackend.id]
+  loadbalancer_id                = azurerm_lb.elb.id
+  name                           = "PublicLBRule-FE1-udp500"
+  protocol                       = "Udp"
+  frontend_port                  = 500
+  backend_port                   = 500
+  frontend_ip_configuration_name = "${var.prefix}-elb-front-pip"
+  probe_id                       = azurerm_lb_probe.elbprobe.id
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elbbackend.id]
 }
 
 resource "azurerm_lb_rule" "lbrule-udp4500" {
-    loadbalancer_id                = azurerm_lb.elb.id
-    name                           = "PublicLBRule-FE1-udp4500"
-    protocol                       = "Udp"
-    frontend_port                  = 4500
-    backend_port                   = 4500
-    frontend_ip_configuration_name = "${var.prefix}-elb-front-pip"
-    probe_id                       = azurerm_lb_probe.elbprobe.id
-    backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elbbackend.id]
+  loadbalancer_id                = azurerm_lb.elb.id
+  name                           = "PublicLBRule-FE1-udp4500"
+  protocol                       = "Udp"
+  frontend_port                  = 4500
+  backend_port                   = 4500
+  frontend_ip_configuration_name = "${var.prefix}-elb-front-pip"
+  probe_id                       = azurerm_lb_probe.elbprobe.id
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elbbackend.id]
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "fgt1-elb-backendpool" {
