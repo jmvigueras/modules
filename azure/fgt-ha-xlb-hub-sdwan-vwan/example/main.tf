@@ -34,16 +34,15 @@ module "fgt-ha" {
     module.vnet-fgt.fgt-passive-ni_ids["port2"],
     module.vnet-fgt.fgt-passive-ni_ids["port3"]
   ]
-  gwlb_ip         = module.xlb.gwlb_ip
-  rs_peers        = module.rs.rs_peers
-  vhub_peer       = module.vwan.virtual_router_ips
-  hub             = var.hub
-  hub_vxlan       = var.hub_vxlan
-  rs_bgp-asn      = module.rs.rs_bgp-asn
-  spoke_bgp-asn   = var.spoke_bgp-asn
+  gwlb_ip         = module.xlb.gwlb_ip // add vxlan config to GWLB
+  rs_peers        = module.rs.rs_peers // add BGP config to AzureRouterServer
+  rs_bgp-asn      = module.rs.rs_bgp-asn // BGP ASN AzureRouterServer
+  vhub_peer       = module.vwan.virtual_router_ips // add BGP config to vHUB
+  hub             = var.hub // add ADVPN HUB config
+  hub_vxlan       = var.hub_vxlan // add vxlan connection to other HUB
+  spoke_bgp-asn   = var.spoke_bgp-asn // BGP ASN spokes
   spoke_cidr_vnet = "172.16.0.0/12" // Complete CIDR range VNETs in Azure
 }
-
 
 
 ###########################################################################
