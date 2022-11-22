@@ -37,6 +37,7 @@ module "fgt-ha" {
   gwlb_ip         = module.xlb.gwlb_ip
   rs_peers        = module.rs.rs_peers
   vhub_peer       = null
+  hub             = var.hub
   rs_bgp-asn      = module.rs.rs_bgp-asn
   spoke_bgp-asn   = var.spoke_bgp-asn
   spoke_cidr_vnet = "172.16.0.0/12" // Complete CIDR range VNETs in Azure
