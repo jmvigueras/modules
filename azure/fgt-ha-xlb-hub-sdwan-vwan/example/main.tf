@@ -38,6 +38,7 @@ module "fgt-ha" {
   rs_peers        = module.rs.rs_peers
   vhub_peer       = module.vwan.virtual_router_ips
   hub             = var.hub
+  hub_vxlan       = var.hub_vxlan
   rs_bgp-asn      = module.rs.rs_bgp-asn
   spoke_bgp-asn   = var.spoke_bgp-asn
   spoke_cidr_vnet = "172.16.0.0/12" // Complete CIDR range VNETs in Azure

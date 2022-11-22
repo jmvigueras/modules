@@ -93,9 +93,10 @@ data "template_file" "fgt-passive_all-config" {
 
     spoke_cidr_vnet = var.spoke_cidr_vnet
 
-    fgt_advpn-config  = data.template_file.fgt_advpn-config.rendered
-    fgt_vxlan-config  = data.template_file.fgt_vxlan-config.rendered
-    fgt_bgp-config    = data.template_file.fgt_bgp-config.rendered
+    fgt_advpn-config  = var.hub != null ? data.template_file.fgt_advpn-config.rendered : ""
+    fgt_vxlan-config  = var.gwlb_ip != null ?  data.template_file.fgt_vxlan-config.rendered : ""
+    fgt_bgp-config    = var.hub != null ? data.template_file.fgt_bgp-config.rendered : ""
     fgt_policy-config = data.template_file.fgt_policy-config.rendered
+    fgt_vxlan-to-hub  = var.hub_vxlan != null && var.hub != null ? data.template_file.fgt_vxlan-to-hub.rendered : ""
   }
 }

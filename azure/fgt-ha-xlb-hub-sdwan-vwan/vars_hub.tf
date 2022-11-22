@@ -10,6 +10,15 @@ variable "hub" {
   }
 }
 
+// Details for vxlan connection to hub (simulated L2/MPLS)
+variable "hub_vxlan" {
+  type = map(any)
+  default = {
+    "public-ip1"     = "11.11.11.11"
+    "vxlan-ip1"      = "10.10.30.1"
+  }
+}
+
 // CIDR range for VNET FGT
 // - (Recomended range /20)
 variable "vnet-fgt_cidr" {
