@@ -15,8 +15,8 @@ variable "hub" {
 variable "hub_vxlan" {
   type = map(any)
   default = {
-    "public-ip1"     = "11.11.11.11"
-    "vxlan-ip1"      = "10.10.30.1"
+    "public-ip1" = "11.11.11.11"
+    "vxlan-ip1"  = "10.10.30.1"
   }
 }
 
