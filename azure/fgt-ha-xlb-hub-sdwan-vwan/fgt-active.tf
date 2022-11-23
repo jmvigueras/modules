@@ -138,6 +138,8 @@ data "template_file" "fgt_bgp-config" {
     spoke_bgp-asn   = var.spoke_bgp-asn
     spoke_cidr_vnet = var.spoke_cidr_vnet
     spoke_cidr_site = var.spoke_cidr_site
+    hub-peer_bgp-asn = var.hub-peer_vxlan["bgp-asn"]
+    hub-peer_ip1    = var.hub-peer_vxlan["remote-ip1"]
   })
 }
 
@@ -155,7 +157,7 @@ data "template_file" "fgt_gwlb-config" {
 data "template_file" "fgt_vxlan-to-hub" {
   template = file("${path.module}/templates/fgt-vxlan-to-hub.conf")
   vars = {
-    hub-peer_public-ip1 = var.hub_vxlan["public-ip1"]
-    hub_vxlan-ip1       = var.hub_vxlan["vxlan-ip1"]
+    hub-peer_public-ip1 = var.hub-peer_vxlan["public-ip1"]
+    hub_peer_local-ip1  = var.hub-peer_vxlan["local-ip1"]
   }
 }
