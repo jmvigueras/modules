@@ -111,7 +111,7 @@ data "template_file" "fgt-active_all-config" {
     fgt_gwlb-config   = var.gwlb_ip != null ? data.template_file.fgt_gwlb-config.rendered : ""
     fgt_bgp-config    = var.hub != null ? data.template_file.fgt_bgp-config.rendered : ""
     fgt_policy-config = data.template_file.fgt_policy-config.rendered
-    fgt_vxlan-to-hub  = var.hub_vxlan != null && var.hub != null ? data.template_file.fgt_vxlan-to-hub.rendered : ""
+    fgt_vxlan-to-hub  = var.hub-peer_vxlan != null && var.hub != null ? data.template_file.fgt_vxlan-to-hub.rendered : ""
   }
 }
 
