@@ -12,7 +12,10 @@ variable "adminusername" {
   type    = string
   default = "azureadmin"
 }
-variable "adminpassword" {}
+variable "adminpassword" {
+  type    = string
+  default = null
+}
 
 // SSH RSA public key for KeyPair if not exists
 variable "rsa-public-key" {
