@@ -8,8 +8,17 @@ variable "resourcegroup_name" {
   default = null
 }
 
-variable "adminusername" {}
+variable "adminusername" {
+  type    = string
+  default = "azureadmin"
+}
 variable "adminpassword" {}
+
+// SSH RSA public key for KeyPair if not exists
+variable "rsa-public-key" {
+  type    = string
+  default = null
+}
 
 # Azure resourcers prefix description
 variable "prefix" {

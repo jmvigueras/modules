@@ -27,12 +27,13 @@ resource "azurerm_virtual_machine" "vm" {
   os_profile {
     computer_name  = "${var.prefix}-vm-${count.index + 1}"
     admin_username = var.adminusername
-    admin_password = var.adminpassword
-    custom_data    = data.template_file.lnx_custom_data.rendered
+    // admin_password = var.adminpassword
+    custom_data = data.template_file.lnx_custom_data.rendered
   }
 
   os_profile_linux_config {
-    disable_password_authentication = false
+    disable_password_authentication = true
+    ssh_keys                        = var.rsa-public-key
   }
 
   boot_diagnostics {
@@ -43,7 +44,5 @@ resource "azurerm_virtual_machine" "vm" {
 
 data "template_file" "lnx_custom_data" {
   template = file("${path.module}/templates/customdata-lnx.tpl")
-
-  vars = {
-  }
 }
+

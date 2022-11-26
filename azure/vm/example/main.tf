@@ -12,7 +12,8 @@ module "vms" {
   tags                     = var.tags
   storage-account_endpoint = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
   adminusername            = "azureadmin"
-  adminpassword            = "my-secret-pass#"
+ // adminpassword          = "my-secret-pass#"
+  rsa-public-key           = tls_private_key.ssh-rsa.public_key_openssh
 
   vm_ni_ids = [
     "/subscriptions/xxxxx/resourceGroups/module-vnet-spoke-rg/providers/Microsoft.Network/networkInterfaces/subnet-1_ni-1",
@@ -52,3 +53,15 @@ resource "azurerm_resource_group" "rg" {
 
   tags = var.tags
 }
+
+resource "tls_private_key" "ssh-rsa" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
+
+resource "local_file" "ssh_private_key_pem" {
+  content         = tls_private_key.ssh-rsa.private_key_pem
+  filename        = "./ssh-key.pem"
+  file_permission = "0600"
+}
+
