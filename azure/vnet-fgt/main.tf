@@ -15,35 +15,35 @@ resource "azurerm_subnet" "subnet-hamgmt" {
   name                 = "${var.prefix}-subnet-hamgmt"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 4, 1)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 1)]
 }
 
 resource "azurerm_subnet" "subnet-public" {
   name                 = "${var.prefix}-subnet-public"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 4, 2)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 2)]
 }
 
 resource "azurerm_subnet" "subnet-private" {
   name                 = "${var.prefix}-subnet-private"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 4, 3)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 3)]
 }
 
 resource "azurerm_subnet" "subnet-vgw" {
   name                 = "GatewaySubnet"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 5, 12)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 6)]
 }
 
 resource "azurerm_subnet" "subnet-routeserver" {
   name                 = "RouteServerSubnet"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 5, 13)]
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 7)]
 }
 
 ######################################################################

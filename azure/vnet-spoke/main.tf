@@ -19,7 +19,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_1" {
   name                 = "subnet-1"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
-  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 2, 0)]
+  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 0)]
 }
 
 resource "azurerm_subnet" "vnet-spoke_subnet_2" {
@@ -27,7 +27,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_2" {
   name                 = "subnet-2"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
-  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 2, 2)]
+  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 1)]
 }
 
 resource "azurerm_subnet" "vnet-spoke_subnet_routeserver" {
@@ -35,7 +35,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_routeserver" {
   name                 = "RouteServerSubnet"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
-  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 4, 12)]
+  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 4)]
 }
 
 resource "azurerm_subnet" "vnet-spoke_subnet_vgw" {
@@ -43,7 +43,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_vgw" {
   name                 = "GatewaySubnet"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
-  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 4, 13)]
+  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 5)]
 }
 
 resource "azurerm_subnet" "vnet-spoke_subnet_pl" {
@@ -51,7 +51,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_pl" {
   name                 = "PrivateLinkSubnet"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
-  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 4, 14)]
+  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 6)]
 
   private_endpoint_network_policies_enabled = true
 }
@@ -61,7 +61,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_pl-s" {
   name                 = "PrivateLinkServicesSubnet"
   resource_group_name  = var.resourcegroup_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
-  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 4, 15)]
+  address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 7)]
 
   private_link_service_network_policies_enabled = true
 }
