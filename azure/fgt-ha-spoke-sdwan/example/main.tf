@@ -1,11 +1,14 @@
-###################################################################
+#--------------------------------------------------------------------------------------
 # Example of use of module
-###################################################################
-// Create FGT cluster as HUB-ADVPN
-// (Example with a full scenario deployment with all modules)
+# - it will deploy fortigate (FGT) cluster as site spoke to HUB (configure "ha = true" in site var definition for FGT HA)
+# - it will use another module to create necessary VNET
+# - it will use another module to create VM bastion for testing
+#--------------------------------------------------------------------------------------
+
+// Create FGT cluster as HUB SDWAN site
 module "fgt-site-ha" {
   depends_on = [module.vnet-fgt]
-  source     = "../"
+  source     = "github.com/jmvigueras/modules//azure/fgt-ha-spoke-sdwan"
 
   prefix                   = var.prefix
   location                 = var.location
@@ -41,12 +44,11 @@ module "fgt-site-ha" {
   ]
 }
 
-###########################################################################
+#--------------------------------------------------------------------------------------
 # Deploy complete architecture with other modules used as input in module
-# - module vnet-fgt
-# - module vnet-spoke-fgt
-# - module vm
-############################################################################
+# - module vnet-fgt (../../vnet-fgt)
+# - module vm (../../vm)
+#--------------------------------------------------------------------------------------
 
 // Module VNET for FGT
 // - This module will generate VNET and network intefaces for FGT cluster
@@ -65,7 +67,7 @@ module "vnet-fgt" {
 
 // Create virtual machines
 // - this module will create a test VM in VNET spoke to FGT site
-module "vms" {
+module "vm" {
   source = "github.com/jmvigueras/modules//azure/vm"
 
   prefix                   = var.prefix
@@ -81,9 +83,9 @@ module "vms" {
   ]
 }
 
-###################################################################
+#--------------------------------------------------------------------------------------
 # Create necesary resources if not provided
-###################################################################
+#--------------------------------------------------------------------------------------
 
 // Create storage account if not provided
 resource "random_id" "randomId" {
