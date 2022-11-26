@@ -14,6 +14,10 @@ output "cluster-public-ip_name" {
   value = azurerm_public_ip.cluster-public-ip.name
 }
 
+output "bastion-public-ip_ip" {
+  value = azurerm_public_ip.bastion-public-ip.ip_address
+}
+
 output "vnet" {
   value = {
     name = azurerm_virtual_network.vnet-fgt.name
@@ -59,6 +63,10 @@ output "fgt-passive-ni_ids" {
   }
 }
 
+output "bastion-ni_id" {
+  value = azurerm_network_interface.ni-bastion.id
+}
+
 output "fgt-passive-ni_names" {
   value = [
     azurerm_network_interface.ni-passiveport1.name,
@@ -81,6 +89,7 @@ output "subnet_cidrs" {
     private = azurerm_subnet.subnet-private.address_prefixes[0]
     vgw     = azurerm_subnet.subnet-vgw.address_prefixes[0]
     rs      = azurerm_subnet.subnet-routeserver.address_prefixes[0]
+    bastion = azurerm_subnet.subnet-bastion.address_prefixes[0]
   }
 }
 
@@ -91,6 +100,7 @@ output "subnet_names" {
     private = azurerm_subnet.subnet-private.name
     vgw     = azurerm_subnet.subnet-vgw.name
     rs      = azurerm_subnet.subnet-routeserver.name
+    bastion = azurerm_subnet.subnet-bastion.name
   }
 }
 
@@ -101,6 +111,16 @@ output "subnet_ids" {
     private = azurerm_subnet.subnet-private.id
     vgw     = azurerm_subnet.subnet-vgw.id
     rs      = azurerm_subnet.subnet-routeserver.id
+    bastion = azurerm_subnet.subnet-bastion.id
+  }
+}
+
+output "nsg_ids" {
+  value = {
+    mgmt    = azurerm_network_security_group.nsg-mgmt-ha.id
+    public  = azurerm_network_security_group.nsg-public.id
+    private = azurerm_network_security_group.nsg-private.id
+    bastion = azurerm_network_security_group.nsg-bastion.id
   }
 }
 
@@ -114,12 +134,4 @@ output "nsg-private_id" {
 
 output "nsg-mgmt-ha_id" {
   value = azurerm_network_security_group.nsg-mgmt-ha.id
-}
-
-output "nsg_ids" {
-  value = {
-    mgmt    = azurerm_network_security_group.nsg-mgmt-ha.id
-    public  = azurerm_network_security_group.nsg-public.id
-    private = azurerm_network_security_group.nsg-private.id
-  }
 }

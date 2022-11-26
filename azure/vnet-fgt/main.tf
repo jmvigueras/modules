@@ -32,6 +32,13 @@ resource "azurerm_subnet" "subnet-private" {
   address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 3)]
 }
 
+resource "azurerm_subnet" "subnet-bastion" {
+  name                 = "${var.prefix}-subnet-bastion"
+  resource_group_name  = var.resourcegroup_name
+  virtual_network_name = azurerm_virtual_network.vnet-fgt.name
+  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 4)]
+}
+
 resource "azurerm_subnet" "subnet-vgw" {
   name                 = "GatewaySubnet"
   resource_group_name  = var.resourcegroup_name
@@ -188,5 +195,35 @@ resource "azurerm_network_interface" "ni-passiveport3" {
     private_ip_address            = cidrhost(azurerm_subnet.subnet-private.address_prefixes[0], 11)
   }
 
+  tags = var.tags
+}
+
+
+// Bastion public IP
+resource "azurerm_public_ip" "bastion-public-ip" {
+  name                = "${var.prefix}-bastion-public-ip"
+  location            = var.location
+  resource_group_name = var.resourcegroup_name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  sku_tier            = "Regional"
+
+  tags = var.tags
+}
+
+// Bastion Network Interface
+resource "azurerm_network_interface" "ni-bastion" {
+  name                = "${var.prefix}-ni-bastion"
+  location            = var.location
+  resource_group_name = var.resourcegroup_name
+
+  ip_configuration {
+    name                          = "ipconfig1"
+    subnet_id                     = azurerm_subnet.subnet-bastion.id
+    private_ip_address_allocation = "Static"
+    private_ip_address            = cidrhost(azurerm_subnet.subnet-bastion.address_prefixes[0], 10)
+    primary                       = true
+    public_ip_address_id          = azurerm_public_ip.bastion-public-ip.id
+  }
   tags = var.tags
 }

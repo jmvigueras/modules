@@ -69,3 +69,11 @@ output "nsg-mgmt-ha_id" {
 output "nsg_ids" {
   value = module.vnet-fgt.nsg_ids
 }
+
+output "bastion-ni_id" {
+  value = module.vnet-fgt.bastion-ni_id
+}
+
+output "bastion-public-ip_ip" {
+  value = module.vnet-fgt.bastion-public-ip_ip
+}
