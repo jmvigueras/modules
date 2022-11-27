@@ -14,7 +14,8 @@ This terraform code will deploy a fortigate site, simulating and on premise site
 It is highly recomended to used other modules as inputs to generate necessary variables for this module. Check example to see how to use modules `vnet-fgt` and `vm`.
    - module vnet-fgt (`github.com/jmvigueras/modules/azure/vnet-fgt`)
    - module vm (`github.com/jmvigueras/modules/azure/vm`)
-Needed to update vars_hubs.tf.
+
+Needed to update vars_hubs.tf
    - Complete data of each HUB to connect with SDWAN Fortinet as list of collections as it is showed here:
 
    ```sh
@@ -54,7 +55,7 @@ Needed to update vars_hubs.tf.
       ]
       }
    ```
-      - Update site details
+      - Update site details:
    ```sh
       variable "site" {
       type = map(any)
