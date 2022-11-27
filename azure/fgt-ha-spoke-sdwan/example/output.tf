@@ -14,5 +14,6 @@ output "bastion-vm" {
   value = {
     ssh_access = "ssh -i ssh-key.pem ${var.adminusername}@${module.vnet-fgt.bastion-public-ip_ip}"
     private_ip = cidrhost(module.vnet-fgt.subnet_cidrs["bastion"], 10)
+    udr_route_name = azurerm_route_table.rt-bastion.name
   }
 }
