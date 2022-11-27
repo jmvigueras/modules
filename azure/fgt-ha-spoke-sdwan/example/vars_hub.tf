@@ -35,6 +35,6 @@ variable "site" {
     id      = "site-1"
     cidr    = "192.168.0.0/24"
     bgp-asn = "65011"
-    ha      = false
+    ha      = true
   }
 }

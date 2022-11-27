@@ -22,21 +22,26 @@ module "fgt-site-ha" {
   admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
   rsa-public-key = chomp(tls_private_key.ssh-rsa.public_key_openssh)
 
-  subscription_id = var.subscription_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  tenant_id       = var.tenant_id
-
+  # Subnets details for VNET FGT (mandatory)
   fgt-subnet_cidrs = module.vnet-fgt.subnet_cidrs
-
-  hubs = var.hubs
+  # Site configuration defined in vars_hubs.tf (mandatory)
   site = var.site
+  # Configure SDWAN to HUB in vars_hubs.tf (comment if you don't need it)
+  hubs = var.hubs
+  
+  # Configure SDN connector (uncomment to provide detail to connect to your Azure environment)
+  #subscription_id = var.subscription_id
+  #client_id       = var.client_id
+  #client_secret   = var.client_secret
+  #tenant_id       = var.tenant_id
 
+  # FGT active network interfaces (mandatory)
   fgt-active-ni_ids = [
     module.vnet-fgt.fgt-active-ni_ids["port1"],
     module.vnet-fgt.fgt-active-ni_ids["port2"],
     module.vnet-fgt.fgt-active-ni_ids["port3"]
   ]
+  # FGT passive network interfaces (mandatory if you set ha=true in site definition in vars_hubs.tf)
   fgt-passive-ni_ids = [
     module.vnet-fgt.fgt-passive-ni_ids["port1"],
     module.vnet-fgt.fgt-passive-ni_ids["port2"],
@@ -46,8 +51,8 @@ module "fgt-site-ha" {
 
 #--------------------------------------------------------------------------------------
 # Deploy complete architecture with other modules used as input in module
-# - module vnet-fgt (../../vnet-fgt)
-# - module vm (../../vm)
+# - module vnet-fgt (github.com/jmvigueras/modules//azure/vnet-fgt)
+# - module vm (github.com/jmvigueras/modules//azure/vm)
 #--------------------------------------------------------------------------------------
 
 // Module VNET for FGT
@@ -86,13 +91,12 @@ module "vm" {
 #--------------------------------------------------------------------------------------
 # Create necesary resources if not provided
 #--------------------------------------------------------------------------------------
-
-// Create storage account if not provided
 resource "random_id" "randomId" {
   count       = var.storage-account_endpoint == null ? 1 : 0
   byte_length = 8
 }
 
+// Create storage account if not provided
 resource "azurerm_storage_account" "storageaccount" {
   count                    = var.storage-account_endpoint == null ? 1 : 0
   name                     = "stgra${random_id.randomId[count.index].hex}"

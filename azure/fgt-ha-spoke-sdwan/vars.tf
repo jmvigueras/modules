@@ -1,10 +1,25 @@
 // Azure configuration
-variable "subscription_id" {}
-variable "client_id" {}
-variable "client_secret" {}
-variable "tenant_id" {}
+variable "subscription_id" {
+  type    = string
+  default = ""
+}
+variable "client_id" {
+  type    = string
+  default = ""
+}
+variable "client_secret" {
+  type    = string
+  default = ""
+}
+variable "tenant_id" {
+  type    = string
+  default = ""
+}
 
-variable "storage-account_endpoint" {}
+variable "storage-account_endpoint" {
+  type    = string
+  default = null
+}
 variable "resourcegroup_name" {
   type    = string
   default = null

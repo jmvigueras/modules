@@ -1,6 +1,6 @@
-##############################################################################################################
+#------------------------------------------------------------------------------------------------------------
 # FGT ACTIVE VM
-##############################################################################################################
+#------------------------------------------------------------------------------------------------------------
 # Create new random API key to be provisioned in FortiGates.
 resource "random_string" "api_key" {
   length  = 30
@@ -80,6 +80,8 @@ data "template_file" "fgt-active_all-config" {
     api_key        = random_string.api_key.result
     rsa-public-key = var.rsa-public-key
     adminusername  = var.adminusername
+    admin_port     = var.admin_port
+    admin_cidr     = var.admin_cidr
 
     port1_ip   = cidrhost(var.fgt-subnet_cidrs["mgmt"], 10)
     port1_mask = cidrnetmask(var.fgt-subnet_cidrs["mgmt"])
@@ -91,17 +93,10 @@ data "template_file" "fgt-active_all-config" {
     port3_mask = cidrnetmask(var.fgt-subnet_cidrs["private"])
     port3_gw   = cidrhost(var.fgt-subnet_cidrs["private"], 1)
 
-    tenant       = var.tenant_id
-    subscription = var.subscription_id
-    clientid     = var.client_id
-    clientsecret = var.client_secret
-    admin_port   = var.admin_port
-    admin_cidr   = var.admin_cidr
-    rsg          = var.resourcegroup_name
-
     fgt_ha-config    = data.template_file.fgt_ha-active-config.rendered
     fgt_sdwan-config = var.hubs != null ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
     fgt_bgp-config   = var.site != null ? data.template_file.fgt_bgp-config.rendered : ""
+    fgt_sdn-config   = var.subscription_id != "" && var.tenant_id != "" && var.client_id != "" && var.client_secret != "" ? data.template_file.fgt_sdn-config.0.rendered : ""
   }
 }
 
@@ -139,5 +134,15 @@ data "template_file" "fgt_bgp-config" {
   }
 }
 
-
+data "template_file" "fgt_sdn-config" {
+  count    = var.subscription_id != "" && var.tenant_id != "" && var.client_id != "" && var.client_secret != "" ? 1 : 0
+  template = file("${path.module}/templates/fgt-sdn.conf")
+  vars = {
+    tenant       = var.tenant_id
+    subscription = var.subscription_id
+    clientid     = var.client_id
+    clientsecret = var.client_secret
+    rsg          = var.resourcegroup_name
+  }
+}
 
