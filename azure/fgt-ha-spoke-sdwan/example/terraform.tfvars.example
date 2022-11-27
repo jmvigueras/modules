@@ -5,3 +5,4 @@ client_secret   = "xxxxxxxxx"
 tenant_id       = "xxx-xxx-xxx"
 
 prefix = "fortinet"
+location = "francecentral"

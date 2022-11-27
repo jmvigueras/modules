@@ -67,7 +67,8 @@ module "vnet-fgt" {
 
   vnet-fgt_cidr = var.site["cidr"]
   admin_port    = var.admin_port
-  admin_cidr    = "${chomp(data.http.my-public-ip.body)}/32"
+  admin_cidr    = var.admin_cidr
+  // admin_cidr    = "${chomp(data.http.my-public-ip.body)}/32" (restrict access to user who deploys terrafom)
 }
 
 // Create virtual machines
