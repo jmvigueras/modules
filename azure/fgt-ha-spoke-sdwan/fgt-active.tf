@@ -82,6 +82,7 @@ data "template_file" "fgt-active_all-config" {
     adminusername  = var.adminusername
     admin_port     = var.admin_port
     admin_cidr     = var.admin_cidr
+    site_cidr      = var.site["cidr"]
 
     port1_ip   = cidrhost(var.fgt-subnet_cidrs["mgmt"], 10)
     port1_mask = cidrnetmask(var.fgt-subnet_cidrs["mgmt"])
