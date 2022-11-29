@@ -27,7 +27,7 @@ resource "azurerm_route" "r-RFC1918-bastion-2" {
 
 resource "azurerm_route" "r-RFC1918-bastion-3" {
   depends_on             = [module.fgt-site-ha]
-  name                   = "RFC1918-bastion-2"
+  name                   = "RFC1918-bastion-3"
   resource_group_name    = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
   route_table_name       = azurerm_route_table.rt-bastion.name
   address_prefix         = "192.168.0.0/16"
