@@ -5,7 +5,7 @@
 
 // Create VNETs spoke
 module "vnet-spoke" {
-  //  depends_on = [module.vnet-fgt]
+  depends_on = [module.vnet-fgt]
   source = "../"
 
   prefix             = var.prefix
@@ -13,18 +13,14 @@ module "vnet-spoke" {
   resourcegroup_name = var.resourcegroup_name == null ? azurerm_resource_group.rg[0].name : var.resourcegroup_name
   tags               = var.tags
 
-  vnet-spoke_cidrs = ["172.23.133.0/25", "172.23.133.128/25"]
-  vnet-fgt         = null
-
-  /*
   vnet-spoke_cidrs = var.vnet-spoke_cidrs
+  # Peer with VNET vnet-fgt
   vnet-fgt = {
     id   = module.vnet-fgt.vnet["id"]
     name = module.vnet-fgt.vnet["name"]
   }
-*/
 }
-/*
+
 // Deploy VNET, Subnets, Interfaces and NSG for Fortigate cluster
 // - Need for peering with VNET FGT if not provided as variable
 module "vnet-fgt" {
@@ -38,7 +34,6 @@ module "vnet-fgt" {
   admin_port    = var.admin_port
   admin_cidr    = var.admin_cidr
 }
-*/
 
 ###################################################################
 # Create necesary resources if not provided
