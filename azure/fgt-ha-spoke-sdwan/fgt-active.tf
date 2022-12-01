@@ -152,5 +152,6 @@ data "template_file" "fgt_vwan-config" {
   template = templatefile("${path.module}/templates/fgt-vwan.conf", {
     vhub_peer    = var.vhub_peer
     vhub_bgp-asn = var.vhub_bgp-asn
+    port3_gw     = cidrhost(var.fgt-subnet_cidrs["private"], 1)
   })
 }
