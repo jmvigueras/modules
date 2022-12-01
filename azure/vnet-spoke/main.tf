@@ -73,7 +73,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_pl-s" {
 // Network Interface VM Test Spoke-1 subnet 1
 resource "azurerm_network_interface" "ni_subnet_1" {
   count               = length(var.vnet-spoke_cidrs)
-  name                = "${var.prefix}-subnet-1_ni-${count.index + 1}"
+  name                = "${var.prefix}-ni-vnet-${count.index + 1}-subnet-1"
   location            = var.location
   resource_group_name = var.resourcegroup_name
 
@@ -91,7 +91,7 @@ resource "azurerm_network_interface" "ni_subnet_1" {
 // Network Interface VM Test Spoke-1 subnet 2
 resource "azurerm_network_interface" "ni_subnet_2" {
   count               = length(var.vnet-spoke_cidrs)
-  name                = "${var.prefix}-subnet-2_ni-${count.index + 1}"
+  name                = "${var.prefix}-ni-vnet-${count.index + 1}-subnet-2"
   location            = var.location
   resource_group_name = var.resourcegroup_name
 
