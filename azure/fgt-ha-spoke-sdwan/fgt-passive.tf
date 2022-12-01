@@ -91,6 +91,7 @@ data "template_file" "fgt-passive_all-config" {
     fgt_sdwan-config = var.hubs != null ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
     fgt_bgp-config   = var.site != null ? data.template_file.fgt_bgp-config.rendered : ""
     fgt_sdn-config   = var.subscription_id != "" && var.tenant_id != "" && var.client_id != "" && var.client_secret != "" ? data.template_file.fgt_sdn-config.0.rendered : ""
+    fgt_vwan-config  = var.vhub_peer != null ? data.template_file.fgt_vwan-config.rendered : ""
   }
 }
 
