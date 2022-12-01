@@ -57,7 +57,7 @@ output "ni_ids" {
 
 output "ni_ips" {
   value = {
-    subnet1 = azurerm_network_interface.ni_subnet_1.*.private_ip_addresses[0]
-    subnet2 = azurerm_network_interface.ni_subnet_2.*.private_ip_addresses[0]
+    subnet1 = azurerm_network_interface.ni_subnet_1.*.private_ip_addresses
+    subnet2 = azurerm_network_interface.ni_subnet_2.*.private_ip_addresses
   }
 }
