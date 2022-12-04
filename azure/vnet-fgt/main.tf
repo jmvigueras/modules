@@ -56,8 +56,7 @@ resource "azurerm_subnet" "subnet-routeserver" {
 ######################################################################
 ## Create public IPs and interfaces (Active and passive FGT)
 ######################################################################
-// Allocated Public IPs
-
+// // Public service IPs (public interfaces)
 resource "azurerm_public_ip" "cluster-public-ip" {
   name                = "${var.prefix}-cluster-public-ip"
   location            = var.location
@@ -68,7 +67,17 @@ resource "azurerm_public_ip" "cluster-public-ip" {
 
   tags = var.tags
 }
+resource "azurerm_public_ip" "passive-public-ip" {
+  name                = "${var.prefix}-passive-public-ip"
+  location            = var.location
+  resource_group_name = var.resourcegroup_name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  sku_tier            = "Regional"
 
+  tags = var.tags
+}
+// Public MGMT IPs (mgmt interfaces)
 resource "azurerm_public_ip" "active-mgmt-ip" {
   name                = "${var.prefix}-active-mgmt-ip"
   location            = var.location
@@ -79,7 +88,6 @@ resource "azurerm_public_ip" "active-mgmt-ip" {
 
   tags = var.tags
 }
-
 resource "azurerm_public_ip" "passive-mgmt-ip" {
   name                = "${var.prefix}-passive-mgmt-ip"
   location            = var.location
@@ -176,6 +184,7 @@ resource "azurerm_network_interface" "ni-passiveport2" {
     subnet_id                     = azurerm_subnet.subnet-public.id
     private_ip_address_allocation = "Static"
     private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0], 11)
+    public_ip_address_id          = azurerm_public_ip.passive-public-ip.id
   }
 
   tags = var.tags
