@@ -29,7 +29,7 @@ resource "azurerm_virtual_machine" "fgt-passive" {
   }
 
   storage_os_disk {
-    name              = "${var.prefix}-osDisk-fgt-passive"
+    name              = "${var.prefix}-${var.site["id"]}-osDisk-fgt-passive"
     caching           = "ReadWrite"
     managed_disk_type = "Standard_LRS"
     create_option     = "FromImage"
@@ -37,7 +37,7 @@ resource "azurerm_virtual_machine" "fgt-passive" {
 
   # Log data disks
   storage_data_disk {
-    name              = "${var.prefix}-datadisk-fgt-passive"
+    name              = "${var.prefix}-${var.site["id"]}-datadisk-fgt-passive"
     managed_disk_type = "Standard_LRS"
     create_option     = "Empty"
     lun               = 0
@@ -45,7 +45,7 @@ resource "azurerm_virtual_machine" "fgt-passive" {
   }
 
   os_profile {
-    computer_name  = "fgt-passive"
+    computer_name  = "${var.site["id"]}-fgt-passive"
     admin_username = var.adminusername
     admin_password = var.adminpassword
     custom_data    = data.template_file.fgt-passive_all-config.0.rendered
