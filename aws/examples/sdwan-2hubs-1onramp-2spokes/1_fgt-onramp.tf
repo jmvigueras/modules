@@ -1,17 +1,16 @@
 #------------------------------------------------------------------------------
-# Create ONRAMP AWS 
+# Create ONRAMP
 # - create TGW
-# - create GWLB
-# - Create VPC onramp (associated to TGW)
-# - Create VPC TGW spoke (associated to TGW)
+# - Create VPC onramp (associated to TGW default RT)
+# - Create VPC TGW spoke (associated to TGW spoke RT)
 # - Create TGW connect (use GRE and dynamic routing to TGW)
-# - Create FGT onramp config (FGCP)
+# - Create FGT onramp config (FGSP Active-Active)
 # - Create FGT instance
-# - Create test instances in VPC TGW spoke 
+# - Create test instances in VPC TGW spoke (2 x Az1 and 2 x Az2)
 #------------------------------------------------------------------------------
 // Create TGW
 module "tgw" {
-  source = "../tgw"
+  source = "../../tgw"
 
   prefix      = var.prefix
   tgw_cidr    = local.tgw_cidr
@@ -20,11 +19,11 @@ module "tgw" {
 
 // Create VPC FGT
 module "vpc_onramp" {
-  source = "../vpc-fgt-ha-2az-tgw"
+  source = "../../vpc-fgt-ha-2az-tgw"
 
   prefix     = "${var.prefix}-onramp"
   admin_cidr = local.admin_cidr
-  admin_port = var.admin_port
+  admin_port = local.admin_port
   region     = var.region
 
   vpc-sec_cidr          = local.onramp["cidr"]
@@ -36,11 +35,11 @@ module "vpc_onramp" {
 // Create VPC spoke attached to TGW
 module "vpc_tgw-spoke" {
   count  = local.count
-  source = "../vpc-spoke-2az-to-tgw"
+  source = "../../vpc-spoke-2az-to-tgw"
 
   prefix     = "${var.prefix}-tgw-spoke-${count.index + 1}"
   admin_cidr = local.admin_cidr
-  admin_port = var.admin_port
+  admin_port = local.admin_port
   region     = var.region
 
   vpc-spoke_cidr        = cidrsubnet(local.vpc-spoke_cidr, 1, count.index)
@@ -51,7 +50,7 @@ module "vpc_tgw-spoke" {
 
 // Create TGW connect
 module "tgw_connect" {
-  source = "../tgw_connect"
+  source = "../../tgw_connect"
 
   prefix         = var.prefix
   vpc_tgw-att_id = module.vpc_onramp.vpc_tgw-att_id
@@ -68,10 +67,10 @@ module "tgw_connect" {
 
 // Create FGT config
 module "fgt_onramp_config" {
-  source = "../fgt-config"
+  source = "../../fgt-config"
 
   admin_cidr     = local.admin_cidr
-  admin_port     = var.admin_port
+  admin_port     = local.admin_port
   rsa-public-key = tls_private_key.ssh.public_key_openssh
   api_key        = random_string.api_key.result
 
@@ -93,7 +92,7 @@ module "fgt_onramp_config" {
 
 // Create FGT
 module "fgt_onramp" {
-  source = "../"
+  source = "../../fgt-ha-2az"
 
   fgt-ami       = var.license_type == "byol" ? data.aws_ami_ids.fgt_amis_byol.ids[0] : data.aws_ami_ids.fgt_amis_payg.ids[0]
   prefix        = "${var.prefix}-onramp"
@@ -106,15 +105,23 @@ module "fgt_onramp" {
   fgt_config_1       = module.fgt_onramp_config.fgt_config_1
   fgt_config_2       = module.fgt_onramp_config.fgt_config_2
 
-  //fgt_passive = true  
+  fgt_passive = true
 }
 
 // Create test VM on VPC TGW spoke
-module "vm_onramp" {
+module "vm_onramp_az1" {
   count  = local.count
-  source = "../new-instance"
+  source = "../../new-instance"
 
-  prefix  = "${var.prefix}-onramp"
+  prefix  = "${var.prefix}-spoke-${count.index}-az1"
   ni_id   = [module.vpc_tgw-spoke[count.index].az1-vm-ni_id]
+  keypair = aws_key_pair.keypair.key_name
+}
+module "vm_onramp_az2" {
+  count  = local.count
+  source = "../../new-instance"
+
+  prefix  = "${var.prefix}-spoke-${count.index}-az2"
+  ni_id   = [module.vpc_tgw-spoke[count.index].az2-vm-ni_id]
   keypair = aws_key_pair.keypair.key_name
 }

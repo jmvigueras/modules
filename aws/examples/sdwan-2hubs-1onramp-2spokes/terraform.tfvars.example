@@ -2,4 +2,4 @@
 access_key = "xxx"
 secret_key = "xxx"
 
-prefix = "module-fgt-ha"
+prefix = "sdwan-demo"
