@@ -1,0 +1,99 @@
+output "fgt-active-ni_ids" {
+  value = {
+    mgmt    = aws_network_interface.ni-active-mgmt.id
+    public  = aws_network_interface.ni-active-public.id
+    private = aws_network_interface.ni-active-private.id
+  }
+}
+
+output "fgt-active-ni_ips" {
+  value = {
+    mgmt    = aws_network_interface.ni-active-mgmt.private_ip
+    public  = aws_network_interface.ni-active-public.private_ip
+    private = aws_network_interface.ni-active-private.private_ip
+  }
+}
+
+output "fgt-passive-ni_ids" {
+  value = {
+    mgmt    = aws_network_interface.ni-passive-mgmt.id
+    public  = aws_network_interface.ni-passive-public.id
+    private = aws_network_interface.ni-passive-private.id
+  }
+}
+
+output "fgt-passive-ni_ips" {
+  value = {
+    mgmt    = aws_network_interface.ni-passive-mgmt.private_ip
+    public  = aws_network_interface.ni-passive-public.private_ip
+    private = aws_network_interface.ni-passive-private.private_ip
+  }
+}
+
+output "subnet_az1_cidrs" {
+  value = {
+    mgmt    = aws_subnet.subnet-az1-mgmt-ha.cidr_block
+    public  = aws_subnet.subnet-az1-public.cidr_block
+    private = aws_subnet.subnet-az1-private.cidr_block
+    bastion = aws_subnet.subnet-az1-bastion.cidr_block
+    tgw     = aws_subnet.subnet-az1-tgw.cidr_block
+    gwlb    = aws_subnet.subnet-az1-gwlb.cidr_block
+  }
+}
+
+output "subnet_az2_cidrs" {
+  value = {
+    mgmt    = aws_subnet.subnet-az2-mgmt-ha.cidr_block
+    public  = aws_subnet.subnet-az2-public.cidr_block
+    private = aws_subnet.subnet-az2-private.cidr_block
+    bastion = aws_subnet.subnet-az2-bastion.cidr_block
+    tgw     = aws_subnet.subnet-az2-tgw.cidr_block
+    gwlb    = aws_subnet.subnet-az2-gwlb.cidr_block
+  }
+}
+
+output "subnet_az1_ids" {
+  value = {
+    mgmt    = aws_subnet.subnet-az1-mgmt-ha.id
+    public  = aws_subnet.subnet-az1-public.id
+    private = aws_subnet.subnet-az1-private.id
+    bastion = aws_subnet.subnet-az1-bastion.id
+    tgw     = aws_subnet.subnet-az1-tgw.id
+    gwlb    = aws_subnet.subnet-az1-gwlb.id
+  }
+}
+
+output "subnet_az2_ids" {
+  value = {
+    mgmt    = aws_subnet.subnet-az2-mgmt-ha.id
+    public  = aws_subnet.subnet-az2-public.id
+    private = aws_subnet.subnet-az2-private.id
+    bastion = aws_subnet.subnet-az2-bastion.id
+    tgw     = aws_subnet.subnet-az2-tgw.id
+    gwlb    = aws_subnet.subnet-az2-gwlb.id
+  }
+}
+
+output "bastion-ni_ids" {
+  value = {
+    az1 = aws_network_interface.ni-bastion-az1.id
+    az2 = aws_network_interface.ni-bastion-az2.id
+  }
+}
+
+output "vpc-sec_id" {
+  value = aws_vpc.vpc-sec.id
+}
+
+output "nsg_ids" {
+  value = {
+    mgmt    = aws_security_group.nsg-vpc-sec-mgmt.id
+    ha      = aws_security_group.nsg-vpc-sec-ha.id
+    private = aws_security_group.nsg-vpc-sec-private.id
+    public  = aws_security_group.nsg-vpc-sec-public.id
+  }
+}
+
+output "vpc_tgw-att_id" {
+  value = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-sec.id
+}
