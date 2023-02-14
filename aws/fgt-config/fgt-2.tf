@@ -38,6 +38,9 @@ data "template_file" "fgt_passive" {
     fgt_vxlan-config       = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
     fgt_vpn-config         = var.config_hub ? var.config_fgsp ? data.template_file.fgt_vpn-config.1.rendered : data.template_file.fgt_vpn-config.0.rendered : ""
     fgt_gwlb-geneve-config = var.config_gwlb-geneve ? data.template_file.fgt_passive_gwlb-geneve-config.rendered : ""
+    fgt_fmg-config         = var.config_fmg ? data.template_file.fgt_2_fmg-config.rendered : ""
+    fgt_faz-config         = var.config_faz ? data.template_file.fgt_2_faz-config.rendered : ""
+    fgt_extra-config       = var.fgt_passive_extra-config
   }
 }
 
@@ -71,11 +74,11 @@ data "template_file" "fgt_passive_static-config" {
 }
 
 data "template_file" "fgt_passive_tgw-gre-config" {
-  template = file("${path.module}/templates/fgt-tgw-gre.conf")
+  template = file("${path.module}/templates/aws_fgt-tgw.conf")
   vars = {
     bgp-asn          = var.tgw_bgp-asn
     port             = var.private_port
-    port_gw          = cidrhost(var.subnet_active_cidrs["private"], 1)
+    port_gw          = cidrhost(var.subnet_passive_cidrs["private"], 1)
     tunnel_local_ip  = var.fgt-passive-ni_ips["private"]
     remote_cidr      = var.tgw_cidr[0]
     tunnel_remote_ip = cidrhost(var.tgw_cidr[0], 11)
@@ -86,7 +89,7 @@ data "template_file" "fgt_passive_tgw-gre-config" {
 }
 
 data "template_file" "fgt_passive_gwlb-geneve-config" {
-  template = file("${path.module}/templates/fgt-gwlb-geneve.conf")
+  template = file("${path.module}/templates/aws_fgt-gwlb-geneve.conf")
   vars = {
     gwlbe_ip_az1    = var.gwlbe_ip[0]
     gwlbe_ip_az2    = var.gwlbe_ip[1]
@@ -94,5 +97,25 @@ data "template_file" "fgt_passive_gwlb-geneve-config" {
     subnet-az2-gwlb = var.subnet_passive_cidrs["gwlb"]
     private_port    = var.private_port
     private_gw      = cidrhost(var.subnet_passive_cidrs["private"], 1)
+  }
+}
+
+data "template_file" "fgt_2_faz-config" {
+  template = file("${path.module}/templates/fgt-faz.conf")
+  vars = {
+    ip                      = var.faz_ip
+    sn                      = var.faz_sn
+    source-ip               = var.faz_fgt-2_source-ip
+    interface-select-method = var.faz_interface-select-method
+  }
+}
+
+data "template_file" "fgt_2_fmg-config" {
+  template = file("${path.module}/templates/fgt-fmg.conf")
+  vars = {
+    ip                      = var.fmg_ip
+    sn                      = var.fmg_sn
+    source-ip               = var.fmg_fgt-2_source-ip
+    interface-select-method = var.fmg_interface-select-method
   }
 }

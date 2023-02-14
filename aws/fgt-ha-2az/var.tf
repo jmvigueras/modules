@@ -67,3 +67,16 @@ variable "instance_type" {
   type        = string
   default     = "c6i.large"
 }
+
+variable "fgt_ni_0" {
+  type    = string
+  default = "mgmt"
+}
+variable "fgt_ni_1" {
+  type    = string
+  default = "public"
+}
+variable "fgt_ni_2" {
+  type    = string
+  default = "private"
+}

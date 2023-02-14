@@ -58,11 +58,14 @@ data "template_file" "fgt_active" {
     fgt_vxlan-config       = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
     fgt_vpn-config         = var.config_hub ? data.template_file.fgt_vpn-config.0.rendered : ""
     fgt_gwlb-geneve-config = var.config_gwlb-geneve ? data.template_file.fgt_active_gwlb-geneve-config.rendered : ""
+    fgt_fmg-config         = var.config_fmg ? data.template_file.fgt_1_fmg-config.rendered : ""
+    fgt_faz-config         = var.config_faz ? data.template_file.fgt_1_faz-config.rendered : ""
+    fgt_extra-config       = var.fgt_active_extra-config
   }
 }
 
 data "template_file" "fgt_sdn-config" {
-  template = file("${path.module}/templates/fgt-sdn.conf")
+  template = file("${path.module}/templates/aws_fgt-sdn.conf")
 }
 
 data "template_file" "fgt_ha-fgcp-active-config" {
@@ -105,6 +108,7 @@ data "template_file" "fgt_sdwan-config" {
     localid           = var.spoke["id"]
     sdwan_port        = var.public_port
     private_port      = var.private_port
+    count             = count.index + 1
   }
 }
 
@@ -135,6 +139,7 @@ data "template_file" "fgt_spoke_bgp-config" {
     bgp-asn   = var.spoke["bgp-asn"]
     router-id = var.fgt-active-ni_ips["mgmt"]
     network   = var.spoke["cidr"]
+    role      = "spoke"
   }
 }
 
@@ -144,6 +149,7 @@ data "template_file" "fgt_hub_bgp-config" {
     bgp-asn   = var.hub["bgp-asn_hub"]
     router-id = var.fgt-active-ni_ips["mgmt"]
     network   = var.hub["cidr"]
+    role      = "hub"
   }
 }
 
@@ -169,7 +175,7 @@ data "template_file" "fgt_active_static-config" {
 }
 
 data "template_file" "fgt_active_tgw-gre-config" {
-  template = file("${path.module}/templates/fgt-tgw-gre.conf")
+  template = file("${path.module}/templates/aws_fgt-tgw.conf")
   vars = {
     bgp-asn          = var.tgw_bgp-asn
     port             = var.private_port
@@ -184,7 +190,7 @@ data "template_file" "fgt_active_tgw-gre-config" {
 }
 
 data "template_file" "fgt_active_gwlb-geneve-config" {
-  template = file("${path.module}/templates/fgt-gwlb-geneve.conf")
+  template = file("${path.module}/templates/aws_fgt-gwlb-geneve.conf")
   vars = {
     gwlbe_ip_az1    = var.gwlbe_ip[0]
     gwlbe_ip_az2    = var.gwlbe_ip[1]
@@ -192,5 +198,25 @@ data "template_file" "fgt_active_gwlb-geneve-config" {
     subnet-az2-gwlb = var.subnet_passive_cidrs["gwlb"]
     private_port    = var.private_port
     private_gw      = cidrhost(var.subnet_active_cidrs["private"], 1)
+  }
+}
+
+data "template_file" "fgt_1_faz-config" {
+  template = file("${path.module}/templates/fgt-faz.conf")
+  vars = {
+    ip                      = var.faz_ip
+    sn                      = var.faz_sn
+    source-ip               = var.faz_fgt-1_source-ip
+    interface-select-method = var.faz_interface-select-method
+  }
+}
+
+data "template_file" "fgt_1_fmg-config" {
+  template = file("${path.module}/templates/fgt-fmg.conf")
+  vars = {
+    ip                      = var.fmg_ip
+    sn                      = var.fmg_sn
+    source-ip               = var.fmg_fgt-1_source-ip
+    interface-select-method = var.fmg_interface-select-method
   }
 }

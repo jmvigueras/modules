@@ -1,10 +1,14 @@
-// Create Active FGT
-module "fgt-config_hub-fgsp" {
+#---------------------------------------------------------------------------------
+# Create FGT cluster HUB1
+# - FGSP
+# - TGW attachment connect
+# - vxlan to HUB2
+#---------------------------------------------------------------------------------
+module "fgt-config_hub1" {
   source = "../"
 
   admin_cidr     = local.admin_cidr
   admin_port     = var.admin_port
-  keypair        = var.keypair != null ? var.keypair : aws_key_pair.keypair[0].key_name
   rsa-public-key = tls_private_key.ssh.public_key_openssh
   api_key        = random_string.api_key.result
 
@@ -13,13 +17,22 @@ module "fgt-config_hub-fgsp" {
   fgt-active-ni_ips    = local.fgt-active-ni_ips
   fgt-passive-ni_ips   = local.fgt-passive-ni_ips
 
-  config_hub     = true
-  config_fgsp    = true
-  hub            = local.hub
-  hub-peer_vxlan = local.hub-peer_vxlan
+  config_fgsp     = true
+  config_hub      = true
+  config_tgw-gre  = true
+  config_vxlan    = true
+  hub             = local.hub1
+  hub-peer_vxlan  = local.hub1_peer_vxlan
+  tgw_inside_cidr = local.hub1_tgw_inside_cidr
+  tgw_cidr        = local.hub1_tgw_cidr
+  tgw_bgp-asn     = local.hub1_tgw_bgp-asn
 }
-
-module "fgt-config_spoke-fgcp" {
+#---------------------------------------------------------------------------------
+# Create FGT cluster HUB2
+# - FGCP
+# - vxlan to HUB1
+#---------------------------------------------------------------------------------
+module "fgt-config_hub2" {
   source = "../"
 
   admin_cidr     = local.admin_cidr
@@ -32,8 +45,31 @@ module "fgt-config_spoke-fgcp" {
   fgt-active-ni_ips    = local.fgt-active-ni_ips
   fgt-passive-ni_ips   = local.fgt-passive-ni_ips
 
+  config_fgcp     = true
+  config_hub      = true
+  config_vxlan    = true
+  hub             = local.hub2
+  hub-peer_vxlan  = local.hub2_peer_vxlan
+}
+#---------------------------------------------------------------------------------
+# Create FGT cluster spoke
+# - FGCP
+#---------------------------------------------------------------------------------
+module "fgt-config_spoke" {
+  source = "../"
+
+  admin_cidr     = local.admin_cidr
+  admin_port     = var.admin_port
+  rsa-public-key = tls_private_key.ssh.public_key_openssh
+  api_key        = random_string.api_key.result
+
+  subnet_active_cidrs  = local.subnet_active_cidrs
+  subnet_passive_cidrs = local.subnet_passive_cidrs
+  fgt-active-ni_ips    = local.fgt-active-ni_ips
+  fgt-passive-ni_ips   = local.fgt-passive-ni_ips
+
+  config_fgsp  = true
   config_spoke = true
-  config_fgcp  = true
   hubs         = local.hubs
   spoke        = local.spoke
 }

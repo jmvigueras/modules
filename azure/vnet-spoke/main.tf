@@ -8,7 +8,7 @@ resource "azurerm_virtual_network" "vnet-spoke" {
   name                = "${var.prefix}-vnet-spoke-${count.index + 1}"
   address_space       = [var.vnet-spoke_cidrs[count.index]]
   location            = var.location
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
 
   tags = var.tags
 }
@@ -17,7 +17,7 @@ resource "azurerm_virtual_network" "vnet-spoke" {
 resource "azurerm_subnet" "vnet-spoke_subnet_1" {
   count                = length(var.vnet-spoke_cidrs)
   name                 = "subnet-1"
-  resource_group_name  = var.resourcegroup_name
+  resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
   address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 0)]
 }
@@ -25,7 +25,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_1" {
 resource "azurerm_subnet" "vnet-spoke_subnet_2" {
   count                = length(var.vnet-spoke_cidrs)
   name                 = "subnet-2"
-  resource_group_name  = var.resourcegroup_name
+  resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
   address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 1)]
 }
@@ -33,7 +33,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_2" {
 resource "azurerm_subnet" "vnet-spoke_subnet_routeserver" {
   count                = length(var.vnet-spoke_cidrs)
   name                 = "RouteServerSubnet"
-  resource_group_name  = var.resourcegroup_name
+  resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
   address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 4)]
 }
@@ -41,7 +41,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_routeserver" {
 resource "azurerm_subnet" "vnet-spoke_subnet_vgw" {
   count                = length(var.vnet-spoke_cidrs)
   name                 = "GatewaySubnet"
-  resource_group_name  = var.resourcegroup_name
+  resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
   address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 5)]
 }
@@ -49,7 +49,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_vgw" {
 resource "azurerm_subnet" "vnet-spoke_subnet_pl" {
   count                = length(var.vnet-spoke_cidrs)
   name                 = "PrivateLinkSubnet"
-  resource_group_name  = var.resourcegroup_name
+  resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
   address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 6)]
 
@@ -59,7 +59,7 @@ resource "azurerm_subnet" "vnet-spoke_subnet_pl" {
 resource "azurerm_subnet" "vnet-spoke_subnet_pl-s" {
   count                = length(var.vnet-spoke_cidrs)
   name                 = "PrivateLinkServicesSubnet"
-  resource_group_name  = var.resourcegroup_name
+  resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-spoke[count.index].name
   address_prefixes     = [cidrsubnet(var.vnet-spoke_cidrs[count.index], 3, 7)]
 
@@ -75,7 +75,7 @@ resource "azurerm_network_interface" "ni_subnet_1" {
   count               = length(var.vnet-spoke_cidrs)
   name                = "${var.prefix}-ni-vnet-${count.index + 1}-subnet-1"
   location            = var.location
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
 
   ip_configuration {
     name                          = "ipconfig1"
@@ -93,7 +93,7 @@ resource "azurerm_network_interface" "ni_subnet_2" {
   count               = length(var.vnet-spoke_cidrs)
   name                = "${var.prefix}-ni-vnet-${count.index + 1}-subnet-2"
   location            = var.location
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
 
   ip_configuration {
     name                          = "ipconfig1"

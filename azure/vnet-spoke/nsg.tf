@@ -3,7 +3,7 @@
 resource "azurerm_network_security_group" "nsg-hub-spoke" {
   name                = "${var.prefix}-nsg-vnet-spoke"
   location            = var.location
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
 
   tags = var.tags
 }
@@ -18,7 +18,7 @@ resource "azurerm_network_security_rule" "nsr-hub-ingress-spoke" {
   destination_port_range      = "*"
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
-  resource_group_name         = var.resourcegroup_name
+  resource_group_name         = var.resource_group_name
   network_security_group_name = azurerm_network_security_group.nsg-hub-spoke.name
 }
 
@@ -32,7 +32,7 @@ resource "azurerm_network_security_rule" "nsr-hub-egress-spoke" {
   destination_port_range      = "*"
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
-  resource_group_name         = var.resourcegroup_name
+  resource_group_name         = var.resource_group_name
   network_security_group_name = azurerm_network_security_group.nsg-hub-spoke.name
 }
 

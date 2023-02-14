@@ -56,7 +56,7 @@ resource "aws_security_group" "nsg-vpc-vm" {
   }
 
   tags = {
-    Name = "${var.prefix}-nsg-vpc-vm"
+    Name = "${var.prefix}-nsg-vm"
   }
 }
 
@@ -77,5 +77,9 @@ resource "aws_security_group" "nsg-vpc-gwlb" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  tags = {
+    Name = "${var.prefix}-nsg-gwlb"
   }
 }

@@ -2,7 +2,7 @@
 resource "azurerm_public_ip" "public-ip-rs" {
   count               = length(var.subnet_ids)
   name                = "${var.prefix}-rs-${count.index + 1}-pip"
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
   sku                 = "Standard"
@@ -14,7 +14,7 @@ resource "azurerm_public_ip" "public-ip-rs" {
 resource "azurerm_route_server" "rs" {
   count                = length(var.subnet_ids)
   name                 = "${var.prefix}-rs-${count.index + 1}"
-  resource_group_name  = var.resourcegroup_name
+  resource_group_name  = var.resource_group_name
   location             = var.location
   sku                  = "Standard"
   public_ip_address_id = azurerm_public_ip.public-ip-rs[count.index].id

@@ -44,15 +44,15 @@ resource "aws_instance" "fgt_active" {
   user_data            = var.fgt_config_1
   network_interface {
     device_index         = 0
-    network_interface_id = var.fgt-active-ni_ids["public"]
+    network_interface_id = var.fgt-active-ni_ids[var.fgt_ni_0]
   }
   network_interface {
     device_index         = 1
-    network_interface_id = var.fgt-active-ni_ids["private"]
+    network_interface_id = var.fgt-active-ni_ids[var.fgt_ni_1]
   }
   network_interface {
     device_index         = 2
-    network_interface_id = var.fgt-active-ni_ids["mgmt"]
+    network_interface_id = var.fgt-active-ni_ids[var.fgt_ni_2]
   }
   tags = {
     Name = var.fgt_ha_fgsp ? "${var.prefix}-fgt-1" : "${var.prefix}-fgt-active"
@@ -70,15 +70,15 @@ resource "aws_instance" "fgt_passive" {
   user_data            = var.fgt_config_2
   network_interface {
     device_index         = 0
-    network_interface_id = var.fgt-passive-ni_ids["public"]
+    network_interface_id = var.fgt-passive-ni_ids[var.fgt_ni_0]
   }
   network_interface {
     device_index         = 1
-    network_interface_id = var.fgt-passive-ni_ids["private"]
+    network_interface_id = var.fgt-passive-ni_ids[var.fgt_ni_1]
   }
   network_interface {
     device_index         = 2
-    network_interface_id = var.fgt-passive-ni_ids["mgmt"]
+    network_interface_id = var.fgt-passive-ni_ids[var.fgt_ni_2]
   }
   tags = {
     Name = var.fgt_ha_fgsp ? "${var.prefix}-fgt-2" : "${var.prefix}-fgt-passive"

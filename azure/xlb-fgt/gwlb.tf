@@ -5,7 +5,7 @@
 resource "azurerm_lb" "gwlb" {
   name                = "${var.prefix}-GatewayLoadBalancer"
   location            = var.location
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
   sku                 = "Gateway"
 
   frontend_ip_configuration {
@@ -21,16 +21,16 @@ resource "azurerm_lb_backend_address_pool" "gwlbbackend" {
   name            = "BackEndPool"
 
   tunnel_interface {
-    identifier = var.gwlb-vxlan["vdi_int"]
+    identifier = var.gwlb_vxlan["vdi_int"]
     type       = "Internal"
     protocol   = "VXLAN"
-    port       = var.gwlb-vxlan["port_int"]
+    port       = var.gwlb_vxlan["port_int"]
   }
   tunnel_interface {
-    identifier = var.gwlb-vxlan["vdi_ext"]
+    identifier = var.gwlb_vxlan["vdi_ext"]
     type       = "External"
     protocol   = "VXLAN"
-    port       = var.gwlb-vxlan["port_ext"]
+    port       = var.gwlb_vxlan["port_ext"]
   }
 }
 

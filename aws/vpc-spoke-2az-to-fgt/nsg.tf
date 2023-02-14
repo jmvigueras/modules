@@ -2,8 +2,7 @@
 ## Need to create 4 of them as our Security Groups are linked to a VPC
 
 resource "aws_security_group" "nsg-vpc-vm" {
-  count       = length(var.vpc-spoke_cidr)
-  name        = "nsg-vpc-vm"
+  name        = "${var.prefix}-nsg-vpc-vm"
   description = "Allow SSH and ICMP traffic"
   vpc_id      = aws_vpc.vpc-spoke.id
 
@@ -57,13 +56,12 @@ resource "aws_security_group" "nsg-vpc-vm" {
   }
 
   tags = {
-    Name = "${var.prefix}-nsg-vpc-${count.index + 1}-vm"
+    Name = "${var.prefix}-nsg-vm"
   }
 }
 
 resource "aws_security_group" "nsg-vpc-gwlb" {
-  count       = length(var.vpc-spoke_cidr)
-  name        = "nsg-vpc-gwlb"
+  name        = "${var.prefix}-nsg-vpc-gwlb"
   description = "Allow all traffic"
   vpc_id      = aws_vpc.vpc-spoke.id
 
@@ -79,5 +77,9 @@ resource "aws_security_group" "nsg-vpc-gwlb" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  tags = {
+    Name = "${var.prefix}-nsg-gwlb"
   }
 }

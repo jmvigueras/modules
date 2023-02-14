@@ -5,7 +5,7 @@
 resource "azurerm_public_ip" "elb-pip" {
   name                = "${var.prefix}-elb-pip"
   location            = var.location
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
   domain_name_label   = format("%s-%s", lower(var.prefix), "elb-pip")
@@ -14,7 +14,7 @@ resource "azurerm_public_ip" "elb-pip" {
 resource "azurerm_lb" "elb" {
   name                = "${var.prefix}-ExternalLoadBalancer"
   location            = var.location
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
   sku                 = "Standard"
   tags                = var.tags
 

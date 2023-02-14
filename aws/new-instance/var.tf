@@ -5,7 +5,7 @@ variable "prefix" {
 }
 
 variable "ni_id" {
-  type    = list(string)
+  type    = string
   default = null
 }
 

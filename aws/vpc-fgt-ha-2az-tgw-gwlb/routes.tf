@@ -107,13 +107,13 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-sec" {
 }
 # Create route table association
 resource "aws_ec2_transit_gateway_route_table_association" "tgw-att-vpc-sec_association" {
-//  count                          = var.tgw_rt-association_id == null ? 0 : 1
+  //  count                          = var.tgw_rt-association_id == null ? 0 : 1
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-sec.id
   transit_gateway_route_table_id = var.tgw_rt-association_id
 }
 # Create route propagation if route table id provided
 resource "aws_ec2_transit_gateway_route_table_propagation" "tgw-att-vpc-sec_propagation" {
-//  count                          = var.tgw_rt-propagation_id == null ? 0 : 1
+  //  count                          = var.tgw_rt-propagation_id == null ? 0 : 1
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-sec.id
   transit_gateway_route_table_id = var.tgw_rt-propagation_id
 }

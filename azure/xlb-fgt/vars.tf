@@ -1,5 +1,5 @@
 // Resource group name
-variable "resourcegroup_name" {
+variable "resource_group_name" {
   type    = string
   default = null
 }
@@ -56,7 +56,7 @@ variable "fgt-ni_ips" {
 }
 
 // Fortigate vxlan vdi and port config
-variable "gwlb-vxlan" {
+variable "gwlb_vxlan" {
   type = map(any)
   default = {
     vdi_ext  = "800"

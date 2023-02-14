@@ -1,4 +1,4 @@
-variable "resourcegroup_name" {}
+variable "resource_group_name" {}
 
 // Azure resourcers tags
 variable "tags" {

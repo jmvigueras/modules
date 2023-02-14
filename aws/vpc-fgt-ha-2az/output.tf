@@ -81,6 +81,41 @@ output "bastion-ni_ids" {
   }
 }
 
+output "bastion-ni_ips" {
+  value = {
+    az1 = aws_network_interface.ni-bastion-az1.private_ip
+    az2 = aws_network_interface.ni-bastion-az2.private_ip
+  }
+}
+
+output "faz_ni_ids" {
+  value = {
+    public  = aws_network_interface.ni-faz-public.id
+    private = aws_network_interface.ni-faz-private.id
+  }
+}
+
+output "faz_ni_ips" {
+  value = {
+    public  = aws_network_interface.ni-faz-public.private_ip
+    private = aws_network_interface.ni-faz-private.private_ip
+  }
+}
+
+output "fmg_ni_ids" {
+  value = {
+    public  = aws_network_interface.ni-fmg-public.id
+    private = aws_network_interface.ni-fmg-private.id
+  }
+}
+
+output "fmg_ni_ips" {
+  value = {
+    public  = aws_network_interface.ni-fmg-public.private_ip
+    private = aws_network_interface.ni-fmg-private.private_ip
+  }
+}
+
 output "vpc-sec_id" {
   value = aws_vpc.vpc-sec.id
 }

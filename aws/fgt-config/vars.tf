@@ -99,7 +99,6 @@ variable "hub-peer_vxlan" {
 # Predefined variables for TGW (GRE connection)
 # - config_tgw-gre   = false (default) 
 #-----------------------------------------------------------------------------------
-
 variable "config_tgw-gre" {
   type    = bool
   default = false
@@ -124,7 +123,6 @@ variable "tgw_bgp-asn" {
 # Predefined variables for GWLB (GENEVE connection)
 # - config_gwlb-geneve = false (default) 
 #-----------------------------------------------------------------------------------
-
 variable "config_gwlb-geneve" {
   type    = bool
   default = false
@@ -133,6 +131,74 @@ variable "config_gwlb-geneve" {
 variable "gwlbe_ip" {
   type    = list(string)
   default = ["172.20.0.66", "172.20.0.194"]
+}
+
+#-----------------------------------------------------------------------------------
+# Predefined variables for FMG 
+# - config_fmg = false (default) 
+#-----------------------------------------------------------------------------------
+variable "config_fmg" {
+  type    = bool
+  default = false
+}
+
+variable "fmg_ip" {
+  type    = string
+  default = ""
+}
+
+variable "fmg_sn" {
+  type    = string
+  default = ""
+}
+
+variable "fmg_interface-select-method" {
+  type    = string
+  default = ""
+}
+
+variable "fmg_fgt-1_source-ip" {
+  type    = string
+  default = ""
+}
+
+variable "fmg_fgt-2_source-ip" {
+  type    = string
+  default = ""
+}
+
+#-----------------------------------------------------------------------------------
+# Predefined variables for FAZ 
+# - config_faz = false (default) 
+#-----------------------------------------------------------------------------------
+variable "config_faz" {
+  type    = bool
+  default = false
+}
+
+variable "faz_ip" {
+  type    = string
+  default = ""
+}
+
+variable "faz_sn" {
+  type    = string
+  default = ""
+}
+
+variable "faz_interface-select-method" {
+  type    = string
+  default = ""
+}
+
+variable "faz_fgt-1_source-ip" {
+  type    = string
+  default = ""
+}
+
+variable "faz_fgt-2_source-ip" {
+  type    = string
+  default = ""
 }
 
 #-----------------------------------------------------------------------------------
@@ -154,6 +220,16 @@ variable "api_key" {
 variable "fgt_passive" {
   type    = bool
   default = false
+}
+
+variable "fgt_passive_extra-config" {
+  type    = string
+  default = ""
+}
+
+variable "fgt_active_extra-config" {
+  type    = string
+  default = ""
 }
 
 variable "vpc-spoke_cidr" {
@@ -181,15 +257,15 @@ variable "subnet_passive_cidrs" {
   default = null
 }
 
-variable "public_port" {
+variable "mgmt_port" {
   type    = string
   default = "port1"
 }
-variable "private_port" {
+variable "public_port" {
   type    = string
   default = "port2"
 }
-variable "mgmt_port" {
+variable "private_port" {
   type    = string
   default = "port3"
 }
@@ -217,7 +293,8 @@ variable "license_file_2" {
 
 variable "keypair" {
   description = "Provide a keypair for accessing the FortiGate instances"
-  default     = "<key pair>"
+  type      = string
+  default   = null
 }
 
 // SSH RSA public key for KeyPair if not exists

@@ -86,3 +86,49 @@ resource "aws_network_interface" "ni-bastion-az2" {
     Name = "${var.prefix}-ni-bastion-az2"
   }
 }
+
+# ------------------------------------------------------------------
+# Create all the eni interfaces FAZ
+# ------------------------------------------------------------------
+resource "aws_network_interface" "ni-faz-public" {
+  subnet_id         = aws_subnet.subnet-az1-public.id
+  security_groups   = [aws_security_group.nsg-vpc-sec-allow-all.id]
+  private_ips       = [cidrhost(aws_subnet.subnet-az1-public.cidr_block, 12)]
+  source_dest_check = false
+  tags = {
+    Name = "${var.prefix}-ni-faz-public"
+  }
+}
+
+resource "aws_network_interface" "ni-faz-private" {
+  subnet_id         = aws_subnet.subnet-az1-bastion.id
+  security_groups   = [aws_security_group.nsg-vpc-sec-allow-all.id]
+  private_ips       = [cidrhost(aws_subnet.subnet-az1-bastion.cidr_block, 12)]
+  source_dest_check = false
+  tags = {
+    Name = "${var.prefix}-ni-faz-private"
+  }
+}
+
+# ------------------------------------------------------------------
+# Create all the eni interfaces FMG
+# ------------------------------------------------------------------
+resource "aws_network_interface" "ni-fmg-public" {
+  subnet_id         = aws_subnet.subnet-az1-public.id
+  security_groups   = [aws_security_group.nsg-vpc-sec-allow-all.id]
+  private_ips       = [cidrhost(aws_subnet.subnet-az1-public.cidr_block, 13)]
+  source_dest_check = false
+  tags = {
+    Name = "${var.prefix}-ni-fmg-public"
+  }
+}
+
+resource "aws_network_interface" "ni-fmg-private" {
+  subnet_id         = aws_subnet.subnet-az1-bastion.id
+  security_groups   = [aws_security_group.nsg-vpc-sec-allow-all.id]
+  private_ips       = [cidrhost(aws_subnet.subnet-az1-bastion.cidr_block, 13)]
+  source_dest_check = false
+  tags = {
+    Name = "${var.prefix}-ni-fmg-private"
+  }
+}

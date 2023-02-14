@@ -5,8 +5,7 @@
 #-------------------------------------------------------------------------------------------------------------
 # VPC peering to VPC-SEC
 # - Create VPC peering with VPC-SEC if vpc-sec_id provided
-resource "aws_vpc_peering_connection" "to-vpc-sec-1" {
-  count       = var.vpc-sec_id != null ? length(var.vpc-spoke_cidr) : 0
+resource "aws_vpc_peering_connection" "peer_vpc-sec_1" {
   peer_vpc_id = var.vpc-sec_id
   vpc_id      = aws_vpc.vpc-spoke.id
   auto_accept = true
@@ -15,8 +14,8 @@ resource "aws_vpc_peering_connection" "to-vpc-sec-1" {
     Name = "${var.prefix}-sec-to-spoke"
   }
 }
-resource "aws_vpc_peering_connection" "to-vpc-sec-2" {
-  count       = var.vpc-sec_id != null ? length(var.vpc-spoke_cidr) : 0
+/*
+resource "aws_vpc_peering_connection" "peer_vpc-sec_2" {
   peer_vpc_id = aws_vpc.vpc-spoke.id
   vpc_id      = var.vpc-sec_id
   auto_accept = true
@@ -25,14 +24,13 @@ resource "aws_vpc_peering_connection" "to-vpc-sec-2" {
     Name = "${var.prefix}-spoke-to-sec"
   }
 }
-
+*/
 # TableRoute to FGW
 resource "aws_route_table" "rt-fgt" {
-  count  = var.fgt-active-ni_id != null ? length(var.vpc-spoke_cidr) : 0
   vpc_id = aws_vpc.vpc-spoke.id
   route {
-    cidr_block           = "0.0.0.0/0"
-    network_interface_id = var.fgt-active-ni_id
+    cidr_block                = "0.0.0.0/0"
+    vpc_peering_connection_id = aws_vpc_peering_connection.peer_vpc-sec_1.id
   }
   route {
     cidr_block = var.admin_cidr
@@ -46,12 +44,10 @@ resource "aws_route_table" "rt-fgt" {
 # Route tables associations
 # - Associate RT to FGT if provided
 resource "aws_route_table_association" "ra-subnet-az1-vm-fgt" {
-  count          = var.vpc-sec_id != null && var.fgt-active-ni_id != null ? length(var.vpc-spoke_cidr) : 0
   subnet_id      = aws_subnet.subnet-vpc-az1-vm.id
   route_table_id = aws_route_table.rt-fgt.id
 }
 resource "aws_route_table_association" "ra-subnet-az2-vm-fgt" {
-  count          = var.vpc-sec_id != null && var.fgt-active-ni_id != null ? length(var.vpc-spoke_cidr) : 0
   subnet_id      = aws_subnet.subnet-vpc-az2-vm.id
   route_table_id = aws_route_table.rt-fgt.id
 }

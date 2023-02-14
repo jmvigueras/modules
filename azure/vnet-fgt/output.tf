@@ -6,12 +6,20 @@ output "fgt-passive-mgmt-ip" {
   value = azurerm_public_ip.passive-mgmt-ip.ip_address
 }
 
-output "cluster-public-ip_ip" {
-  value = azurerm_public_ip.cluster-public-ip.ip_address
+output "fgt-active-public-ip" {
+  value = azurerm_public_ip.active-public-ip.ip_address
 }
 
-output "cluster-public-ip_name" {
-  value = azurerm_public_ip.cluster-public-ip.name
+output "fgt-active-public-name" {
+  value = azurerm_public_ip.active-public-ip.name
+}
+
+output "fgt-passive-public-ip" {
+  value = azurerm_public_ip.passive-public-ip.ip_address
+}
+
+output "fgt-passive-public-name" {
+  value = azurerm_public_ip.passive-public-ip.name
 }
 
 output "bastion-public-ip_ip" {
@@ -33,33 +41,49 @@ output "vnet_names" {
 
 output "fgt-active-ni_ids" {
   value = {
-    port1 = azurerm_network_interface.ni-activeport1.id
-    port2 = azurerm_network_interface.ni-activeport2.id
-    port3 = azurerm_network_interface.ni-activeport3.id
+    mgmt    = azurerm_network_interface.ni-active-mgmt.id
+    public  = azurerm_network_interface.ni-active-public.id
+    private = azurerm_network_interface.ni-active-private.id
   }
 }
 
 output "fgt-active-ni_names" {
   value = {
-    port1 = azurerm_network_interface.ni-activeport1.name
-    port2 = azurerm_network_interface.ni-activeport2.name
-    port3 = azurerm_network_interface.ni-activeport3.name
+    mgmt    = azurerm_network_interface.ni-active-mgmt.name
+    public  = azurerm_network_interface.ni-active-public.name
+    private = azurerm_network_interface.ni-active-private.name
   }
 }
 
 output "fgt-active-ni_ips" {
   value = {
-    port1 = azurerm_network_interface.ni-activeport1.private_ip_address
-    port2 = azurerm_network_interface.ni-activeport2.private_ip_address
-    port3 = azurerm_network_interface.ni-activeport3.private_ip_address
+    mgmt    = azurerm_network_interface.ni-active-mgmt.private_ip_address
+    public  = azurerm_network_interface.ni-active-public.private_ip_address
+    private = azurerm_network_interface.ni-active-private.private_ip_address
   }
 }
 
 output "fgt-passive-ni_ids" {
   value = {
-    port1 = azurerm_network_interface.ni-passiveport1.id
-    port2 = azurerm_network_interface.ni-passiveport2.id
-    port3 = azurerm_network_interface.ni-passiveport3.id
+    mgmt    = azurerm_network_interface.ni-passive-mgmt.id
+    public  = azurerm_network_interface.ni-passive-public.id
+    private = azurerm_network_interface.ni-passive-private.id
+  }
+}
+
+output "fgt-passive-ni_names" {
+  value = {
+    mgmt    = azurerm_network_interface.ni-passive-mgmt.name
+    public  = azurerm_network_interface.ni-passive-public.name
+    private = azurerm_network_interface.ni-passive-private.name
+  }
+}
+
+output "fgt-passive-ni_ips" {
+  value = {
+    mgmt    = azurerm_network_interface.ni-passive-mgmt.private_ip_address
+    public  = azurerm_network_interface.ni-passive-public.private_ip_address
+    private = azurerm_network_interface.ni-passive-private.private_ip_address
   }
 }
 
@@ -67,19 +91,39 @@ output "bastion-ni_id" {
   value = azurerm_network_interface.ni-bastion.id
 }
 
-output "fgt-passive-ni_names" {
+output "fmg_public-ip" {
+  value = azurerm_public_ip.fmg_public-ip.ip_address
+}
+
+output "faz_public-ip" {
+  value = azurerm_public_ip.faz_public-ip.ip_address
+}
+
+output "faz_ni_ids" {
   value = {
-    port1 = azurerm_network_interface.ni-passiveport1.name
-    port2 = azurerm_network_interface.ni-passiveport2.name
-    port3 = azurerm_network_interface.ni-passiveport3.name
+    public  = azurerm_network_interface.faz_ni_public.id
+    private = azurerm_network_interface.faz_ni_private.id
   }
 }
 
-output "fgt-passive-ni_ips" {
+output "faz_ni_ips" {
   value = {
-    port1 = azurerm_network_interface.ni-passiveport1.private_ip_address
-    port2 = azurerm_network_interface.ni-passiveport2.private_ip_address
-    port3 = azurerm_network_interface.ni-passiveport3.private_ip_address
+    public  = azurerm_network_interface.faz_ni_public.private_ip_address
+    private = azurerm_network_interface.faz_ni_private.private_ip_address
+  }
+}
+
+output "fmg_ni_ids" {
+  value = {
+    public  = azurerm_network_interface.fmg_ni_public.id
+    private = azurerm_network_interface.fmg_ni_private.id
+  }
+}
+
+output "fmg_ni_ips" {
+  value = {
+    public  = azurerm_network_interface.fmg_ni_public.private_ip_address
+    private = azurerm_network_interface.fmg_ni_private.private_ip_address
   }
 }
 

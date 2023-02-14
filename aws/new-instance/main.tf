@@ -22,29 +22,27 @@ data "aws_ami" "vm_ami" {
 // Creat public IP for instance
 resource "aws_eip" "vm_eip" {
   depends_on        = [aws_instance.vm]
-  count             = length(var.ni_id)
   vpc               = true
-  network_interface = var.ni_id[count.index]
+  network_interface = var.ni_id
   tags = {
-    Name    = "${var.prefix}-eip-vm-${count.index + 1}"
+    Name    = "${var.prefix}-eip-vm"
     Project = var.prefix
   }
 }
 
 # test device in spoke1
 resource "aws_instance" "vm" {
-  count         = length(var.ni_id)
   ami           = data.aws_ami.vm_ami.id
   instance_type = var.vm_size
   key_name      = var.keypair
 
   network_interface {
     device_index         = 0
-    network_interface_id = var.ni_id[count.index]
+    network_interface_id = var.ni_id
   }
 
   tags = {
-    Name    = "${var.prefix}-vm-${count.index + 1}"
+    Name    = "${var.prefix}-vm"
     Project = var.prefix
   }
 }

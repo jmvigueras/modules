@@ -1,7 +1,7 @@
 //Create Azure vWAN
 resource "azurerm_virtual_wan" "vwan" {
   name                = "${var.prefix}-vwan"
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
   location            = var.location
 
   tags = var.tags
@@ -10,7 +10,7 @@ resource "azurerm_virtual_wan" "vwan" {
 //Create Azure vHUB
 resource "azurerm_virtual_hub" "vhub" {
   name                = "${var.prefix}-vhub"
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
   location            = var.location
   virtual_wan_id      = azurerm_virtual_wan.vwan.id
   sku                 = "Standard"
@@ -24,7 +24,7 @@ resource "azurerm_virtual_hub" "vhub" {
 resource "azurerm_public_ip" "public-ip-vhub-rs" {
   count               = var.subnet-fgt_ids == null ? 0 : 1
   name                = "${var.prefix}-vhub-rs-pip"
-  resource_group_name = var.resourcegroup_name
+  resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
   sku                 = "Standard"
