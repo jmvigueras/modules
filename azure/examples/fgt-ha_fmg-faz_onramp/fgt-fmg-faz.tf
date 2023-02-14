@@ -1,10 +1,9 @@
 #------------------------------------------------------------------
-# Create FGT HUB 
-# - FGSP
-# - vWAN association (dynamic routing to vHUB)
-# - LB sandwich
-# - Azure Route Server BGP session in vNet spoke FGT
-# - vxlan interfaces to connecto to GWLB
+# Create FGT onramp:
+# - Create FGT cluster config (FGCP - FMG - FAZ - SDWAN spoke)
+# - Create FGT instances with config
+# - Create FGT vNET
+# - Create FMG and FAZ instances
 #------------------------------------------------------------------
 module "fgt_spoke_config" {
   source = "../../fgt-config"
