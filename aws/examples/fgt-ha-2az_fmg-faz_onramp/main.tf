@@ -33,6 +33,7 @@ resource "random_string" "vpn_psk" {
   numeric = true
 }
 
+/*
 # Get the last AMI Images from AWS MarektPlace FGT PAYG
 data "aws_ami_ids" "fgt_amis_payg" {
   owners = ["679593333241"]
@@ -52,3 +53,4 @@ data "aws_ami_ids" "fgt_amis_byol" {
     values = ["FortiGate-VM64-AWS ${local.fgt_build}*"]
   }
 }
+*/

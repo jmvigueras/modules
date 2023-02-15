@@ -45,11 +45,13 @@ module "fgt_spoke" {
   count  = local.count
   source = "../../fgt-ha-2az"
 
-  fgt-ami       = var.license_type == "byol" ? data.aws_ami_ids.fgt_amis_byol.ids[0] : data.aws_ami_ids.fgt_amis_payg.ids[0]
   prefix        = "${local.prefix}-spoke-${count.index + 1}"
   region        = var.region
   instance_type = local.instance_type
   keypair       = aws_key_pair.keypair.key_name
+
+  license_type = local.license_type
+  fgt_build    = local.fgt_build
 
   fgt-active-ni_ids  = module.fgt_spoke_vpc[count.index].fgt-active-ni_ids
   fgt-passive-ni_ids = module.fgt_spoke_vpc[count.index].fgt-passive-ni_ids

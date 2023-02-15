@@ -36,7 +36,7 @@ resource "aws_eip" "fgt_passive_eip_public" {
 
 # Create the instance FGT AZ1 Active
 resource "aws_instance" "fgt_active" {
-  ami                  = var.fgt-ami
+  ami                  = var.license_type == "byol" ? data.aws_ami_ids.fgt_amis_byol.ids[0] : data.aws_ami_ids.fgt_amis_payg.ids[0]
   instance_type        = var.instance_type
   availability_zone    = var.region["az1"]
   key_name             = var.keypair
@@ -62,7 +62,7 @@ resource "aws_instance" "fgt_active" {
 # Create the instance FGT AZ2 Passive
 resource "aws_instance" "fgt_passive" {
   count                = var.fgt-passive-ni_ids != null && var.fgt_passive ? 1 : 0
-  ami                  = var.fgt-ami
+  ami                  = var.license_type == "byol" ? data.aws_ami_ids.fgt_amis_byol.ids[0] : data.aws_ami_ids.fgt_amis_payg.ids[0]
   instance_type        = var.instance_type
   availability_zone    = var.region["az2"]
   key_name             = var.keypair
@@ -82,5 +82,26 @@ resource "aws_instance" "fgt_passive" {
   }
   tags = {
     Name = var.fgt_ha_fgsp ? "${var.prefix}-fgt-2" : "${var.prefix}-fgt-passive"
+  }
+}
+
+
+# Get the last AMI Images from AWS MarektPlace FGT PAYG
+data "aws_ami_ids" "fgt_amis_payg" {
+  owners = ["679593333241"]
+
+  filter {
+    name   = "name"
+    values = ["FortiGate-VM64-AWSONDEMAND ${var.fgt_build}*"]
+  }
+}
+
+# Get the last AMI Images from AWS MarektPlace FGT BYOL
+data "aws_ami_ids" "fgt_amis_byol" {
+  owners = ["679593333241"]
+
+  filter {
+    name   = "name"
+    values = ["FortiGate-VM64-AWS ${var.fgt_build}*"]
   }
 }

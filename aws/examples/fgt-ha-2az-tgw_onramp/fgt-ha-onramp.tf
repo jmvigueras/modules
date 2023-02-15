@@ -32,11 +32,13 @@ module "fgt_onramp_config" {
 module "fgt_onramp" {
   source = "../../fgt-ha-2az"
 
-  fgt-ami       = var.license_type == "byol" ? data.aws_ami_ids.fgt_amis_byol.ids[0] : data.aws_ami_ids.fgt_amis_payg.ids[0]
   prefix        = "${local.prefix}-onramp"
   region        = var.region
   instance_type = local.instance_type
   keypair       = aws_key_pair.keypair.key_name
+
+  license_type = local.license_type
+  fgt_build    = local.fgt_build
 
   fgt-active-ni_ids  = module.vpc_onramp.fgt-active-ni_ids
   fgt-passive-ni_ids = module.vpc_onramp.fgt-passive-ni_ids

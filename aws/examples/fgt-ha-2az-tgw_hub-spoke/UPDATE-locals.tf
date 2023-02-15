@@ -10,6 +10,7 @@ locals {
   admin_cidr    = "${chomp(data.http.my-public-ip.body)}/32"
   instance_type = "c6i.large"
   fgt_build     = "build1396"
+  license_type  = "payg"
 
   #-----------------------------------------------------------------------------------------------------
   # FGT HUB locals

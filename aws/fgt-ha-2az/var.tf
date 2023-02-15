@@ -80,3 +80,15 @@ variable "fgt_ni_2" {
   type    = string
   default = "private"
 }
+
+// License Type to create FortiGate-VM
+// Provide the license type for FortiGate-VM Instances, either byol or payg.
+variable "license_type" {
+  type    = string
+  default = "payg"
+}
+
+variable "fgt_build" {
+  type    = string
+  default = "build1396"
+}
