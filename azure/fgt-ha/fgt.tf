@@ -15,15 +15,15 @@ resource "azurerm_virtual_machine" "fgt-1" {
 
   storage_image_reference {
     publisher = var.publisher
-    offer     = var.fgtoffer
-    sku       = var.license_type == "byol" ? var.fgtsku["byol"] : var.fgtsku["payg"]
-    version   = var.fgtversion
+    offer     = var.fgt_offer
+    sku       = var.fgt_sku[var.license_type]
+    version   = var.fgt_version
   }
 
   plan {
-    name      = var.license_type == "byol" ? var.fgtsku["byol"] : var.fgtsku["payg"]
     publisher = var.publisher
-    product   = var.fgtoffer
+    product   = var.fgt_offer
+    name      = var.fgt_sku[var.license_type]
   }
 
   storage_os_disk {
@@ -79,16 +79,15 @@ resource "azurerm_virtual_machine" "fgt-2" {
 
   storage_image_reference {
     publisher = var.publisher
-    offer     = var.fgtoffer
-    sku       = var.license_type == "byol" ? var.fgtsku["byol"] : var.fgtsku["payg"]
-    version   = var.fgtversion
-    id        = null
+    offer     = var.fgt_offer
+    sku       = var.fgt_sku[var.license_type]
+    version   = var.fgt_version
   }
 
   plan {
-    name      = var.license_type == "byol" ? var.fgtsku["byol"] : var.fgtsku["payg"]
     publisher = var.publisher
-    product   = var.fgtoffer
+    product   = var.fgt_offer
+    name      = var.fgt_sku[var.license_type]
   }
 
   storage_os_disk {

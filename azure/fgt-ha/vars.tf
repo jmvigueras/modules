@@ -60,7 +60,7 @@ variable "fgt_ni_2" {
 //  Check : https://docs.microsoft.com/en-us/azure/virtual-machines/linux/sizes
 variable "size" {
   type    = string
-  default = "Standard_F4"
+  default = "Standard_F4s_v2"
 }
 
 variable "location" {
@@ -92,30 +92,28 @@ variable "accelerate" {
   default = "false"
 }
 
-variable "publisher" {
-  type    = string
-  default = "fortinet"
-}
-
-variable "fgtoffer" {
-  type    = string
-  default = "fortinet_fortigate-vm_v5"
-}
-
-// FOS version
-variable "fgtversion" {
-  type    = string
-  default = "7.2.2"
-}
-
-// BYOL sku: fortinet_fg-vm
-// PAYG sku: fortinet_fg-vm_payg_2022
-variable "fgtsku" {
+// AMI
+variable "fgt_sku" {
   type = map(string)
   default = {
     byol = "fortinet_fg-vm"
     payg = "fortinet_fg-vm_payg_2022"
   }
+}
+
+variable "publisher" {
+  type    = string
+  default = "fortinet"
+}
+
+variable "fgt_offer" {
+  type    = string
+  default = "fortinet_fortigate-vm_v5"
+}
+
+variable "fgt_version" {
+  type    = string
+  default = "latest"
 }
 
 // license file for the active fgt

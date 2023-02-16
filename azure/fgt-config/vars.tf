@@ -137,8 +137,8 @@ variable "config_gwlb-vxlan" {
   type    = bool
   default = false
 }
-variable "gwlb_vxlan"  {
-  type    = map(string)
+variable "gwlb_vxlan" {
+  type = map(string)
   default = {
     vdi_ext  = "800"
     vdi_int  = "801"
@@ -146,7 +146,7 @@ variable "gwlb_vxlan"  {
     port_int = "10801"
   }
 }
-variable "gwlb_ip"  {
+variable "gwlb_ip" {
   type    = string
   default = "172.30.3.15"
 }

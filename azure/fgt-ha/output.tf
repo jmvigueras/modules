@@ -7,9 +7,9 @@ output "admin_password" {
 }
 
 output "fgt-1_id" {
-  value =  azurerm_virtual_machine.fgt-1.id
+  value = azurerm_virtual_machine.fgt-1.id
 }
 
 output "fgt-2_id" {
-  value =  azurerm_virtual_machine.fgt-2.*.id
+  value = azurerm_virtual_machine.fgt-2.*.id
 }

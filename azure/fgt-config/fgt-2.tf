@@ -28,20 +28,20 @@ data "template_file" "fgt_passive" {
     mgmt_mask    = cidrnetmask(var.subnet_cidrs["mgmt"])
     mgmt_gw      = cidrhost(var.subnet_cidrs["mgmt"], 1)
 
-    fgt_sdn-config         = data.template_file.fgt_sdn-config.rendered
-    fgt_ha-fgcp-config     = var.config_fgcp ? data.template_file.fgt_ha-fgcp-passive-config.rendered : ""
-    fgt_ha-fgsp-config     = var.config_fgsp ? data.template_file.fgt_ha-fgsp-passive-config.rendered : ""
-    fgt_bgp-config         = var.config_spoke ? data.template_file.fgt_spoke_bgp-config.rendered : var.config_hub ? data.template_file.fgt_hub_bgp-config.rendered : ""
-    fgt_static-config      = var.vpc-spoke_cidr != null ? data.template_file.fgt_static-config.rendered : ""
-    fgt_sdwan-config       = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
-    fgt_vpn-config         = var.config_hub ? data.template_file.fgt_vpn-config.1.rendered : ""
-    fgt_vxlan-config       = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
-    fgt_vhub-config        = var.config_vhub ? data.template_file.fgt_vhub-config.rendered : ""
-    fgt_ars-config         = var.config_ars ? data.template_file.fgt_ars-config.rendered : ""
-    fgt_gwlb-vxlan-config  = var.config_gwlb-vxlan ? data.template_file.fgt_gwlb-vxlan-config.rendered : ""
-    fgt_fmg-config         = var.config_fmg ? data.template_file.fgt_2_fmg-config.rendered : ""
-    fgt_faz-config         = var.config_faz ? data.template_file.fgt_2_faz-config.rendered : ""
-    fgt_extra-config       = var.fgt_passive_extra-config
+    fgt_sdn-config        = data.template_file.fgt_sdn-config.rendered
+    fgt_ha-fgcp-config    = var.config_fgcp ? data.template_file.fgt_ha-fgcp-passive-config.rendered : ""
+    fgt_ha-fgsp-config    = var.config_fgsp ? data.template_file.fgt_ha-fgsp-passive-config.rendered : ""
+    fgt_bgp-config        = var.config_spoke ? data.template_file.fgt_spoke_bgp-config.rendered : var.config_hub ? data.template_file.fgt_hub_bgp-config.rendered : ""
+    fgt_static-config     = var.vpc-spoke_cidr != null ? data.template_file.fgt_static-config.rendered : ""
+    fgt_sdwan-config      = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
+    fgt_vpn-config        = var.config_hub ? data.template_file.fgt_vpn-config.1.rendered : ""
+    fgt_vxlan-config      = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
+    fgt_vhub-config       = var.config_vhub ? data.template_file.fgt_vhub-config.rendered : ""
+    fgt_ars-config        = var.config_ars ? data.template_file.fgt_ars-config.rendered : ""
+    fgt_gwlb-vxlan-config = var.config_gwlb-vxlan ? data.template_file.fgt_gwlb-vxlan-config.rendered : ""
+    fgt_fmg-config        = var.config_fmg ? data.template_file.fgt_2_fmg-config.rendered : ""
+    fgt_faz-config        = var.config_faz ? data.template_file.fgt_2_faz-config.rendered : ""
+    fgt_extra-config      = var.fgt_passive_extra-config
   }
 }
 
