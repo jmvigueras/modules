@@ -60,7 +60,7 @@ variable "fgt_ni_2" {
 //  Check : https://docs.microsoft.com/en-us/azure/virtual-machines/linux/sizes
 variable "size" {
   type    = string
-  default = "Standard_F4s_v2"
+  default = "Standard_F4"
 }
 
 variable "location" {
