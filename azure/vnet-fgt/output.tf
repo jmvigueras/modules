@@ -35,7 +35,7 @@ output "vnet" {
 
 output "vnet_names" {
   value = {
-    "vnet-fgt" = azurerm_virtual_network.vnet-fgt.name
+    vnet-fgt = azurerm_virtual_network.vnet-fgt.name
   }
 }
 
