@@ -1,45 +1,63 @@
-// Azure configuration
-variable "subscription_id" {}
-variable "client_id" {}
-variable "client_secret" {}
-variable "tenant_id" {}
-
-variable "storage-account_endpoint" {
-  type    = string
-  default = null
-}
-
-// Resource group name
-variable "resource_group_name" {
-  type    = string
-  default = null
-}
+variable "storage-account_endpoint" {}
+variable "resource_group_name" {}
 
 variable "admin_username" {
   type    = string
   default = "azureadmin"
 }
-
-variable "admin_password" {
-  type    = string
-  default = "Terraform123#"
-}
-
-// HTTPS Port
-variable "admin_port" {
-  type    = string
-  default = "8443"
-}
-
-variable "admin_cidr" {
-  type    = string
-  default = "0.0.0.0/0"
-}
+variable "admin_password" {}
 
 # Azure resourcers prefix description
 variable "prefix" {
   type    = string
   default = "terraform"
+}
+
+variable "fgt_passive" {
+  type    = bool
+  default = false
+}
+
+variable "fgt_ha_fgsp" {
+  type    = bool
+  default = false
+}
+
+variable "fgt_config_1" {
+  type    = string
+  default = ""
+}
+
+variable "fgt_config_2" {
+  type    = string
+  default = ""
+}
+
+variable "fgt-active-ni_ids" {
+  type    = map(string)
+  default = null
+}
+
+variable "fgt-passive-ni_ids" {
+  type    = map(string)
+  default = null
+}
+
+variable "fgt_ni_0" {
+  type    = string
+  default = "public"
+}
+variable "fgt_ni_1" {
+  type    = string
+  default = "private"
+}
+variable "fgt_ni_2" {
+  type    = string
+  default = "mgmt"
+}
+variable "fgt_ni_3" {
+  type    = string
+  default = "ha"
 }
 
 //  For HA, choose instance size that support 4 nics at least
@@ -58,7 +76,7 @@ variable "location" {
 variable "tags" {
   type = map(any)
   default = {
-    Deploy  = "module-fgt-ha-xlb"
+    Deploy  = "module-fgt-ha"
     Project = "terraform-fortinet"
   }
 }
@@ -66,6 +84,7 @@ variable "tags" {
 // License Type to create FortiGate-VM
 // Provide the license type for FortiGate-VM Instances, either byol or payg.
 variable "license_type" {
+  type    = string
   default = "payg"
 }
 
@@ -73,7 +92,17 @@ variable "license_type" {
 // Make the the instance choosed supports accelerated networking.
 // Check: https://docs.microsoft.com/en-us/azure/virtual-network/accelerated-networking-overview#supported-vm-instances
 variable "accelerate" {
+  type    = string
   default = "false"
+}
+
+// AMI
+variable "fgt_sku" {
+  type = map(string)
+  default = {
+    byol = "fortinet_fg-vm"
+    payg = "fortinet_fg-vm_payg_2022"
+  }
 }
 
 variable "publisher" {
@@ -81,25 +110,14 @@ variable "publisher" {
   default = "fortinet"
 }
 
-variable "fgtoffer" {
+variable "fgt_offer" {
   type    = string
   default = "fortinet_fortigate-vm_v5"
 }
 
-// FOS version
-variable "fgtversion" {
+variable "fgt_version" {
   type    = string
-  default = "7.2.2"
-}
-
-// BYOL sku: fortinet_fg-vm
-// PAYG sku: fortinet_fg-vm_payg_2022
-variable "fgtsku" {
-  type = map(any)
-  default = {
-    byol = "fortinet_fg-vm"
-    payg = "fortinet_fg-vm_payg_2022"
-  }
+  default = "latest"
 }
 
 // license file for the active fgt

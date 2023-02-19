@@ -13,7 +13,7 @@ resource "azurerm_lb" "ilb" {
   frontend_ip_configuration {
     name                          = "${var.prefix}-ilb-front-ip"
     subnet_id                     = var.subnet_private["id"]
-    private_ip_address            = cidrhost(var.subnet_private["cidr"], 9)
+    private_ip_address            = var.ilb_ip != null ? var.ilb_ip : cidrhost(var.subnet_private["cidr"], 9)
     private_ip_address_allocation = "Static"
   }
 }

@@ -44,6 +44,7 @@ output "fgt-active-ni_ids" {
     mgmt    = azurerm_network_interface.ni-active-mgmt.id
     public  = azurerm_network_interface.ni-active-public.id
     private = azurerm_network_interface.ni-active-private.id
+    ha      = azurerm_network_interface.ni-active-ha.id
   }
 }
 
@@ -52,6 +53,7 @@ output "fgt-active-ni_names" {
     mgmt    = azurerm_network_interface.ni-active-mgmt.name
     public  = azurerm_network_interface.ni-active-public.name
     private = azurerm_network_interface.ni-active-private.name
+    ha      = azurerm_network_interface.ni-active-ha.name
   }
 }
 
@@ -60,6 +62,7 @@ output "fgt-active-ni_ips" {
     mgmt    = azurerm_network_interface.ni-active-mgmt.private_ip_address
     public  = azurerm_network_interface.ni-active-public.private_ip_address
     private = azurerm_network_interface.ni-active-private.private_ip_address
+    ha      = azurerm_network_interface.ni-active-ha.private_ip_address
   }
 }
 
@@ -68,6 +71,7 @@ output "fgt-passive-ni_ids" {
     mgmt    = azurerm_network_interface.ni-passive-mgmt.id
     public  = azurerm_network_interface.ni-passive-public.id
     private = azurerm_network_interface.ni-passive-private.id
+    ha      = azurerm_network_interface.ni-passive-ha.id
   }
 }
 
@@ -76,6 +80,7 @@ output "fgt-passive-ni_names" {
     mgmt    = azurerm_network_interface.ni-passive-mgmt.name
     public  = azurerm_network_interface.ni-passive-public.name
     private = azurerm_network_interface.ni-passive-private.name
+    ha      = azurerm_network_interface.ni-passive-ha.name
   }
 }
 
@@ -84,6 +89,7 @@ output "fgt-passive-ni_ips" {
     mgmt    = azurerm_network_interface.ni-passive-mgmt.private_ip_address
     public  = azurerm_network_interface.ni-passive-public.private_ip_address
     private = azurerm_network_interface.ni-passive-private.private_ip_address
+    ha      = azurerm_network_interface.ni-passive-ha.private_ip_address
   }
 }
 
@@ -129,9 +135,10 @@ output "fmg_ni_ips" {
 
 output "subnet_cidrs" {
   value = {
-    mgmt    = azurerm_subnet.subnet-hamgmt.address_prefixes[0]
+    mgmt    = azurerm_subnet.subnet-mgmt.address_prefixes[0]
     public  = azurerm_subnet.subnet-public.address_prefixes[0]
     private = azurerm_subnet.subnet-private.address_prefixes[0]
+    ha      = azurerm_subnet.subnet-ha.address_prefixes[0]
     vgw     = azurerm_subnet.subnet-vgw.address_prefixes[0]
     rs      = azurerm_subnet.subnet-routeserver.address_prefixes[0]
     bastion = azurerm_subnet.subnet-bastion.address_prefixes[0]
@@ -140,9 +147,10 @@ output "subnet_cidrs" {
 
 output "subnet_names" {
   value = {
-    mgmt    = azurerm_subnet.subnet-hamgmt.name
+    mgmt    = azurerm_subnet.subnet-mgmt.name
     public  = azurerm_subnet.subnet-public.name
     private = azurerm_subnet.subnet-private.name
+    ha      = azurerm_subnet.subnet-ha.name
     vgw     = azurerm_subnet.subnet-vgw.name
     rs      = azurerm_subnet.subnet-routeserver.name
     bastion = azurerm_subnet.subnet-bastion.name
@@ -151,9 +159,10 @@ output "subnet_names" {
 
 output "subnet_ids" {
   value = {
-    mgmt    = azurerm_subnet.subnet-hamgmt.id
+    mgmt    = azurerm_subnet.subnet-mgmt.id
     public  = azurerm_subnet.subnet-public.id
     private = azurerm_subnet.subnet-private.id
+    ha      = azurerm_subnet.subnet-ha.id
     vgw     = azurerm_subnet.subnet-vgw.id
     rs      = azurerm_subnet.subnet-routeserver.id
     bastion = azurerm_subnet.subnet-bastion.id

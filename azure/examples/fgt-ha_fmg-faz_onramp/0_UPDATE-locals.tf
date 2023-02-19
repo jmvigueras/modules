@@ -1,5 +1,32 @@
 locals {
   #-----------------------------------------------------------------------------------------------------
+  # General variables
+  #-----------------------------------------------------------------------------------------------------
+  resource_group_name      = null // a new resource group will be created if null
+  location                 = "francecentral"
+  storage-account_endpoint = null               // a new resource group will be created if null
+  prefix                   = "demo-fgt-faz-fmg" // prefix added to all resources created
+
+  admin_port     = "8443"
+  admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
+  admin_username = "azureadmin"
+  admin_password = "Terraform123#"
+
+  fgt_license_type = "payg"
+  fgt_size         = "Standard_F4"
+  fgt_version      = "latest"
+
+  faz_license_type = "byol"
+  faz_license_file = "./licenses/licenseFAZ.lic"
+  fmg_license_type = "byol"
+  fmg_license_file = "./licenses/licenseFMG.lic"
+
+  tags = {
+    Deploy  = "module-fgt-ha-xlb"
+    Project = "terraform-fortinet"
+  }
+
+  #-----------------------------------------------------------------------------------------------------
   # FGT HUB locals
   #-----------------------------------------------------------------------------------------------------
   hub1 = {
@@ -26,8 +53,6 @@ locals {
     dpd-retryinterval = "5"
     mode-cfg          = true
   }
-
-  admin_cidr = "${chomp(data.http.my-public-ip.body)}/32"
 
   #-----------------------------------------------------------------------------------------------------
   # FGT Spoke locals
@@ -93,7 +118,7 @@ resource "tls_private_key" "ssh" {
 }
 resource "local_file" "ssh_private_key_pem" {
   content         = tls_private_key.ssh.private_key_pem
-  filename        = "./ssh-key/${var.prefix}-ssh-key.pem"
+  filename        = "./ssh-key/${local.prefix}-ssh-key.pem"
   file_permission = "0600"
 }
 
@@ -113,27 +138,27 @@ resource "random_string" "vpn_psk" {
 
 // Create storage account if not provided
 resource "random_id" "randomId" {
-  count       = var.storage-account_endpoint == null ? 1 : 0
+  count       = local.storage-account_endpoint == null ? 1 : 0
   byte_length = 8
 }
 
 resource "azurerm_storage_account" "storageaccount" {
-  count                    = var.storage-account_endpoint == null ? 1 : 0
+  count                    = local.storage-account_endpoint == null ? 1 : 0
   name                     = "stgra${random_id.randomId[count.index].hex}"
-  resource_group_name      = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  location                 = var.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  location                 = local.location
   account_replication_type = "LRS"
   account_tier             = "Standard"
   min_tls_version          = "TLS1_2"
 
-  tags = var.tags
+  tags = local.tags
 }
 
 // Create Resource Group if it is null
 resource "azurerm_resource_group" "rg" {
-  count    = var.resource_group_name == null ? 1 : 0
-  name     = "${var.prefix}-rg"
-  location = var.location
+  count    = local.resource_group_name == null ? 1 : 0
+  name     = "${local.prefix}-rg"
+  location = local.location
 
-  tags = var.tags
+  tags = local.tags
 }

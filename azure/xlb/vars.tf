@@ -55,6 +55,22 @@ variable "fgt-ni_ips" {
   }
 }
 
+// Region for deployment
+variable "config_gwlb" {
+  type    = bool
+  default = false
+}
+
+variable "gwlb_ip" {
+  type    = string
+  default = null
+}
+
+variable "ilb_ip" {
+  type    = string
+  default = null
+}
+
 // Fortigate vxlan vdi and port config
 variable "gwlb_vxlan" {
   type = map(any)

@@ -10,7 +10,7 @@ module "fgt_spoke_config" {
   source = "../../fgt-config"
 
   admin_cidr     = local.admin_cidr
-  admin_port     = var.admin_port
+  admin_port     = local.admin_port
   rsa-public-key = tls_private_key.ssh.public_key_openssh
   api_key        = random_string.api_key.result
 
@@ -34,14 +34,14 @@ module "fgt_spoke_config" {
 module "fgt_spoke" {
   source = "../../fgt-ha"
 
-  prefix                   = "${var.prefix}-spoke"
-  location                 = var.location
-  resource_group_name      = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                     = var.tags
-  storage-account_endpoint = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
+  prefix                   = "${local.prefix}-spoke"
+  location                 = local.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                     = local.tags
+  storage-account_endpoint = local.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : local.storage-account_endpoint
 
-  admin_username = var.admin_username
-  admin_password = var.admin_password
+  admin_username = local.admin_username
+  admin_password = local.admin_password
 
   fgt-active-ni_ids  = module.fgt_spoke_vnet.fgt-active-ni_ids
   fgt-passive-ni_ids = module.fgt_spoke_vnet.fgt-passive-ni_ids
@@ -54,14 +54,14 @@ module "fgt_spoke" {
 module "fgt_spoke_vnet" {
   source = "../../vnet-fgt"
 
-  prefix              = "${var.prefix}-spoke"
-  location            = var.location
-  resource_group_name = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                = var.tags
+  prefix              = "${local.prefix}-spoke"
+  location            = local.location
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                = local.tags
 
   vnet-fgt_cidr = local.spoke["cidr"]
-  admin_port    = var.admin_port
-  admin_cidr    = var.admin_cidr
+  admin_port    = local.admin_port
+  admin_cidr    = local.admin_cidr
 }
 
 

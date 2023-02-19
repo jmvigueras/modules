@@ -7,9 +7,9 @@ output "elb_public-ip" {
 }
 
 output "gwlb_frontip_config_id" {
-  value = azurerm_lb.gwlb.frontend_ip_configuration.0.id
+  value = azurerm_lb.gwlb.*.frontend_ip_configuration.0.id
 }
 
 output "gwlb_ip" {
-  value = azurerm_lb.gwlb.frontend_ip_configuration.0.private_ip_address
+  value = azurerm_lb.gwlb.*.frontend_ip_configuration.0.private_ip_address
 }

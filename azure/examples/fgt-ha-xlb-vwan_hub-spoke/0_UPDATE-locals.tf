@@ -1,5 +1,47 @@
 locals {
   #-----------------------------------------------------------------------------------------------------
+  # General variables
+  #-----------------------------------------------------------------------------------------------------
+  resource_group_name      = null                 // a new resource group will be created if null
+  location                 = "francecentral"
+  storage-account_endpoint = null                 // a new resource group will be created if null
+  prefix                   = "demo-fgt-ha-vwan"   // prefix added to all resources created
+
+  admin_port     = "8443"
+  admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
+  admin_username = "azureadmin"
+  admin_password = "Terraform123#"
+
+  license_type = "payg"
+  fgt_size     = "Standard_F4"
+  fgt_version  = "latest"
+
+  tags = {
+    Deploy  = "module-fgt-ha-xlb"
+    Project = "terraform-fortinet"
+  }
+  #-----------------------------------------------------------------------------------------------------
+  # LB locals
+  #-----------------------------------------------------------------------------------------------------
+  config_gwlb        = true
+  ilb_ip             = cidrhost(module.fgt_spoke_vnet.subnet_cidrs["private"], 9)
+  backend-probe_port = "8008"
+  
+  gwlb_ip =  cidrhost(module.fgt_spoke_vnet.subnet_cidrs["private"], 8)
+  gwlb_vxlan = {
+    vdi_ext  = "800"
+    vdi_int  = "801"
+    port_ext = "10800"
+    port_int = "10801"
+  }
+
+  #-----------------------------------------------------------------------------------------------------
+  # vWAN
+  #-----------------------------------------------------------------------------------------------------
+  vhub_cidr             = "172.30.14.0/23"
+  vhub_vnet-spoke_cidrs = ["172.30.18.0/23"]
+  
+  #-----------------------------------------------------------------------------------------------------
   # FGT HUB locals
   #-----------------------------------------------------------------------------------------------------
   hub1 = {
@@ -40,19 +82,9 @@ locals {
     local-ip  = "10.10.30.2"
     vni       = "1100"
   }
-  gwlb_vxlan = {
-    vdi_ext  = "800"
-    vdi_int  = "801"
-    port_ext = "10800"
-    port_int = "10801"
-  }
-  gwlb_ip = module.xlb.gwlb_ip
 
-  vhub_cidr             = "172.30.14.0/23"
   fgt_vnet-spoke_cidrs  = ["172.30.16.0/23"]
-  vhub_vnet-spoke_cidrs = ["172.30.18.0/23"]
 
-  admin_cidr = "${chomp(data.http.my-public-ip.body)}/32"
 
   #-----------------------------------------------------------------------------------------------------
   # FGT Spoke locals
@@ -118,7 +150,7 @@ resource "tls_private_key" "ssh" {
 }
 resource "local_file" "ssh_private_key_pem" {
   content         = tls_private_key.ssh.private_key_pem
-  filename        = "./ssh-key/${var.prefix}-ssh-key.pem"
+  filename        = "./ssh-key/${local.prefix}-ssh-key.pem"
   file_permission = "0600"
 }
 
@@ -138,27 +170,27 @@ resource "random_string" "vpn_psk" {
 
 // Create storage account if not provided
 resource "random_id" "randomId" {
-  count       = var.storage-account_endpoint == null ? 1 : 0
+  count       = local.storage-account_endpoint == null ? 1 : 0
   byte_length = 8
 }
 
 resource "azurerm_storage_account" "storageaccount" {
-  count                    = var.storage-account_endpoint == null ? 1 : 0
+  count                    = local.storage-account_endpoint == null ? 1 : 0
   name                     = "stgra${random_id.randomId[count.index].hex}"
-  resource_group_name      = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  location                 = var.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  location                 = local.location
   account_replication_type = "LRS"
   account_tier             = "Standard"
   min_tls_version          = "TLS1_2"
 
-  tags = var.tags
+  tags = local.tags
 }
 
 // Create Resource Group if it is null
 resource "azurerm_resource_group" "rg" {
-  count    = var.resource_group_name == null ? 1 : 0
-  name     = "${var.prefix}-rg"
-  location = var.location
+  count    = local.resource_group_name == null ? 1 : 0
+  name     = "${local.prefix}-rg"
+  location = local.location
 
-  tags = var.tags
+  tags = local.tags
 }

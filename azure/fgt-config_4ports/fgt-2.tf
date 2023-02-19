@@ -27,6 +27,9 @@ data "template_file" "fgt_passive" {
     mgmt_ip      = var.fgt-passive-ni_ips["mgmt"]
     mgmt_mask    = cidrnetmask(var.subnet_cidrs["mgmt"])
     mgmt_gw      = cidrhost(var.subnet_cidrs["mgmt"], 1)
+    ha_port      = var.ha_port
+    ha_ip        = var.fgt-passive-ni_ips["ha"]
+    ha_mask      = cidrnetmask(var.subnet_cidrs["ha"])
 
     fgt_sdn-config        = data.template_file.fgt_sdn-config.rendered
     fgt_ha-fgcp-config    = var.config_fgcp ? data.template_file.fgt_ha-fgcp-passive-config.rendered : ""
@@ -52,7 +55,7 @@ data "template_file" "fgt_ha-fgcp-passive-config" {
     mgmt_port    = var.mgmt_port
     mgmt_gw      = cidrhost(var.subnet_cidrs["mgmt"], 1)
     ha_port      = var.ha_port
-    peerip       = var.fgt-active-ni_ips["mgmt"]
+    peerip       = var.fgt-active-ni_ips["ha"]
   }
 }
 

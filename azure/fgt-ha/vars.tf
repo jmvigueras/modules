@@ -45,15 +45,15 @@ variable "fgt-passive-ni_ids" {
 
 variable "fgt_ni_0" {
   type    = string
-  default = "mgmt"
+  default = "public"
 }
 variable "fgt_ni_1" {
   type    = string
-  default = "public"
+  default = "private"
 }
 variable "fgt_ni_2" {
   type    = string
-  default = "private"
+  default = "mgmt"
 }
 
 //  For HA, choose instance size that support 4 nics at least

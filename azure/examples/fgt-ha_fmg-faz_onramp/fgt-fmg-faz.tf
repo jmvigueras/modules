@@ -9,9 +9,9 @@ module "fgt_spoke_config" {
   source = "../../fgt-config"
 
   admin_cidr     = local.admin_cidr
-  admin_port     = var.admin_port
+  admin_port     = local.admin_port
   rsa-public-key = trimspace(tls_private_key.ssh.public_key_openssh)
-  api_key        = random_string.api_key.result
+  api_key        = trimspace(random_string.api_key.result)
 
   subnet_cidrs       = module.fgt_spoke_vnet.subnet_cidrs
   fgt-active-ni_ips  = module.fgt_spoke_vnet.fgt-active-ni_ips
@@ -38,20 +38,21 @@ module "fgt_spoke" {
   source = "../../fgt-ha"
 
   prefix                   = "${local.prefix}-spoke"
-  location                 = var.location
-  resource_group_name      = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                     = var.tags
-  storage-account_endpoint = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
+  location                 = local.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                     = local.tags
+  storage-account_endpoint = local.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : local.storage-account_endpoint
 
-  admin_username = var.admin_username
-  admin_password = var.admin_password
+  admin_username = local.admin_username
+  admin_password = local.admin_password
 
   fgt-active-ni_ids  = module.fgt_spoke_vnet.fgt-active-ni_ids
   fgt-passive-ni_ids = module.fgt_spoke_vnet.fgt-passive-ni_ids
   fgt_config_1       = module.fgt_spoke_config.fgt_config_1
   fgt_config_2       = module.fgt_spoke_config.fgt_config_2
 
-  fgt_passive = true
+  fgt_passive  = true
+  license_type = local.fgt_license_type
 }
 
 // Module VNET for FGT
@@ -60,13 +61,13 @@ module "fgt_spoke_vnet" {
   source = "../../vnet-fgt"
 
   prefix              = "${local.prefix}-spoke"
-  location            = var.location
-  resource_group_name = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                = var.tags
+  location            = local.location
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                = local.tags
 
   vnet-fgt_cidr = local.spoke["cidr"]
-  admin_port    = var.admin_port
-  admin_cidr    = var.admin_cidr
+  admin_port    = local.admin_port
+  admin_cidr    = local.admin_cidr
 }
 
 #------------------------------------------------------------------------------
@@ -77,18 +78,18 @@ module "faz" {
   source = "../../faz"
 
   prefix                   = local.prefix
-  location                 = var.location
-  resource_group_name      = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                     = var.tags
-  storage-account_endpoint = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
+  location                 = local.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                     = local.tags
+  storage-account_endpoint = local.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : local.storage-account_endpoint
 
   rsa-public-key = trimspace(tls_private_key.ssh.public_key_openssh)
-  api_key        = random_string.api_key.result
-  license_type   = "byol"
+  api_key        = trimspace(random_string.api_key.result)
+  license_type   = local.faz_license_type
   license_file   = "./licenses/licenseFAZ.lic"
 
-  admin_username = var.admin_username
-  admin_password = var.admin_password
+  admin_username = local.admin_username
+  admin_password = local.admin_password
 
   faz_ni_ids = module.fgt_spoke_vnet.faz_ni_ids
   faz_ni_ips = module.fgt_spoke_vnet.faz_ni_ips
@@ -102,18 +103,18 @@ module "fmg" {
   source = "../../fmg"
 
   prefix                   = local.prefix
-  location                 = var.location
-  resource_group_name      = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                     = var.tags
-  storage-account_endpoint = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
+  location                 = local.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                     = local.tags
+  storage-account_endpoint = local.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : local.storage-account_endpoint
 
   rsa-public-key = trimspace(tls_private_key.ssh.public_key_openssh)
-  api_key        = random_string.api_key.result
-  license_type   = "byol"
+  api_key        = trimspace(random_string.api_key.result)
+  license_type   = local.fmg_license_type
   license_file   = "./licenses/licenseFMG.lic"
 
-  admin_username = var.admin_username
-  admin_password = var.admin_password
+  admin_username = local.admin_username
+  admin_password = local.admin_password
 
   fmg_ni_ids = module.fgt_spoke_vnet.fmg_ni_ids
   fmg_ni_ips = module.fgt_spoke_vnet.fmg_ni_ips

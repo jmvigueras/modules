@@ -40,7 +40,7 @@ variable "hubs" {
   default = [
     {
       id                = "HUB"
-      bgp-asn           = "65000"
+      bgp-asn           = "65001"
       public-ip         = "11.11.11.11"
       hub-ip            = "172.20.30.1"
       site-ip           = "172.20.30.10" // set to "" if VPN mode-cfg is enable
@@ -87,7 +87,7 @@ variable "config_vxlan" {
 variable "hub-peer_vxlan" {
   type = map(string)
   default = {
-    bgp-asn   = "65000"
+    bgp-asn   = "65001"
     public-ip = "" // leave in blank if you don't know public IP jet
     remote-ip = "10.10.30.1"
     local-ip  = "10.10.30.2"
@@ -313,7 +313,7 @@ variable "mgmt_port" {
 }
 variable "ha_port" {
   type    = string
-  default = "port3"
+  default = "port4"
 }
 
 // License Type to create FortiGate-VM

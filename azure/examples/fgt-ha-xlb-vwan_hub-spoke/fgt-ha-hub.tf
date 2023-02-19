@@ -11,7 +11,7 @@ module "fgt_hub_config" {
   source     = "../../fgt-config"
 
   admin_cidr     = local.admin_cidr
-  admin_port     = var.admin_port
+  admin_port     = local.admin_port
   rsa-public-key = tls_private_key.ssh.public_key_openssh
   api_key        = random_string.api_key.result
 
@@ -44,14 +44,14 @@ module "fgt_hub" {
   depends_on = [module.fgt_hub_config]
   source     = "../../fgt-ha"
 
-  prefix                   = "${var.prefix}-hub"
-  location                 = var.location
-  resource_group_name      = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                     = var.tags
-  storage-account_endpoint = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
+  prefix                   = "${local.prefix}-hub"
+  location                 = local.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                     = local.tags
+  storage-account_endpoint = local.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : local.storage-account_endpoint
 
-  admin_username = var.admin_username
-  admin_password = var.admin_password
+  admin_username = local.admin_username
+  admin_password = local.admin_password
 
   fgt-active-ni_ids  = module.fgt_hub_vnet.fgt-active-ni_ids
   fgt-passive-ni_ids = module.fgt_hub_vnet.fgt-passive-ni_ids
@@ -66,14 +66,14 @@ module "fgt_hub" {
 module "fgt_hub_vnet" {
   source = "../../vnet-fgt"
 
-  prefix              = "${var.prefix}-hub"
-  location            = var.location
-  resource_group_name = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                = var.tags
+  prefix              = "${local.prefix}-hub"
+  location            = local.location
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                = local.tags
 
   vnet-fgt_cidr = local.hub1["cidr"]
-  admin_port    = var.admin_port
-  admin_cidr    = var.admin_cidr
+  admin_port    = local.admin_port
+  admin_cidr    = local.admin_cidr
 }
 
 
@@ -92,10 +92,10 @@ module "vwan" {
   depends_on = [module.vnet-spoke-vhub, module.fgt_hub_vnet]
   source     = "../../vwan"
 
-  prefix              = var.prefix
-  location            = var.location
-  resource_group_name = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                = var.tags
+  prefix              = local.prefix
+  location            = local.location
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                = local.tags
 
   vhub_cidr              = local.vhub_cidr
   vnet_connection        = module.vnet-spoke-vhub.vnet_ids
@@ -110,10 +110,10 @@ module "vwan" {
 module "vnet-spoke-vhub" {
   source = "../../vnet-spoke"
 
-  prefix              = "${var.prefix}-vhub"
-  location            = var.location
-  resource_group_name = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                = var.tags
+  prefix              = "${local.prefix}-vhub"
+  location            = local.location
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                = local.tags
 
   vnet-spoke_cidrs = local.vhub_vnet-spoke_cidrs
   vnet-fgt         = null
@@ -126,10 +126,10 @@ module "vnet-spoke-fgt" {
   depends_on = [module.fgt_hub_vnet]
   source     = "../../vnet-spoke"
 
-  prefix              = "${var.prefix}-fgt"
-  location            = var.location
-  resource_group_name = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                = var.tags
+  prefix              = "${local.prefix}-fgt"
+  location            = local.location
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                = local.tags
 
   vnet-spoke_cidrs = local.fgt_vnet-spoke_cidrs
   vnet-fgt = {
@@ -141,14 +141,16 @@ module "vnet-spoke-fgt" {
 // Create load balancers
 module "xlb" {
   depends_on = [module.fgt_hub_vnet]
-  source     = "../../xlb-fgt"
+  source     = "../../xlb"
 
-  prefix              = var.prefix
-  location            = var.location
-  resource_group_name = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                = var.tags
+  prefix              = local.prefix
+  location            = local.location
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                = local.tags
 
-  gwlb_vxlan = local.gwlb_vxlan
+  config_gwlb        = local.config_gwlb
+  ilb_ip             = local.ilb_ip
+  backend-probe_port = local.backend-probe_port
 
   subnet_private = {
     cidr    = module.fgt_hub_vnet.subnet_cidrs["private"]
@@ -176,10 +178,10 @@ module "rs" {
   depends_on = [module.vnet-spoke-fgt, module.fgt_hub_vnet]
   source     = "../../routeserver"
 
-  prefix              = var.prefix
-  location            = var.location
-  resource_group_name = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                = var.tags
+  prefix              = local.prefix
+  location            = local.location
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                = local.tags
 
   subnet_ids   = module.vnet-spoke-fgt.subnet_ids["routeserver"]
   fgt_bgp-asn  = local.hub1["bgp-asn_hub"]
@@ -191,12 +193,12 @@ module "rs" {
 module "vm_hub_vnet-spoke-fgt" {
   source = "../../new-vm_rsa-ssh"
 
-  prefix                   = "${var.prefix}-spoke-fgt"
-  location                 = var.location
-  resource_group_name      = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                     = var.tags
-  storage-account_endpoint = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
-  admin_username           = var.admin_username
+  prefix                   = "${local.prefix}-spoke-fgt"
+  location                 = local.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                     = local.tags
+  storage-account_endpoint = local.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : local.storage-account_endpoint
+  admin_username           = local.admin_username
   rsa-public-key           = tls_private_key.ssh.public_key_openssh
 
   vm_ni_ids = [
@@ -208,12 +210,12 @@ module "vm_hub_vnet-spoke-fgt" {
 module "vm_hub_vnet-spoke-vhub" {
   source = "../../new-vm_rsa-ssh"
 
-  prefix                   = "${var.prefix}-spoke-vhub"
-  location                 = var.location
-  resource_group_name      = var.resource_group_name == null ? azurerm_resource_group.rg[0].name : var.resource_group_name
-  tags                     = var.tags
-  storage-account_endpoint = var.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : var.storage-account_endpoint
-  admin_username           = var.admin_username
+  prefix                   = "${local.prefix}-spoke-vhub"
+  location                 = local.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                     = local.tags
+  storage-account_endpoint = local.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : local.storage-account_endpoint
+  admin_username           = local.admin_username
   rsa-public-key           = tls_private_key.ssh.public_key_openssh
 
   vm_ni_ids = [
