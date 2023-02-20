@@ -24,7 +24,7 @@ resource "aws_network_interface" "ni-active-public" {
 resource "aws_network_interface" "ni-active-private" {
   subnet_id         = aws_subnet.subnet-az1-private.id
   security_groups   = [aws_security_group.nsg-vpc-sec-private.id]
-  private_ips       = local.fgt-2_ni_private_ips
+  private_ips       = local.fgt-1_ni_private_ips
   source_dest_check = false
   tags = {
     Name = "${var.prefix}-ni-active-private"
@@ -35,7 +35,7 @@ resource "aws_network_interface" "ni-active-private" {
 # Create all the eni interfaces FGT passive
 # ------------------------------------------------------------------
 resource "aws_network_interface" "ni-passive-mgmt" {
-  subnet_id         = aws_subnet.subnet-az2-mgmt-ha.id
+  subnet_id         = aws_subnet.subnet-az1-mgmt-ha.id
   security_groups   = [aws_security_group.nsg-vpc-sec-mgmt.id, aws_security_group.nsg-vpc-sec-ha.id]
   private_ips       = local.fgt-2_ni_mgmt_ips
   source_dest_check = false
@@ -45,7 +45,7 @@ resource "aws_network_interface" "ni-passive-mgmt" {
 }
 
 resource "aws_network_interface" "ni-passive-public" {
-  subnet_id         = aws_subnet.subnet-az2-public.id
+  subnet_id         = aws_subnet.subnet-az1-public.id
   security_groups   = [aws_security_group.nsg-vpc-sec-public.id]
   private_ips       = local.fgt-2_ni_public_ips
   source_dest_check = false
@@ -55,7 +55,7 @@ resource "aws_network_interface" "ni-passive-public" {
 }
 
 resource "aws_network_interface" "ni-passive-private" {
-  subnet_id         = aws_subnet.subnet-az2-private.id
+  subnet_id         = aws_subnet.subnet-az1-private.id
   security_groups   = [aws_security_group.nsg-vpc-sec-private.id]
   private_ips       = local.fgt-2_ni_private_ips
   source_dest_check = false
@@ -74,16 +74,6 @@ resource "aws_network_interface" "ni-bastion-az1" {
   source_dest_check = false
   tags = {
     Name = "${var.prefix}-ni-bastion-az1"
-  }
-}
-
-resource "aws_network_interface" "ni-bastion-az2" {
-  subnet_id         = aws_subnet.subnet-az2-bastion.id
-  security_groups   = [aws_security_group.nsg-vpc-sec-bastion.id]
-  private_ips       = local.bastion_az2_ni_ips
-  source_dest_check = false
-  tags = {
-    Name = "${var.prefix}-ni-bastion-az2"
   }
 }
 

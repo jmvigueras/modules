@@ -8,9 +8,9 @@ output "fgt-active-ni_ids" {
 
 output "fgt-active-ni_ips" {
   value = {
-    mgmt    = aws_network_interface.ni-active-mgmt.private_ip
-    public  = aws_network_interface.ni-active-public.private_ip
-    private = aws_network_interface.ni-active-private.private_ip
+    mgmt    = local.fgt-1_ni_mgmt_ip
+    public  = local.fgt-1_ni_public_ip
+    private = local.fgt-1_ni_private_ip
   }
 }
 
@@ -24,9 +24,9 @@ output "fgt-passive-ni_ids" {
 
 output "fgt-passive-ni_ips" {
   value = {
-    mgmt    = aws_network_interface.ni-passive-mgmt.private_ip
-    public  = aws_network_interface.ni-passive-public.private_ip
-    private = aws_network_interface.ni-passive-private.private_ip
+    mgmt    = local.fgt-2_ni_mgmt_ip
+    public  = local.fgt-2_ni_public_ip
+    private = local.fgt-2_ni_private_ip
   }
 }
 

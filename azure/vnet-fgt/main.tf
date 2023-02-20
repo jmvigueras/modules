@@ -14,42 +14,42 @@ resource "azurerm_subnet" "subnet-hamgmt" {
   name                 = "${var.prefix}-subnet-hamgmt"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 1)]
+  address_prefixes     = [local.subnet_mgmt_cidr]
 }
 
 resource "azurerm_subnet" "subnet-public" {
   name                 = "${var.prefix}-subnet-public"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 2)]
+  address_prefixes     = [local.subnet_public_cidr]
 }
 
 resource "azurerm_subnet" "subnet-private" {
   name                 = "${var.prefix}-subnet-private"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 3)]
+  address_prefixes     = [local.subnet_private_cidr]
 }
 
 resource "azurerm_subnet" "subnet-bastion" {
   name                 = "${var.prefix}-subnet-bastion"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 4)]
+  address_prefixes     = [local.subnet_bastion_cidr]
 }
 
 resource "azurerm_subnet" "subnet-vgw" {
   name                 = "GatewaySubnet"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 6)]
+  address_prefixes     = [local.subnet_vgw_cidr]
 }
 
 resource "azurerm_subnet" "subnet-routeserver" {
   name                 = "RouteServerSubnet"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet-fgt.name
-  address_prefixes     = [cidrsubnet(var.vnet-fgt_cidr, 3, 7)]
+  address_prefixes     = [local.subnet_routeserver_cidr]
 }
 
 ######################################################################
@@ -109,7 +109,7 @@ resource "azurerm_network_interface" "ni-active-mgmt" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-hamgmt.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-hamgmt.address_prefixes[0], 10)
+    private_ip_address            = local.fgt-1_ni_mgmt_ip
     primary                       = true
     public_ip_address_id          = azurerm_public_ip.active-mgmt-ip.id
   }
@@ -128,7 +128,7 @@ resource "azurerm_network_interface" "ni-active-public" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-public.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0], 10)
+    private_ip_address            = local.fgt-1_ni_public_ip
     public_ip_address_id          = azurerm_public_ip.active-public-ip.id
   }
 
@@ -146,7 +146,7 @@ resource "azurerm_network_interface" "ni-active-private" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-private.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-private.address_prefixes[0], 10)
+    private_ip_address            = local.fgt-1_ni_private_ip
   }
 
   tags = var.tags
@@ -163,7 +163,7 @@ resource "azurerm_network_interface" "ni-passive-mgmt" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-hamgmt.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-hamgmt.address_prefixes[0], 11)
+    private_ip_address            = local.fgt-2_ni_mgmt_ip
     primary                       = true
     public_ip_address_id          = azurerm_public_ip.passive-mgmt-ip.id
   }
@@ -182,7 +182,7 @@ resource "azurerm_network_interface" "ni-passive-public" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-public.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0], 11)
+    private_ip_address            = local.fgt-2_ni_public_ip
     public_ip_address_id          = azurerm_public_ip.passive-public-ip.id
   }
 
@@ -200,7 +200,7 @@ resource "azurerm_network_interface" "ni-passive-private" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-private.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-private.address_prefixes[0], 11)
+    private_ip_address            = local.fgt-2_ni_private_ip
   }
 
   tags = var.tags
@@ -228,7 +228,7 @@ resource "azurerm_network_interface" "ni-bastion" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-bastion.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-bastion.address_prefixes[0], 10)
+    private_ip_address            = local.bastion_ni_ip
     primary                       = true
     public_ip_address_id          = azurerm_public_ip.bastion-public-ip.id
   }
@@ -259,7 +259,7 @@ resource "azurerm_network_interface" "faz_ni_public" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-public.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0], 12)
+    private_ip_address            = local.faz_ni_public_ip
     primary                       = true
     public_ip_address_id          = azurerm_public_ip.faz_public-ip.id
   }
@@ -275,7 +275,7 @@ resource "azurerm_network_interface" "faz_ni_private" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-bastion.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-bastion.address_prefixes[0], 12)
+    private_ip_address            = local.faz_ni_private_ip
   }
   tags = var.tags
 }
@@ -301,7 +301,7 @@ resource "azurerm_network_interface" "fmg_ni_public" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-public.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-public.address_prefixes[0], 13)
+    private_ip_address            = local.fmg_ni_public_ip
     primary                       = true
     public_ip_address_id          = azurerm_public_ip.fmg_public-ip.id
   }
@@ -317,7 +317,7 @@ resource "azurerm_network_interface" "fmg_ni_private" {
     name                          = "ipconfig1"
     subnet_id                     = azurerm_subnet.subnet-bastion.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(azurerm_subnet.subnet-bastion.address_prefixes[0], 13)
+    private_ip_address            = local.fmg_ni_private_ip
   }
   tags = var.tags
 }

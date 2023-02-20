@@ -9,8 +9,8 @@ output "fgt-active-ni_ids" {
 output "fgt-active-ni_ips" {
   value = {
     mgmt    = local.fgt-1_ni_mgmt_ip
-    public  = local.fgt-1_ni_public_ip
-    private = local.fgt-1_ni_private_ip
+    public  = local.fgt-1_ni_public_ip_float
+    private = local.fgt-1_ni_private_ip_float
   }
 }
 
@@ -41,16 +41,6 @@ output "subnet_az1_cidrs" {
   }
 }
 
-output "subnet_az2_cidrs" {
-  value = {
-    mgmt    = aws_subnet.subnet-az2-mgmt-ha.cidr_block
-    public  = aws_subnet.subnet-az2-public.cidr_block
-    private = aws_subnet.subnet-az2-private.cidr_block
-    bastion = aws_subnet.subnet-az2-bastion.cidr_block
-    tgw     = aws_subnet.subnet-az2-tgw.cidr_block
-    gwlb    = aws_subnet.subnet-az2-gwlb.cidr_block
-  }
-}
 
 output "subnet_az1_ids" {
   value = {
@@ -63,28 +53,15 @@ output "subnet_az1_ids" {
   }
 }
 
-output "subnet_az2_ids" {
-  value = {
-    mgmt    = aws_subnet.subnet-az2-mgmt-ha.id
-    public  = aws_subnet.subnet-az2-public.id
-    private = aws_subnet.subnet-az2-private.id
-    bastion = aws_subnet.subnet-az2-bastion.id
-    tgw     = aws_subnet.subnet-az2-tgw.id
-    gwlb    = aws_subnet.subnet-az2-gwlb.id
-  }
-}
-
 output "bastion-ni_ids" {
   value = {
     az1 = aws_network_interface.ni-bastion-az1.id
-    az2 = aws_network_interface.ni-bastion-az2.id
   }
 }
 
 output "bastion-ni_ips" {
   value = {
     az1 = aws_network_interface.ni-bastion-az1.private_ip
-    az2 = aws_network_interface.ni-bastion-az2.private_ip
   }
 }
 
@@ -127,8 +104,4 @@ output "nsg_ids" {
     private = aws_security_group.nsg-vpc-sec-private.id
     public  = aws_security_group.nsg-vpc-sec-public.id
   }
-}
-
-output "vpc_tgw-att_id" {
-  value = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-sec.id
 }

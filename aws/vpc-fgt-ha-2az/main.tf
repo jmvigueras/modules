@@ -24,7 +24,7 @@ resource "aws_internet_gateway" "igw-vpc-sec" {
 # Subnets AZ1
 resource "aws_subnet" "subnet-az1-mgmt-ha" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 0)
+  cidr_block        = local.subnet_az1_mgmt_cidr
   availability_zone = var.region["az1"]
   tags = {
     Name = "${var.prefix}-subnet-az1-mgmt-ha"
@@ -33,7 +33,7 @@ resource "aws_subnet" "subnet-az1-mgmt-ha" {
 
 resource "aws_subnet" "subnet-az1-public" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 1)
+  cidr_block        = local.subnet_az1_public_cidr
   availability_zone = var.region["az1"]
   tags = {
     Name = "${var.prefix}-subnet-az1-public"
@@ -42,7 +42,7 @@ resource "aws_subnet" "subnet-az1-public" {
 
 resource "aws_subnet" "subnet-az1-private" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 2)
+  cidr_block        = local.subnet_az1_private_cidr
   availability_zone = var.region["az1"]
   tags = {
     Name = "${var.prefix}-subnet-az1-private"
@@ -51,7 +51,7 @@ resource "aws_subnet" "subnet-az1-private" {
 
 resource "aws_subnet" "subnet-az1-tgw" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 3)
+  cidr_block        = local.subnet_az1_tgw_cidr
   availability_zone = var.region["az1"]
   tags = {
     Name = "${var.prefix}-subnet-az1-tgw"
@@ -60,7 +60,7 @@ resource "aws_subnet" "subnet-az1-tgw" {
 
 resource "aws_subnet" "subnet-az1-gwlb" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 4)
+  cidr_block        = local.subnet_az1_gwlb_cidr
   availability_zone = var.region["az1"]
   tags = {
     Name = "${var.prefix}-subnet-az1-gwlb"
@@ -69,7 +69,7 @@ resource "aws_subnet" "subnet-az1-gwlb" {
 
 resource "aws_subnet" "subnet-az1-bastion" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 5)
+  cidr_block        = local.subnet_az1_bastion_cidr
   availability_zone = var.region["az1"]
   tags = {
     Name = "${var.prefix}-subnet-az1-bastion"
@@ -79,7 +79,7 @@ resource "aws_subnet" "subnet-az1-bastion" {
 # Subnets AZ2
 resource "aws_subnet" "subnet-az2-mgmt-ha" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 8)
+  cidr_block        = local.subnet_az2_mgmt_cidr
   availability_zone = var.region["az2"]
   tags = {
     Name = "${var.prefix}-subnet-az2-mgmt-ha"
@@ -88,7 +88,7 @@ resource "aws_subnet" "subnet-az2-mgmt-ha" {
 
 resource "aws_subnet" "subnet-az2-public" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 9)
+  cidr_block        = local.subnet_az2_public_cidr
   availability_zone = var.region["az2"]
   tags = {
     Name = "${var.prefix}-subnet-az2-public"
@@ -97,7 +97,7 @@ resource "aws_subnet" "subnet-az2-public" {
 
 resource "aws_subnet" "subnet-az2-private" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 10)
+  cidr_block        = local.subnet_az2_private_cidr
   availability_zone = var.region["az2"]
   tags = {
     Name = "${var.prefix}-subnet-az2-private"
@@ -106,7 +106,7 @@ resource "aws_subnet" "subnet-az2-private" {
 
 resource "aws_subnet" "subnet-az2-tgw" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 11)
+  cidr_block        = local.subnet_az2_tgw_cidr
   availability_zone = var.region["az2"]
   tags = {
     Name = "${var.prefix}-subnet-az2-tgw"
@@ -115,7 +115,7 @@ resource "aws_subnet" "subnet-az2-tgw" {
 
 resource "aws_subnet" "subnet-az2-gwlb" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 12)
+  cidr_block        = local.subnet_az2_gwlb_cidr
   availability_zone = var.region["az2"]
   tags = {
     Name = "${var.prefix}-subnet-az2-gwlb"
@@ -124,7 +124,7 @@ resource "aws_subnet" "subnet-az2-gwlb" {
 
 resource "aws_subnet" "subnet-az2-bastion" {
   vpc_id            = aws_vpc.vpc-sec.id
-  cidr_block        = cidrsubnet(var.vpc-sec_cidr, 4, 13)
+  cidr_block        = local.subnet_az2_bastion_cidr
   availability_zone = var.region["az2"]
   tags = {
     Name = "${var.prefix}-subnet-az2-bastion"

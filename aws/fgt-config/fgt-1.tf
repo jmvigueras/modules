@@ -69,7 +69,7 @@ data "template_file" "fgt_sdn-config" {
 }
 
 data "template_file" "fgt_ha-fgcp-active-config" {
-  template = file("${path.module}/templates/fgt-ha-fgcp.conf")
+  template = file("${path.module}/templates/aws_fgt-ha-fgcp.conf")
   vars = {
     fgt_priority = 200
     ha_port      = var.mgmt_port
@@ -79,7 +79,7 @@ data "template_file" "fgt_ha-fgcp-active-config" {
 }
 
 data "template_file" "fgt_ha-fgsp-active-config" {
-  template = file("${path.module}/templates/fgt-ha-fgsp.conf")
+  template = file("${path.module}/templates/aws_fgt-ha-fgsp.conf")
   vars = {
     mgmt_port     = var.mgmt_port
     mgmt_gw       = cidrhost(var.subnet_active_cidrs["mgmt"], 1)
