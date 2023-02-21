@@ -1,3 +1,18 @@
+output "fgt_active_eip_mgmt" {
+  value = aws_eip.fgt_active_eip_mgmt.public_ip
+}
+
+output "fgt_passive_eip_mgmt" {
+  value = aws_eip.fgt_passive_eip_mgmt.public_ip
+}
+
+output "fgt_active_eip_public" {
+  value = aws_eip.fgt_active_eip_public.public_ip
+}
+
+output "fgt_passive_eip_public" {
+  value = aws_eip.fgt_passive_eip_public.public_ip
+}
 output "fgt-active-ni_ids" {
   value = {
     mgmt    = aws_network_interface.ni-active-mgmt.id
@@ -127,4 +142,8 @@ output "nsg_ids" {
     private = aws_security_group.nsg-vpc-sec-private.id
     public  = aws_security_group.nsg-vpc-sec-public.id
   }
+}
+
+output "vpc_tgw-att_id" {
+  value = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-sec.id
 }

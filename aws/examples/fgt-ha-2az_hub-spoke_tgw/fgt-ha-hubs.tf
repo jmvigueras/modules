@@ -10,12 +10,12 @@
 #------------------------------------------------------------------------------
 // Create VPC for HUB1
 module "fgt_hub1_vpc" {
-  source = "../../vpc-fgt-ha-2az-tgw"
+  source = "../../vpc-fgt-2az_tgw"
 
   prefix     = "${local.prefix}-hub1"
   admin_cidr = local.admin_cidr
   admin_port = local.admin_port
-  region     = var.region
+  region     = local.region
 
   vpc-sec_cidr          = local.hub1["cidr"]
   tgw_id                = module.tgw_hub1.tgw_id
@@ -50,7 +50,7 @@ module "fgt_hub1" {
   source = "../../fgt-ha"
 
   prefix        = "${local.prefix}-hub1"
-  region        = var.region
+  region        = local.region
   instance_type = local.instance_type
   keypair       = aws_key_pair.keypair.key_name
 
@@ -89,7 +89,7 @@ module "tgw_hub1_vpc-spoke" {
   prefix     = "${local.prefix}-tgw-spoke-${count.index + 1}"
   admin_cidr = local.admin_cidr
   admin_port = local.admin_port
-  region     = var.region
+  region     = local.region
 
   vpc-spoke_cidr        = cidrsubnet(local.vpc-spoke_cidr, 1, count.index)
   tgw_id                = module.tgw_hub1.tgw_id
@@ -130,12 +130,12 @@ module "vm_tgw_hub1" {
 #------------------------------------------------------------------------------
 // Create VPC for HUB2
 module "fgt_hub2_vpc" {
-  source = "../../vpc-fgt-ha-2az"
+  source = "../../vpc-fgt-2az"
 
   prefix     = "${local.prefix}-hub2"
   admin_cidr = local.admin_cidr
   admin_port = local.admin_port
-  region     = var.region
+  region     = local.region
 
   vpc-sec_cidr = local.hub2["cidr"]
 }
@@ -162,7 +162,7 @@ module "fgt_hub2" {
   source = "../../fgt-ha"
 
   prefix        = "${local.prefix}-hub2"
-  region        = var.region
+  region        = local.region
   instance_type = local.instance_type
   keypair       = aws_key_pair.keypair.key_name
 

@@ -18,11 +18,13 @@ module "fgt_onramp_config" {
   fgt-active-ni_ips    = module.fgt_onramp_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips   = module.fgt_onramp_vpc.fgt-passive-ni_ips
 
-  config_fgcp  = true
-  config_fmg   = true
-  config_faz   = true
-  fmg_ip       = module.fgt_onramp_vpc.fmg_ni_ips["private"]
-  faz_ip       = module.fgt_onramp_vpc.faz_ni_ips["private"]
+  config_fgcp = true
+  config_fmg  = true
+  config_faz  = true
+  fmg_ip      = module.fgt_onramp_vpc.fmg_ni_ips["private"]
+  faz_ip      = module.fgt_onramp_vpc.faz_ni_ips["private"]
+
+  vpc-spoke_cidr = local.vpc-spoke_cidr
 }
 
 // Create FGT
@@ -30,7 +32,7 @@ module "fgt_onramp" {
   source = "../../fgt-ha"
 
   prefix        = "${local.prefix}-onramp"
-  region        = var.region
+  region        = local.region
   instance_type = local.instance_type
   keypair       = aws_key_pair.keypair.key_name
 
@@ -47,12 +49,12 @@ module "fgt_onramp" {
 
 // Create VPC FGT
 module "fgt_onramp_vpc" {
-  source = "../../vpc-fgt-ha-2az"
+  source = "../../vpc-fgt-2az"
 
   prefix     = "${local.prefix}-onramp"
   admin_cidr = local.admin_cidr
   admin_port = local.admin_port
-  region     = var.region
+  region     = local.region
 
   vpc-sec_cidr = local.fgt_vpc_cidr
 }
@@ -65,7 +67,7 @@ module "faz" {
   source = "../../faz"
 
   prefix         = local.prefix
-  region         = var.region
+  region         = local.region
   keypair        = aws_key_pair.keypair.key_name
   rsa-public-key = tls_private_key.ssh.public_key_openssh
   api_key        = random_string.api_key.result
@@ -85,7 +87,7 @@ module "fmg" {
   source = "../../fmg"
 
   prefix         = local.prefix
-  region         = var.region
+  region         = local.region
   keypair        = aws_key_pair.keypair.key_name
   rsa-public-key = tls_private_key.ssh.public_key_openssh
   api_key        = random_string.api_key.result

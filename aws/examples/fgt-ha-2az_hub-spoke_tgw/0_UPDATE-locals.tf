@@ -3,14 +3,21 @@
 # Active Passive High Availability MultiAZ with AWS Transit Gateway with VPC standard attachment
 #-----------------------------------------------------------------------------------------------------
 locals {
-  count = 1
+  count = 2
 
-  prefix        = "demo3"
+  prefix        = "demo-fgt-sdwan"
   admin_port    = "8443"
   admin_cidr    = "${chomp(data.http.my-public-ip.body)}/32"
+
   instance_type = "c6i.large"
   fgt_build     = "build1396"
   license_type  = "payg"
+
+  region = {
+    id  = "eu-west-1"
+    az1 = "eu-west-1a"
+    az2 = "eu-west-1c"
+  }
 
   #-----------------------------------------------------------------------------------------------------
   # FGT HUB locals
@@ -58,7 +65,7 @@ locals {
     {
       id                = local.hub1["id"]
       bgp-asn           = local.hub1["bgp-asn_hub"]
-      public-ip         = module.fgt_hub1.fgt_active_eip_public
+      public-ip         = module.fgt_hub1_vpc.fgt_active_eip_public
       hub-ip            = cidrhost(cidrsubnet(local.hub1["vpn_cidr"], 1, 0), 1)
       site-ip           = "" // set to "" if VPN mode-cfg is enable
       hck-srv-ip        = cidrhost(cidrsubnet(local.hub1["vpn_cidr"], 1, 0), 1)
@@ -71,7 +78,7 @@ locals {
     {
       id                = local.hub1["id"]
       bgp-asn           = local.hub1["bgp-asn_hub"]
-      public-ip         = module.fgt_hub1.fgt_passive_eip_public[0]
+      public-ip         = module.fgt_hub1_vpc.fgt_passive_eip_public
       hub-ip            = cidrhost(cidrsubnet(local.hub1["vpn_cidr"], 1, 1), 1)
       site-ip           = "" // set to "" if VPN mode-cfg is enable
       hck-srv-ip        = cidrhost(cidrsubnet(local.hub1["vpn_cidr"], 1, 1), 1)
@@ -84,7 +91,7 @@ locals {
     {
       id                = local.hub2["id"]
       bgp-asn           = local.hub2["bgp-asn_hub"]
-      public-ip         = module.fgt_hub2.fgt_active_eip_public
+      public-ip         = module.fgt_hub2_vpc.fgt_active_eip_public
       hub-ip            = cidrhost(cidrsubnet(local.hub2["vpn_cidr"], 0, 0), 1)
       site-ip           = "" // set to "" if VPN mode-cfg is enable
       hck-srv-ip        = cidrhost(cidrsubnet(local.hub2["vpn_cidr"], 0, 0), 1)

@@ -15,7 +15,7 @@ locals {
   region = {
     id  = "eu-west-1"
     az1 = "eu-west-1a"
-    az2 = "eu-west-1a"
+    az2 = "eu-west-1a"  // same AZ id as AZ1 for a single AZ deployment
   }
 
   fgt_vpc_cidr = "172.30.0.0/24"

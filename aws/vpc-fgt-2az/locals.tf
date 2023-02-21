@@ -47,7 +47,7 @@ locals {
   fgt-2_ni_private_ips = [local.fgt-2_ni_private_ip]
 
   bastion_az1_ni_ips = [local.bastion_az1_ni_ip]
-  bastion_az2_ni_ips = [local.bastion_az1_ni_ip]
+  bastion_az2_ni_ips = [local.bastion_az2_ni_ip]
 
   faz_az1_ni_public_ips  = [local.faz_az1_ni_public_ip]
   faz_az1_ni_private_ips = [local.faz_az1_ni_private_ip]

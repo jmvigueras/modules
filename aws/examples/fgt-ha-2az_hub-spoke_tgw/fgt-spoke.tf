@@ -7,12 +7,12 @@
 // Create VPC spoke
 module "fgt_spoke_vpc" {
   count  = local.count
-  source = "../../vpc-fgt-ha-2az"
+  source = "../../vpc-fgt-2az"
 
   prefix     = "${local.prefix}-spoke-${count.index + 1}"
   admin_cidr = local.admin_cidr
   admin_port = local.admin_port
-  region     = var.region
+  region     = local.region
 
   vpc-sec_cidr = cidrsubnet(local.spoke["cidr"], ceil(log(local.count, 2)), count.index)
 }
@@ -46,7 +46,7 @@ module "fgt_spoke" {
   source = "../../fgt-ha"
 
   prefix        = "${local.prefix}-spoke-${count.index + 1}"
-  region        = var.region
+  region        = local.region
   instance_type = local.instance_type
   keypair       = aws_key_pair.keypair.key_name
 

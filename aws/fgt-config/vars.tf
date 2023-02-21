@@ -25,9 +25,9 @@ variable "config_spoke" {
 variable "spoke" {
   type = map(any)
   default = {
-    id      = "spoke-1"
+    id      = "fgt"
     cidr    = "192.168.0.0/24"
-    bgp-asn = "65011"
+    bgp-asn = "65000"
   }
 }
 
@@ -37,7 +37,7 @@ variable "hubs" {
   default = [
     {
       id                = "HUB1"
-      bgp-asn           = "65001"
+      bgp-asn           = "65000"
       public-ip         = "11.11.11.11"
       hub-ip            = "172.20.30.1"
       site-ip           = "172.20.30.10" // set to "" if VPN mode-cfg is enable
@@ -65,9 +65,9 @@ variable "config_hub" {
 variable "hub" {
   type = map(any)
   default = {
-    id                = "HUB-AWS"
-    bgp-asn_hub       = "65002"
-    bgp-asn_spoke     = "65011"
+    id                = "fgt"
+    bgp-asn_hub       = "65000"
+    bgp-asn_spoke     = "65000"
     vpn_cidr          = "10.10.10.0/24"
     vpn_psk           = "secret-key-123"
     cidr              = "192.168.0.0/24"
@@ -87,7 +87,7 @@ variable "config_vxlan" {
 variable "hub-peer_vxlan" {
   type = map(string)
   default = {
-    bgp-asn   = "65001"
+    bgp-asn   = "65000"
     public-ip = "" // leave in blank if you don't know public IP jet
     remote-ip = "10.10.30.1"
     local-ip  = "10.10.30.2"

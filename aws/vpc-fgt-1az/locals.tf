@@ -12,11 +12,13 @@ locals {
   # ----------------------------------------------------------------------------------
   # FGT IP (UPDATE IF NEEDED)
   # ----------------------------------------------------------------------------------
-  fgt-1_ni_mgmt_ip          = cidrhost(local.subnet_az1_mgmt_cidr, 10)
-  fgt-1_ni_public_ip        = cidrhost(local.subnet_az1_public_cidr, 10)
-  fgt-1_ni_public_ip_float  = cidrhost(local.subnet_az1_public_cidr, 9)
-  fgt-1_ni_private_ip       = cidrhost(local.subnet_az1_private_cidr, 10)
-  fgt-1_ni_private_ip_float = cidrhost(local.subnet_az1_private_cidr, 9)
+
+  fgt_ni_public_ip_float  = cidrhost(local.subnet_az1_public_cidr, 9)
+  fgt_ni_private_ip_float = cidrhost(local.subnet_az1_private_cidr, 9)
+
+  fgt-1_ni_mgmt_ip    = cidrhost(local.subnet_az1_mgmt_cidr, 10)
+  fgt-1_ni_public_ip  = cidrhost(local.subnet_az1_public_cidr, 10)
+  fgt-1_ni_private_ip = cidrhost(local.subnet_az1_private_cidr, 10)
 
   fgt-2_ni_mgmt_ip    = cidrhost(local.subnet_az1_mgmt_cidr, 11)
   fgt-2_ni_public_ip  = cidrhost(local.subnet_az1_public_cidr, 11)
@@ -33,8 +35,8 @@ locals {
   # FGT IPs (NOT UPDATE)
   # ----------------------------------------------------------------------------------
   fgt-1_ni_mgmt_ips    = [local.fgt-1_ni_mgmt_ip]
-  fgt-1_ni_public_ips  = [local.fgt-1_ni_public_ip, local.fgt-1_ni_public_ip_float]
-  fgt-1_ni_private_ips = [local.fgt-1_ni_private_ip, local.fgt-1_ni_private_ip_float]
+  fgt-1_ni_public_ips  = [local.fgt-1_ni_public_ip, local.fgt_ni_public_ip_float]
+  fgt-1_ni_private_ips = [local.fgt-1_ni_private_ip, local.fgt_ni_private_ip_float]
 
   fgt-2_ni_mgmt_ips    = [local.fgt-2_ni_mgmt_ip]
   fgt-2_ni_public_ips  = [local.fgt-2_ni_public_ip]

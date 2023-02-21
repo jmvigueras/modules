@@ -1,39 +1,3 @@
-# Create and attach the eip to the units
-resource "aws_eip" "fgt_active_eip_public" {
-  vpc               = true
-  network_interface = var.fgt-active-ni_ids["public"]
-  tags = {
-    Name = "${var.prefix}-fgt_active_eip_public"
-  }
-}
-
-resource "aws_eip" "fgt_active_eip_mgmt" {
-  vpc               = true
-  network_interface = var.fgt-active-ni_ids["mgmt"]
-  tags = {
-    Name = "${var.prefix}-fgt_active_eip_mgmt"
-  }
-}
-
-# Create and attach the eip to the units
-resource "aws_eip" "fgt_passive_eip_mgmt" {
-  vpc               = true
-  network_interface = var.fgt-passive-ni_ids["mgmt"]
-  tags = {
-    Name = "${var.prefix}-fgt_passive_eip_mgmt"
-  }
-}
-
-# Create and attach the eip to the units
-resource "aws_eip" "fgt_passive_eip_public" {
-  count             = var.fgt-passive-ni_ids != null && var.fgt_passive && var.fgt_ha_fgsp ? 1 : 0
-  vpc               = true
-  network_interface = var.fgt-passive-ni_ids["public"]
-  tags = {
-    Name = "${var.prefix}-fgt_passive_eip_public"
-  }
-}
-
 # Create the instance FGT AZ1 Active
 resource "aws_instance" "fgt_active" {
   ami                  = var.license_type == "byol" ? data.aws_ami_ids.fgt_amis_byol.ids[0] : data.aws_ami_ids.fgt_amis_payg.ids[0]

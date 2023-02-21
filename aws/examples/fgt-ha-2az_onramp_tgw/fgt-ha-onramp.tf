@@ -12,17 +12,19 @@ module "fgt_onramp_config" {
   rsa-public-key = trimspace(tls_private_key.ssh.public_key_openssh)
   api_key        = trimspace(random_string.api_key.result)
 
-  subnet_active_cidrs  = module.vpc_onramp.subnet_az1_cidrs
-  subnet_passive_cidrs = module.vpc_onramp.subnet_az2_cidrs
-  fgt-active-ni_ips    = module.vpc_onramp.fgt-active-ni_ips
-  fgt-passive-ni_ips   = module.vpc_onramp.fgt-passive-ni_ips
+  subnet_active_cidrs  = module.fgt_onramp_vpc.subnet_az1_cidrs
+  subnet_passive_cidrs = module.fgt_onramp_vpc.subnet_az2_cidrs
+  fgt-active-ni_ips    = module.fgt_onramp_vpc.fgt-active-ni_ips
+  fgt-passive-ni_ips   = module.fgt_onramp_vpc.fgt-passive-ni_ips
 
   config_fgcp     = true
+  config_spoke    = true
   config_tgw-gre  = true
+  spoke           = local.onramp
   tgw_inside_cidr = local.tgw_inside_cidr
   tgw_cidr        = local.tgw_cidr
   tgw_bgp-asn     = local.tgw_bgp-asn
-  vpc-spoke_cidr  = [local.vpc-spoke_cidr]
+  vpc-spoke_cidr  = local.vpc-spoke_cidr
 }
 
 // Create FGT
@@ -30,15 +32,15 @@ module "fgt_onramp" {
   source = "../../fgt-ha"
 
   prefix        = "${local.prefix}-onramp"
-  region        = var.region
+  region        = local.region
   instance_type = local.instance_type
   keypair       = aws_key_pair.keypair.key_name
 
   license_type = local.license_type
   fgt_build    = local.fgt_build
 
-  fgt-active-ni_ids  = module.vpc_onramp.fgt-active-ni_ids
-  fgt-passive-ni_ids = module.vpc_onramp.fgt-passive-ni_ids
+  fgt-active-ni_ids  = module.fgt_onramp_vpc.fgt-active-ni_ids
+  fgt-passive-ni_ids = module.fgt_onramp_vpc.fgt-passive-ni_ids
   fgt_config_1       = module.fgt_onramp_config.fgt_config_1
   fgt_config_2       = module.fgt_onramp_config.fgt_config_2
 
@@ -63,15 +65,15 @@ module "tgw" {
 }
 
 // Create VPC FGT
-module "vpc_onramp" {
-  source = "../../vpc-fgt-ha-2az-tgw"
+module "fgt_onramp_vpc" {
+  source = "../../vpc-fgt-2az_tgw"
 
   prefix     = "${local.prefix}-onramp"
   admin_cidr = local.admin_cidr
   admin_port = local.admin_port
-  region     = var.region
+  region     = local.region
 
-  vpc-sec_cidr          = local.fgt_vpc_cidr
+  vpc-sec_cidr          = local.onramp["cidr"]
   tgw_id                = module.tgw.tgw_id
   tgw_rt-association_id = module.tgw.rt_default_id
   tgw_rt-propagation_id = module.tgw.rt_vpc-spoke_id
@@ -85,9 +87,9 @@ module "vpc_tgw-spoke" {
   prefix     = "${local.prefix}-tgw-spoke-${count.index + 1}"
   admin_cidr = local.admin_cidr
   admin_port = local.admin_port
-  region     = var.region
+  region     = local.region
 
-  vpc-spoke_cidr        = cidrsubnet(local.vpc-spoke_cidr, 1, count.index)
+  vpc-spoke_cidr        = cidrsubnet(local.vpc-spoke_cidr[0], 1, count.index)
   tgw_id                = module.tgw.tgw_id
   tgw_rt-association_id = module.tgw.rt_vpc-spoke_id
   tgw_rt-propagation_id = [module.tgw.rt_default_id, module.tgw.rt-vpc-sec-N-S_id, module.tgw.rt-vpc-sec-E-W_id]
@@ -98,12 +100,12 @@ module "tgw_connect" {
   source = "../../tgw_connect"
 
   prefix         = local.prefix
-  vpc_tgw-att_id = module.vpc_onramp.vpc_tgw-att_id
+  vpc_tgw-att_id = module.fgt_onramp_vpc.vpc_tgw-att_id
   tgw_id         = module.tgw.tgw_id
   peer_bgp-asn   = local.onramp["bgp-asn"]
   peer_ip = [
-    module.vpc_onramp.fgt-active-ni_ips["private"],
-    module.vpc_onramp.fgt-passive-ni_ips["private"]
+    module.fgt_onramp_vpc.fgt-active-ni_ips["private"],
+    module.fgt_onramp_vpc.fgt-passive-ni_ips["private"]
   ]
   tgw_inside_cidr   = local.tgw_inside_cidr
   tgw_cidr          = local.tgw_cidr

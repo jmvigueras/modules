@@ -1,10 +1,10 @@
 # Output
 output "fgt_hub1" {
   value = {
-    fgt-1_mgmt   = "https://${module.fgt_hub1.fgt_active_eip_mgmt}:${local.admin_port}"
-    fgt-2_mgmt   = "https://${module.fgt_hub1.fgt_passive_eip_mgmt}:${local.admin_port}"
-    fgt-1_public = module.fgt_hub1.fgt_active_eip_public
-    fgt-2_public = module.fgt_hub1.fgt_passive_eip_public
+    fgt-1_mgmt   = "https://${module.fgt_hub1_vpc.fgt_active_eip_mgmt}:${local.admin_port}"
+    fgt-2_mgmt   = "https://${module.fgt_hub1_vpc.fgt_passive_eip_mgmt}:${local.admin_port}"
+    fgt-1_public = module.fgt_hub1_vpc.fgt_active_eip_public
+    fgt-2_public = module.fgt_hub1_vpc.fgt_passive_eip_public
     username     = "admin"
     fgt-1_pass   = module.fgt_hub1.fgt_active_id
     fgt-2_pass   = module.fgt_hub1.fgt_passive_id
@@ -15,10 +15,10 @@ output "fgt_hub1" {
 }
 output "fgt_hub2" {
   value = {
-    fgt-1_mgmt   = "https://${module.fgt_hub2.fgt_active_eip_mgmt}:${local.admin_port}"
-    fgt-2_mgmt   = "https://${module.fgt_hub2.fgt_passive_eip_mgmt}:${local.admin_port}"
-    fgt-1_public = module.fgt_hub2.fgt_active_eip_public
-    fgt-2_public = module.fgt_hub2.fgt_passive_eip_public
+    fgt-1_mgmt   = "https://${module.fgt_hub2_vpc.fgt_active_eip_mgmt}:${local.admin_port}"
+    fgt-2_mgmt   = "https://${module.fgt_hub2_vpc.fgt_passive_eip_mgmt}:${local.admin_port}"
+    fgt-1_public = module.fgt_hub2_vpc.fgt_active_eip_public
+    fgt-2_public = module.fgt_hub2_vpc.fgt_passive_eip_public
     username     = "admin"
     fgt-1_pass   = module.fgt_hub2.fgt_active_id
     fgt-2_pass   = module.fgt_hub2.fgt_passive_id
@@ -30,7 +30,7 @@ output "fgt_hub2" {
 output "fgt_spoke" {
   value = {
     username   = "admin"
-    fgt-1_mgmt = module.fgt_spoke.*.fgt_active_eip_mgmt
+    fgt-1_mgmt = module.fgt_spoke_vpc.*.fgt_active_eip_mgmt
     fgt-1_pass = module.fgt_spoke.*.fgt_active_id
     admin_cidr = "${chomp(data.http.my-public-ip.body)}/32"
     api_key    = module.fgt_spoke_config.*.api_key

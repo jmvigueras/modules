@@ -1,3 +1,19 @@
+output "fgt_active_eip_mgmt" {
+  value = aws_eip.fgt_active_eip_mgmt.public_ip
+}
+
+output "fgt_passive_eip_mgmt" {
+  value = aws_eip.fgt_passive_eip_mgmt.public_ip
+}
+
+output "fgt_active_eip_public" {
+  value = aws_eip.fgt_active_eip_public.public_ip
+}
+
+output "fgt_passive_eip_public" {
+  value = aws_eip.fgt_passive_eip_public.public_ip
+}
+
 output "fgt-active-ni_ids" {
   value = {
     mgmt    = aws_network_interface.ni-active-mgmt.id
@@ -9,8 +25,8 @@ output "fgt-active-ni_ids" {
 output "fgt-active-ni_ips" {
   value = {
     mgmt    = local.fgt-1_ni_mgmt_ip
-    public  = local.fgt-1_ni_public_ip_float
-    private = local.fgt-1_ni_private_ip_float
+    public  = local.fgt_ni_public_ip_float
+    private = local.fgt_ni_private_ip_float
   }
 }
 
@@ -25,8 +41,8 @@ output "fgt-passive-ni_ids" {
 output "fgt-passive-ni_ips" {
   value = {
     mgmt    = local.fgt-2_ni_mgmt_ip
-    public  = local.fgt-2_ni_public_ip
-    private = local.fgt-2_ni_private_ip
+    public  = local.fgt_ni_public_ip_float
+    private = local.fgt_ni_private_ip_float
   }
 }
 
@@ -105,3 +121,4 @@ output "nsg_ids" {
     public  = aws_security_group.nsg-vpc-sec-public.id
   }
 }
+

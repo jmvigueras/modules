@@ -18,9 +18,13 @@ locals {
     az2 = "eu-west-1c"
   }
 
-  fgt_vpc_cidr = "172.30.0.0/24"
+  onramp = {
+    id      = "fgt"
+    cidr    = "172.30.0.0/23"
+    bgp-asn = "65000"
+  }
 
-  vpc-spoke_cidr = "172.30.100.0/23"
+  vpc-spoke_cidr = ["172.30.100.0/23", module.fgt_onramp_vpc.subnet_az1_cidrs["bastion"]]
 
   tgw_bgp-asn     = "65515"
   tgw_cidr        = ["172.30.10.0/24"]

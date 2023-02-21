@@ -1,4 +1,42 @@
 # ------------------------------------------------------------------
+# Create EIPs
+# ------------------------------------------------------------------
+# Create and attach the eip to the units
+resource "aws_eip" "fgt_active_eip_public" {
+  vpc                       = true
+  network_interface         = aws_network_interface.ni-active-public.id
+  tags = {
+    Name = "${var.prefix}-fgt_active_eip_public"
+  }
+}
+
+resource "aws_eip" "fgt_active_eip_mgmt" {
+  vpc               = true
+  network_interface = aws_network_interface.ni-active-mgmt.id
+  tags = {
+    Name = "${var.prefix}-fgt_active_eip_mgmt"
+  }
+}
+
+# Create and attach the eip to the units
+resource "aws_eip" "fgt_passive_eip_mgmt" {
+  vpc               = true
+  network_interface = aws_network_interface.ni-passive-mgmt.id
+  tags = {
+    Name = "${var.prefix}-fgt_passive_eip_mgmt"
+  }
+}
+
+# Create and attach the eip to the units
+resource "aws_eip" "fgt_passive_eip_public" {
+  vpc               = true
+  network_interface = aws_network_interface.ni-passive-public.id
+  tags = {
+    Name = "${var.prefix}-fgt_passive_eip_public"
+  }
+}
+
+# ------------------------------------------------------------------
 # Create all the eni interfaces FGT active
 # ------------------------------------------------------------------
 resource "aws_network_interface" "ni-active-mgmt" {
@@ -24,7 +62,7 @@ resource "aws_network_interface" "ni-active-public" {
 resource "aws_network_interface" "ni-active-private" {
   subnet_id         = aws_subnet.subnet-az1-private.id
   security_groups   = [aws_security_group.nsg-vpc-sec-private.id]
-  private_ips       = local.fgt-2_ni_private_ips
+  private_ips       = local.fgt-1_ni_private_ips
   source_dest_check = false
   tags = {
     Name = "${var.prefix}-ni-active-private"

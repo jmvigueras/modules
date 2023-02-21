@@ -17,7 +17,9 @@ module "fgt_config" {
   fgt-active-ni_ips    = module.fgt_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips   = module.fgt_vpc.fgt-passive-ni_ips
 
-  config_fgcp    = true
+  config_fgcp = true
+
+  vpc-spoke_cidr = local.vpc-spoke_cidr
 }
 
 // Create FGT
@@ -25,7 +27,7 @@ module "fgt" {
   source = "../../fgt-ha"
 
   prefix        = "${local.prefix}-onramp"
-  region        = var.region
+  region        = local.region
   instance_type = local.instance_type
   keypair       = aws_key_pair.keypair.key_name
 
@@ -42,12 +44,12 @@ module "fgt" {
 
 // Create VPC FGT
 module "fgt_vpc" {
-  source = "../../vpc-fgt-ha-2az"
+  source = "../../vpc-fgt-2az"
 
   prefix     = "${local.prefix}-onramp"
   admin_cidr = local.admin_cidr
   admin_port = local.admin_port
-  region     = var.region
+  region     = local.region
 
   vpc-sec_cidr = local.fgt_vpc_cidr
 }

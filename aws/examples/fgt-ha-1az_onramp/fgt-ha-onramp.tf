@@ -42,7 +42,7 @@ module "fgt" {
 
 // Create VPC FGT
 module "fgt_vpc" {
-  source = "../../vpc-fgt-ha-1az"
+  source = "../../vpc-fgt-1az"
 
   prefix     = "${local.prefix}-onramp"
   admin_cidr = local.admin_cidr
