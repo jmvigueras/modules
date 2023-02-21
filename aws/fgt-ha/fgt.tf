@@ -52,7 +52,7 @@ resource "aws_instance" "fgt_passive" {
 
 # Get the last AMI Images from AWS MarektPlace FGT PAYG
 data "aws_ami_ids" "fgt_amis_payg" {
-  owners = ["679593333241"]
+  owners = ["aws-marketplace"]
 
   filter {
     name   = "name"
@@ -62,7 +62,7 @@ data "aws_ami_ids" "fgt_amis_payg" {
 
 # Get the last AMI Images from AWS MarektPlace FGT BYOL
 data "aws_ami_ids" "fgt_amis_byol" {
-  owners = ["679593333241"]
+  owners = ["aws-marketplace"]
 
   filter {
     name   = "name"

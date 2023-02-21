@@ -21,5 +21,5 @@ locals {
 
   fgt_vpc_cidr = "172.30.0.0/24"
 
-  vpc-spoke_cidr = [module.fgt_onramp_vpc.subnet_az1_cidrs["bastion"]]
+  vpc-spoke_cidr = [module.fgt_vpc.subnet_az1_cidrs["bastion"]]
 }
