@@ -40,7 +40,7 @@ variable "ilb_ip" {
   default = null
 }
 
-variable "config_route" {
+variable "config_spoke_route" {
   type    = bool
   default = false
 }
@@ -57,5 +57,10 @@ variable "subnet_names" {
 
 variable "vpc_names" {
   type    = map(string)
+  default = null
+}
+
+variable "elb_frontend_pip_id" {
+  type    = string
   default = null
 }

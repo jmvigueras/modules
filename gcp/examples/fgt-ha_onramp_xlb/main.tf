@@ -26,11 +26,11 @@ module "fgt_config" {
   fgt-active-ni_ips  = module.fgt_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips = module.fgt_vpc.fgt-passive-ni_ips
 
-  config_fgsp  = true
+  config_fgcp  = true
   config_spoke = true
-  config_ncc   = true
+  config_xlb   = true
   spoke        = local.onramp
-  ncc_peers    = [module.fgt_vpc.ncc_private_ips]
+  ilb_ip       = module.fgt_vpc.ilb_ip
 
   vpc-spoke_cidr = concat(local.vpc_spoke-subnet_cidrs,[module.fgt_vpc.subnet_cidrs["bastion"]])
 }
@@ -60,28 +60,6 @@ module "fgt" {
   fgt_passive = local.fgt_passive
 }
 #------------------------------------------------------------------------------------------------------------
-# Create NCC Router Applicance (private)
-#------------------------------------------------------------------------------------------------------------
-module "ncc_private" {
-  source = "../../ncc"
-
-  prefix = local.prefix
-  region = local.region
-
-  vpc_name         = module.fgt_vpc.vpc_names["private"]
-  subnet_self_link = module.fgt_vpc.subnet_self_links["private"]
-  ncc_bgp-asn      = local.ncc_bgp-asn
-  ncc_ips          = module.fgt_vpc.ncc_private_ips
-
-  fgt_bgp-asn           = local.onramp["bgp-asn"]
-  fgt-active-ni_ip      = module.fgt_vpc.fgt-active-ni_ips["private"]
-  fgt-passive-ni_ip     = module.fgt_vpc.fgt-passive-ni_ips["private"]
-  fgt_active_self_link  = module.fgt.fgt_active_self_link
-  fgt_passive_self_link = module.fgt.fgt_passive_self_link[0]
-
-  fgt_passive = local.fgt_passive
-}
-#------------------------------------------------------------------------------------------------------------
 # Create VPC spokes peered to VPC FGT
 #------------------------------------------------------------------------------------------------------------
 module "vpc_spoke" {
@@ -94,9 +72,26 @@ module "vpc_spoke" {
   fgt_vpc_self_link  = module.fgt_vpc.vpc_self_links["private"]
 }
 #------------------------------------------------------------------------------------------------------------
-# Create NCC Router Applicance (private)
+# Create Internal and External Load Balancer
 #------------------------------------------------------------------------------------------------------------
-module "fgt_vm_bastion" {
+module "xlb" {
+  source = "../../xlb"
+
+  prefix = local.prefix
+  region = local.region
+  zone1  = local.zone1
+  zone2  = local.zone1
+
+  vpc_names             = module.fgt_vpc.vpc_names
+  subnet_names          = module.fgt_vpc.subnet_names
+  ilb_ip                = module.fgt_vpc.ilb_ip
+  fgt_active_self_link  = module.fgt.fgt_active_self_link
+  fgt_passive_self_link = module.fgt.fgt_passive_self_link[0]
+}
+#------------------------------------------------------------------------------------------------------------
+# Create VM in VPC spokes
+#------------------------------------------------------------------------------------------------------------
+module "vm_spoke" {
   source = "../../new-instance"
 
   prefix = local.prefix
@@ -106,9 +101,8 @@ module "fgt_vm_bastion" {
   rsa-public-key = trimspace(tls_private_key.ssh-rsa.public_key_openssh)
   gcp-user_name  = split("@", data.google_client_openid_userinfo.me.email)[0]
 
-  subnet_name = [module.fgt_vpc.subnet_names["bastion"]]
+  subnet_name = module.vpc_spoke.subnet_name
 }
-
 
 
 

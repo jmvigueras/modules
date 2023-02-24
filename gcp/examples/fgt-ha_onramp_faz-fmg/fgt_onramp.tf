@@ -28,13 +28,15 @@ module "fgt_config" {
 
   config_fgsp  = true
   config_spoke = true
+  config_xlb   = true
   config_fmg   = true
   config_faz   = true
   spoke        = local.onramp
+  ilb_ip       = module.fgt_vpc.ilb_ip
   fmg_ip       = module.fgt_vpc.fmg_ni_ips["private"]
   faz_ip       = module.fgt_vpc.faz_ni_ips["private"]
 
-  vpc-spoke_cidr = [module.fgt_vpc.subnet_cidrs["bastion"]]
+  vpc-spoke_cidr = concat(local.vpc_spoke-subnet_cidrs,[module.fgt_vpc.subnet_cidrs["bastion"]])
 }
 #------------------------------------------------------------------------------------------------------------
 # Create FGT cluster instances
@@ -89,9 +91,6 @@ module "xlb" {
   ilb_ip                = module.fgt_vpc.ilb_ip
   fgt_active_self_link  = module.fgt.fgt_active_self_link
   fgt_passive_self_link = module.fgt.fgt_passive_self_link[0]
-
-  config_route    = true
-  vpc_spoke_names = module.vpc_spoke.vpc_name
 }
 
 
