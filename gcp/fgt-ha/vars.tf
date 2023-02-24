@@ -47,14 +47,14 @@ variable "license_type" {
 variable "license_file_1" {
   // Change to your own byol license file, license.lic
   type    = string
-  default = "./licensees/license1.txt"
+  default = "./licensees/license1.lic"
 }
 
 // license file for the passive fgt
 variable "license_file_2" {
   // Change to your own byol license file, license2.lic
   type    = string
-  default = "./licensees/license2.txt"
+  default = "./licensees/license2.lic"
 }
 
 variable "fgt_version" {

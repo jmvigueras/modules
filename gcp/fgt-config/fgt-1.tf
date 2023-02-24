@@ -49,11 +49,10 @@ data "template_file" "fgt_active" {
 }
 
 data "template_file" "fgt_sdn-config" {
-  template = file("${path.module}/templates/gcp_fgt-sdn.conf")
-  vars = {
-    cluster_ip = var.config_fgcp && var.cluster_public_ip_name != null ?  var.cluster_public_ip_name : ""
-    route     = var.config_fgcp && var.private_route_name != null ?  var.private_route_name : ""
-  }
+  template = templatefile("${path.module}/templates/gcp_fgt-sdn.conf", {
+    cluster_ips = var.config_fgcp && var.cluster_public_ip_names != null ?  var.cluster_public_ip_names : ""
+    routes      = var.config_fgcp && var.private_route_names != null ?  var.private_route_names : ""
+  })
 }
 
 data "template_file" "fgt_ha-fgcp-active-config" {
