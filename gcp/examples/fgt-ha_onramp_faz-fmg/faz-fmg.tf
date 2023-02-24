@@ -20,10 +20,9 @@ module "faz" {
     public  = module.fgt_vpc.subnet_cidrs["public"]
     private = module.fgt_vpc.subnet_cidrs["bastion"]
   }
-
   faz_ni_ips = module.fgt_vpc.faz_ni_ips
 
-  license_file = "./licenses/licenseFAZ.lic"
+  license_file = local.faz_license_file
 }
 
 #------------------------------------------------------------------------------------------------------------
@@ -48,8 +47,7 @@ module "fmg" {
     public  = module.fgt_vpc.subnet_cidrs["public"]
     private = module.fgt_vpc.subnet_cidrs["bastion"]
   }
-
   fmg_ni_ips = module.fgt_vpc.fmg_ni_ips
 
-  license_file = "./licenses/licenseFMG.lic"
+  license_file = local.fmg_license_file
 }
