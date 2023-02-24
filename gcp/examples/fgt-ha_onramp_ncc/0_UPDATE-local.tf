@@ -9,7 +9,7 @@ locals {
   admin_cidr   = "${chomp(data.http.my-public-ip.body)}/32"
   license_type = "payg"
 
-  spoke = {
+  onramp = {
     id      = "fgt"
     cidr    = "172.30.0.0/23" //minimum range to create proxy subnet
     bgp-asn = "65000"

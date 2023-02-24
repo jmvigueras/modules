@@ -10,7 +10,7 @@ module "fgt_vpc" {
   region = local.region
   prefix = local.prefix
 
-  vpc-sec_cidr = local.spoke["cidr"]
+  vpc-sec_cidr = local.onramp["cidr"]
 }
 #------------------------------------------------------------------------------------------------------------
 # Create FGT cluster config
@@ -29,7 +29,7 @@ module "fgt_config" {
   config_fgsp  = true
   config_spoke = true
   config_ncc   = true
-  spoke        = local.spoke
+  spoke        = local.onramp
   ncc_peers    = [module.fgt_vpc.ncc_private_ips]
 }
 #------------------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ module "ncc_private" {
   ncc_bgp-asn      = local.ncc_bgp-asn
   ncc_ips          = module.fgt_vpc.ncc_private_ips
 
-  fgt_bgp-asn           = local.spoke["bgp-asn"]
+  fgt_bgp-asn           = local.onramp["bgp-asn"]
   fgt-active-ni_ip      = module.fgt_vpc.fgt-active-ni_ips["private"]
   fgt-passive-ni_ip     = module.fgt_vpc.fgt-passive-ni_ips["private"]
   fgt_active_self_link  = module.fgt.fgt_active_self_link

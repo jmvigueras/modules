@@ -28,14 +28,6 @@ resource "google_compute_network" "vpc_private" {
 # - VPC private: subnet_private, subnet_bastion
 # - VPC mgmt: subnet_mgmt
 #------------------------------------------------------------------------------------------------------------
-locals {
-  subnet_public_cidr  = cidrsubnet(var.vpc-sec_cidr, 3, 0)
-  subnet_proxy_cidr   = cidrsubnet(var.vpc-sec_cidr, 3, 1)
-  subnet_private_cidr = cidrsubnet(var.vpc-sec_cidr, 3, 2)
-  subnet_bastion_cidr = cidrsubnet(var.vpc-sec_cidr, 3, 3)
-  subnet_mgmt_cidr    = cidrsubnet(var.vpc-sec_cidr, 3, 4)
-}
-
 ### Public Subnet ###
 resource "google_compute_subnetwork" "subnet_public" {
   name          = "${var.prefix}-subnet-public"

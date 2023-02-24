@@ -60,34 +60,42 @@ output "subnet_cidrs" {
 
 output "fgt-active-ni_ips" {
   value = {
-    public  = cidrhost(local.subnet_public_cidr, 10)
-    private = cidrhost(local.subnet_private_cidr, 10)
-    mgmt    = cidrhost(local.subnet_mgmt_cidr, 10)
+    public  = local.fgt-1_ni_public_ip
+    private = local.fgt-1_ni_private_ip
+    mgmt    = local.fgt-1_ni_mgmt_ip
   }
 }
 
 output "fgt-passive-ni_ips" {
   value = {
-    public  = cidrhost(local.subnet_public_cidr, 11)
-    private = cidrhost(local.subnet_private_cidr, 11)
-    mgmt    = cidrhost(local.subnet_mgmt_cidr, 11)
+    public  = local.fgt-2_ni_public_ip
+    private = local.fgt-2_ni_private_ip
+    mgmt    = local.fgt-2_ni_mgmt_ip
   }
 }
 
 output "ilb_ip" {
-  value = cidrhost(local.subnet_private_cidr, 9)
+  value = local.ilb_ip
 }
 
 output "ncc_private_ips" {
-  value = [
-    cidrhost(local.subnet_private_cidr, 5),
-    cidrhost(local.subnet_private_cidr, 6)
-  ]
+  value = local.ncc_private_ips
 }
 
 output "ncc_public_ips" {
-  value = [
-    cidrhost(local.subnet_public_cidr, 5),
-    cidrhost(local.subnet_public_cidr, 6)
-  ]
+  value = local.ncc_public_ips
+}
+
+output "faz_ni_ips" {
+  value = {
+    public  = local.faz_ni_public_ip
+    private = local.faz_ni_private_ip
+  }
+}
+
+output "fmg_ni_ips" {
+  value = {
+    public  = local.fmg_ni_public_ip
+    private = local.fmg_ni_private_ip
+  }
 }
