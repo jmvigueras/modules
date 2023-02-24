@@ -13,6 +13,18 @@ variable "config_fgsp" {
 }
 
 #-----------------------------------------------------------------------------------
+# Route to change by SDN connector when FGCP and no LB
+#-----------------------------------------------------------------------------------
+variable "private_route_name" {
+  type = string
+  default = null
+}
+variable "cluster_public_ip_name" {
+  type = string
+  default = null
+}
+
+#-----------------------------------------------------------------------------------
 # Predefined variables for spoke config
 # - config_spoke   = true (default) 
 #-----------------------------------------------------------------------------------

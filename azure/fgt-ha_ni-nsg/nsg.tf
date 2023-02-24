@@ -180,11 +180,6 @@ resource "azurerm_network_interface_security_group_association" "ni-active-priva
   network_interface_id      = azurerm_network_interface.ni-active-private.id
   network_security_group_id = azurerm_network_security_group.nsg-private.id
 }
-resource "azurerm_network_interface_security_group_association" "ni-active-ha-nsg" {
-  network_interface_id      = azurerm_network_interface.ni-active-ha.id
-  network_security_group_id = azurerm_network_security_group.nsg-mgmt-ha.id
-}
-
 
 # Connect the security group to the network interfaces FGT passive
 resource "azurerm_network_interface_security_group_association" "ni-passive-mgmt-nsg" {
@@ -198,8 +193,4 @@ resource "azurerm_network_interface_security_group_association" "ni-passive-publ
 resource "azurerm_network_interface_security_group_association" "ni-passive-private-nsg" {
   network_interface_id      = azurerm_network_interface.ni-passive-private.id
   network_security_group_id = azurerm_network_security_group.nsg-private.id
-}
-resource "azurerm_network_interface_security_group_association" "ni-passive-ha-nsg" {
-  network_interface_id      = azurerm_network_interface.ni-passive-ha.id
-  network_security_group_id = azurerm_network_security_group.nsg-mgmt-ha.id
 }
