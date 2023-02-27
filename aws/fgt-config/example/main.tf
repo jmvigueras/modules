@@ -74,6 +74,31 @@ module "fgt-config_spoke" {
   spoke        = local.spoke
 }
 
+#---------------------------------------------------------------------------------
+# Create FGT onramp
+# - FGCP
+#---------------------------------------------------------------------------------
+module "fgt-config_onramp" {
+  source = "../"
+
+  admin_cidr     = local.admin_cidr
+  admin_port     = var.admin_port
+  rsa-public-key = tls_private_key.ssh.public_key_openssh
+  api_key        = random_string.api_key.result
+
+  subnet_active_cidrs  = local.subnet_active_cidrs
+  subnet_passive_cidrs = local.subnet_passive_cidrs
+  fgt-active-ni_ips    = local.fgt-active-ni_ips
+  fgt-passive-ni_ips   = local.fgt-passive-ni_ips
+
+  config_fgcp  = true
+}
+
+
+
+
+
+
 
 #-----------------------------------------------------------------------
 # Necessary variables

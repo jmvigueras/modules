@@ -3,24 +3,27 @@
 # Active Passive High Availability MultiAZ with AWS Transit Gateway with VPC standard attachment
 #-----------------------------------------------------------------------------------------------------
 locals {
-  count = 2
-
-  prefix        = "demo-fgt-sdwan"
-  admin_port    = "8443"
-  admin_cidr    = "${chomp(data.http.my-public-ip.body)}/32"
-
-  instance_type = "c6i.large"
-  fgt_build     = "build1396"
-  license_type  = "payg"
-
+  count = 2 // number of VPC spokes attached to TGW and number of FGT spoke in SDWAN
+  #-----------------------------------------------------------------------------------------------------
+  # General variables
+  #-----------------------------------------------------------------------------------------------------
+  prefix = "demo-fgt-sdwan"
   region = {
     id  = "eu-west-1"
     az1 = "eu-west-1a"
     az2 = "eu-west-1c"
   }
-
   #-----------------------------------------------------------------------------------------------------
-  # FGT HUB locals
+  # FGT locals
+  #-----------------------------------------------------------------------------------------------------
+  admin_port = "8443"
+  admin_cidr = "${chomp(data.http.my-public-ip.body)}/32"
+
+  instance_type = "c6i.large"
+  fgt_build     = "build1396"
+  license_type  = "payg"
+  #-----------------------------------------------------------------------------------------------------
+  # HUB locals
   #-----------------------------------------------------------------------------------------------------
   hub1 = {
     id                = "HUB1"
@@ -28,7 +31,7 @@ locals {
     bgp-asn_spoke     = "65000"
     vpn_cidr          = "10.10.10.0/24"
     vpn_psk           = "secret-key-123"
-    cidr              = "172.30.100.0/24"
+    cidr              = "172.20.0.0/23"
     ike-version       = "2"
     network_id        = "1"
     dpd-retryinterval = "5"
@@ -40,21 +43,21 @@ locals {
     bgp-asn_spoke     = "65000"
     vpn_cidr          = "10.10.20.0/24"
     vpn_psk           = "secret-key-123"
-    cidr              = "172.30.200.0/24"
+    cidr              = "172.30.0.0/23"
     ike-version       = "2"
     network_id        = "1"
     dpd-retryinterval = "5"
     mode-cfg          = true
   }
 
-  vpc-spoke_cidr = "172.30.100.0/23"
+  vpc-spoke_cidr = "172.20.100.0/23"
 
   tgw_bgp-asn     = "65515"
-  tgw_cidr        = ["172.30.10.0/24"]
+  tgw_cidr        = ["172.20.10.0/24"]
   tgw_inside_cidr = ["169.254.100.0/29", "169.254.101.0/29"]
 
   #-----------------------------------------------------------------------------------------------------
-  # FGT spoke locals
+  # Spoke locals
   #-----------------------------------------------------------------------------------------------------
   spoke = {
     id      = "spoke"

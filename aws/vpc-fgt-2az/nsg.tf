@@ -21,6 +21,13 @@ resource "aws_security_group" "nsg-vpc-sec-mgmt" {
   }
 
   ingress {
+    from_port   = 541
+    to_port     = 541
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     from_port   = 8 # the ICMP type number for 'Echo'
     to_port     = 0 # the ICMP code
     protocol    = "icmp"

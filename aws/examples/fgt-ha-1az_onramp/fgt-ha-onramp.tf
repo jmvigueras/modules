@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------
 # Create FGT cluster onramp
-# - Create FGT onramp config (FGSP Active-Active)
+# - Create FGT onramp config (FGCP Active-Passive)
 # - Create FGT instance
 #------------------------------------------------------------------------------
 // Create FGT config
@@ -19,7 +19,6 @@ module "fgt_config" {
 
   config_fgcp = true
 }
-
 // Create FGT
 module "fgt" {
   source = "../../fgt-ha"
@@ -39,7 +38,6 @@ module "fgt" {
 
   fgt_passive = true
 }
-
 // Create VPC FGT
 module "fgt_vpc" {
   source = "../../vpc-fgt-1az"
@@ -50,4 +48,14 @@ module "fgt_vpc" {
   region     = local.region
 
   vpc-sec_cidr = local.fgt_vpc_cidr
+}
+#------------------------------------------------------------------------------
+# Create VM bastion
+#------------------------------------------------------------------------------
+module "vm_bastion" {
+  source = "../../new-instance"
+
+  prefix  = "${local.prefix}-onramp"
+  ni_id   = module.fgt_vpc.bastion-ni_ids["az1"]
+  keypair = aws_key_pair.keypair.key_name
 }

@@ -14,4 +14,6 @@ output "fgt-config_spoke_1" {
   value = module.fgt-config_spoke.fgt_config_1
 }
 
-
+output "fgt-config_onramp_1" {
+  value = module.fgt-config_onramp.fgt_config_1
+}

@@ -21,7 +21,6 @@ module "fgt_config" {
 
   vpc-spoke_cidr = local.vpc-spoke_cidr
 }
-
 // Create FGT
 module "fgt" {
   source = "../../fgt-ha"
@@ -41,7 +40,6 @@ module "fgt" {
 
   fgt_passive = true
 }
-
 // Create VPC FGT
 module "fgt_vpc" {
   source = "../../vpc-fgt-2az"
@@ -52,4 +50,21 @@ module "fgt_vpc" {
   region     = local.region
 
   vpc-sec_cidr = local.fgt_vpc_cidr
+}
+#------------------------------------------------------------------------------
+# Create VM bastion AZ1 and AZ2
+#------------------------------------------------------------------------------
+module "vm_bastion_az1" {
+  source = "../../new-instance"
+
+  prefix  = "${local.prefix}-onramp-az1"
+  ni_id   = module.fgt_vpc.bastion-ni_ids["az1"]
+  keypair = aws_key_pair.keypair.key_name
+}
+module "vm_bastion_az2" {
+  source = "../../new-instance"
+
+  prefix  = "${local.prefix}-onramp-az2"
+  ni_id   = module.fgt_vpc.bastion-ni_ids["az2"]
+  keypair = aws_key_pair.keypair.key_name
 }

@@ -17,12 +17,16 @@ module "fgt_onramp_config" {
   fgt-active-ni_ips    = module.fgt_onramp_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips   = module.fgt_onramp_vpc.fgt-passive-ni_ips
 
-  config_fgcp  = true
-  config_spoke = true
-  spoke        = local.onramp
-
-  vpc-spoke_cidr = local.vpc-spoke_cidr
+  config_fgsp     = true
+  config_spoke    = true
+  config_tgw-gre  = true
+  spoke           = local.onramp
+  tgw_inside_cidr = local.tgw_inside_cidr
+  tgw_cidr        = local.tgw_cidr
+  tgw_bgp-asn     = local.tgw_bgp-asn
+  vpc-spoke_cidr  = local.vpc-spoke_cidr
 }
+
 // Create FGT
 module "fgt_onramp" {
   source = "../../fgt-ha"
@@ -54,8 +58,7 @@ module "fgt_onramp" {
 module "tgw" {
   source = "../../tgw"
 
-  prefix = local.prefix
-
+  prefix      = local.prefix
   tgw_cidr    = local.tgw_cidr
   tgw_bgp-asn = local.tgw_bgp-asn
 }
@@ -88,11 +91,21 @@ module "vpc_tgw-spoke" {
   tgw_rt-association_id = module.tgw.rt_vpc-spoke_id
   tgw_rt-propagation_id = [module.tgw.rt_default_id, module.tgw.rt-vpc-sec-N-S_id, module.tgw.rt-vpc-sec-E-W_id]
 }
-// Create static route in TGW RouteTable Spoke
-resource "aws_ec2_transit_gateway_route" "spoke_tgw_route" {
-  destination_cidr_block         = "0.0.0.0/0"
-  transit_gateway_attachment_id  = module.fgt_onramp_vpc.vpc_tgw-att_id
-  transit_gateway_route_table_id = module.tgw.rt_vpc-spoke_id
+// Create TGW connect
+module "tgw_connect" {
+  source = "../../tgw_connect"
+
+  prefix         = local.prefix
+  vpc_tgw-att_id = module.fgt_onramp_vpc.vpc_tgw-att_id
+  tgw_id         = module.tgw.tgw_id
+  peer_bgp-asn   = local.onramp["bgp-asn"]
+  peer_ip = [
+    module.fgt_onramp_vpc.fgt-active-ni_ips["private"],
+    module.fgt_onramp_vpc.fgt-passive-ni_ips["private"]
+  ]
+  tgw_inside_cidr   = local.tgw_inside_cidr
+  tgw_cidr          = local.tgw_cidr
+  rt_propagation_id = [module.tgw.rt_vpc-spoke_id]
 }
 
 #------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------------
 # Predefined variables for HA
-# - config_fgcp   = true (default)
+# - config_fgcp   = false (default)
 # - confgi_fgsp   = false (default)
 #-----------------------------------------------------------------------------------
 variable "config_fgcp" {
@@ -13,8 +13,16 @@ variable "config_fgsp" {
 }
 
 #-----------------------------------------------------------------------------------
+# Default BGP configuration
+#-----------------------------------------------------------------------------------
+variable "bgp-asn_default" {
+  type    = string
+  default = "65000"
+}
+
+#-----------------------------------------------------------------------------------
 # Predefined variables for spoke config
-# - config_spoke   = true (default) 
+# - config_spoke   = false (default) 
 #-----------------------------------------------------------------------------------
 variable "config_spoke" {
   type    = bool
@@ -40,10 +48,10 @@ variable "hubs" {
       bgp-asn           = "65000"
       public-ip         = "11.11.11.11"
       hub-ip            = "172.20.30.1"
-      site-ip           = "172.20.30.10" // set to "" if VPN mode-cfg is enable
-      hck-srv-ip        = "172.20.30.1"
+      site-ip           = "172.20.0.10" // set to "" if VPN mode-cfg is enable
+      hck-srv-ip        = "172.20.0.1"
       vpn_psk           = "secret"
-      cidr              = "172.20.30.0/24"
+      cidr              = "172.20.0.0/23"
       ike-version       = "2"
       network_id        = "1"
       dpd-retryinterval = "5"
@@ -70,7 +78,7 @@ variable "hub" {
     bgp-asn_spoke     = "65000"
     vpn_cidr          = "10.10.10.0/24"
     vpn_psk           = "secret-key-123"
-    cidr              = "192.168.0.0/24"
+    cidr              = "172.20.0.0/23"
     ike-version       = "2"
     network_id        = "1"
     dpd-retryinterval = "5"
@@ -117,6 +125,11 @@ variable "tgw_inside_cidr" {
 variable "tgw_bgp-asn" {
   type    = string
   default = "65515"
+}
+
+variable "tgw_gre_interface_name" {
+  type    = string
+  default = "gre-to-tgw"
 }
 
 #-----------------------------------------------------------------------------------

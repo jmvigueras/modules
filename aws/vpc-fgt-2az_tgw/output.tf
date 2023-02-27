@@ -13,6 +13,7 @@ output "fgt_active_eip_public" {
 output "fgt_passive_eip_public" {
   value = aws_eip.fgt_passive_eip_public.public_ip
 }
+
 output "fgt-active-ni_ids" {
   value = {
     mgmt    = aws_network_interface.ni-active-mgmt.id

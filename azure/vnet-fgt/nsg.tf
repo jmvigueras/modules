@@ -35,9 +35,23 @@ resource "azurerm_network_security_rule" "nsr-ingress-mgmt-ha-ssh" {
   network_security_group_name = azurerm_network_security_group.nsg-mgmt-ha.name
 }
 
+resource "azurerm_network_security_rule" "nsr-ingress-mgmt-ha-fmg" {
+  name                        = "${var.prefix}-nsr-ingress-fmg"
+  priority                    = 1002
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "541"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.nsg-mgmt-ha.name
+}
+
 resource "azurerm_network_security_rule" "nsr-ingress-mgmt-ha-https" {
   name                        = "${var.prefix}-nsr-ingress-https"
-  priority                    = 1002
+  priority                    = 1003
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"

@@ -11,3 +11,7 @@ output "fgt" {
     api_key      = module.fgt_config.api_key
   }
 }
+
+output "vm" {
+  value = module.vm_bastion.vm
+}

@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------
 # Create HUB 1
-# - vpc hub1
+# - VPC FGT hub1
 # - config FGT hub1 (FGSP)
 # - FGT hub1
 # - create TGW
@@ -43,7 +43,7 @@ module "fgt_hub1_config" {
   tgw_inside_cidr = local.tgw_inside_cidr
   tgw_cidr        = local.tgw_cidr
   tgw_bgp-asn     = local.tgw_bgp-asn
-  vpc-spoke_cidr  = [local.vpc-spoke_cidr]
+  vpc-spoke_cidr  = [local.vpc-spoke_cidr, module.fgt_hub1_vpc.subnet_az1_cidrs["bastion"], module.fgt_hub1_vpc.subnet_az2_cidrs["bastion"]]
 }
 // Create FGT instances (Active-Active)
 module "fgt_hub1" {
@@ -91,7 +91,7 @@ module "tgw_hub1_vpc-spoke" {
   admin_port = local.admin_port
   region     = local.region
 
-  vpc-spoke_cidr        = cidrsubnet(local.vpc-spoke_cidr, 1, count.index)
+  vpc-spoke_cidr        = cidrsubnet(local.vpc-spoke_cidr, ceil(log(local.count, 2)), count.index)
   tgw_id                = module.tgw_hub1.tgw_id
   tgw_rt-association_id = module.tgw_hub1.rt_vpc-spoke_id
   tgw_rt-propagation_id = [module.tgw_hub1.rt_default_id, module.tgw_hub1.rt-vpc-sec-N-S_id, module.tgw_hub1.rt-vpc-sec-E-W_id]

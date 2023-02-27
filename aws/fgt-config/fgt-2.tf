@@ -31,7 +31,7 @@ data "template_file" "fgt_passive" {
     fgt_sdn-config         = data.template_file.fgt_sdn-config.rendered
     fgt_ha-fgcp-config     = var.config_fgcp ? data.template_file.fgt_ha-fgcp-passive-config.rendered : ""
     fgt_ha-fgsp-config     = var.config_fgsp ? data.template_file.fgt_ha-fgsp-passive-config.rendered : ""
-    fgt_bgp-config         = var.config_spoke ? data.template_file.fgt_spoke_bgp-config.rendered : var.config_hub ? data.template_file.fgt_hub_bgp-config.rendered : ""
+    fgt_bgp-config         = var.config_spoke || var.config_hub ? "" : data.template_file.fgt_bgp-config.rendered
     fgt_static-config      = var.vpc-spoke_cidr != null ? data.template_file.fgt_passive_static-config.rendered : ""
     fgt_sdwan-config       = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
     fgt_tgw-gre-config     = var.config_tgw-gre ? data.template_file.fgt_passive_tgw-gre-config.rendered : ""
@@ -76,6 +76,7 @@ data "template_file" "fgt_passive_static-config" {
 data "template_file" "fgt_passive_tgw-gre-config" {
   template = file("${path.module}/templates/aws_fgt-tgw.conf")
   vars = {
+    interface_name   = var.tgw_gre_interface_name
     bgp-asn          = var.tgw_bgp-asn
     port             = var.private_port
     port_gw          = cidrhost(var.subnet_passive_cidrs["private"], 1)
@@ -85,6 +86,8 @@ data "template_file" "fgt_passive_tgw-gre-config" {
     local_ip         = cidrhost(var.tgw_inside_cidr[1], 1)
     remote_ip_1      = cidrhost(var.tgw_inside_cidr[1], 2)
     remote_ip_2      = cidrhost(var.tgw_inside_cidr[1], 3)
+    route_map_out    = "rm_prepending_out_1"
+    public_port      = var.public_port
   }
 }
 
