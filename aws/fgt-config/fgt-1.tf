@@ -182,6 +182,7 @@ data "template_file" "fgt_active_tgw-gre-config" {
     remote_ip_2      = cidrhost(var.tgw_inside_cidr[0], 3)
     route_map_out    = "rm_prepending_out_0"
     public_port      = var.public_port
+    local_bgp-asn    = var.config_hub ? var.hub["bgp-asn_hub"] : var.config_spoke ? var.spoke["bgp-asn"] : var.bgp-asn_default
   }
 }
 
