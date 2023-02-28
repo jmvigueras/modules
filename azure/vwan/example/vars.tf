@@ -4,7 +4,7 @@ variable "client_id" {}
 variable "client_secret" {}
 variable "tenant_id" {}
 
-variable "resourcegroup_name" {
+variable "resource_group_name" {
   type    = string
   default = null
 }

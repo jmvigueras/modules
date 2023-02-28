@@ -17,3 +17,11 @@ output "virtual_hub_id" {
 output "vwan_id" {
   value = azurerm_virtual_wan.vwan.id
 }
+
+output "vhub_rt_spoke_id" {
+  value = azurerm_virtual_hub_route_table.vhub_rt_spoke.id
+}
+
+output "vhub_rt_default_id" {
+  value = azurerm_virtual_hub.vhub.default_route_table_id
+}
