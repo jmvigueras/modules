@@ -215,14 +215,14 @@ resource "aws_security_group" "nsg-vpc-sec-bastion" {
     from_port   = 8 # the ICMP type number for 'Echo'
     to_port     = 0 # the ICMP code
     protocol    = "icmp"
-    cidr_blocks = ["${var.admin_cidr}"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 0 # the ICMP type number for 'Echo Reply'
     to_port     = 0 # the ICMP code
     protocol    = "icmp"
-    cidr_blocks = ["${var.admin_cidr}"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {

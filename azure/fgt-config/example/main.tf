@@ -12,9 +12,9 @@ module "fgt-config_hub1" {
   rsa-public-key = tls_private_key.ssh.public_key_openssh
   api_key        = random_string.api_key.result
 
-  subnet_cidrs         = local.subnet_cidrs
-  fgt-active-ni_ips    = local.fgt-active-ni_ips
-  fgt-passive-ni_ips   = local.fgt-passive-ni_ips
+  subnet_cidrs       = local.subnet_cidrs
+  fgt-active-ni_ips  = local.fgt-active-ni_ips
+  fgt-passive-ni_ips = local.fgt-passive-ni_ips
 
   config_fgsp       = true
   config_hub        = true
@@ -22,11 +22,12 @@ module "fgt-config_hub1" {
   config_ars        = true
   config_vxlan      = true
   config_gwlb-vxlan = true
-  hub             = local.hub1
-  hub-peer_vxlan  = local.hub1_peer_vxlan
-  vhub_peer       = local.vhub_peer
-  rs_peer         = local.rs_peer
-  gwlb_vxlan      = local.gwlb_vxlan
+
+  hub            = local.hub1
+  hub-peer_vxlan = local.hub1_peer_vxlan
+  vhub_peer      = local.vhub_peer
+  rs_peer        = local.rs_peer
+  gwlb_vxlan     = local.gwlb_vxlan
 }
 #---------------------------------------------------------------------------------
 # Create FGT cluster HUB2
@@ -41,15 +42,16 @@ module "fgt-config_hub2" {
   rsa-public-key = tls_private_key.ssh.public_key_openssh
   api_key        = random_string.api_key.result
 
-  subnet_cidrs         = local.subnet_cidrs
-  fgt-active-ni_ips    = local.fgt-active-ni_ips
-  fgt-passive-ni_ips   = local.fgt-passive-ni_ips
+  subnet_cidrs       = local.subnet_cidrs
+  fgt-active-ni_ips  = local.fgt-active-ni_ips
+  fgt-passive-ni_ips = local.fgt-passive-ni_ips
 
-  config_fgcp     = true
-  config_hub      = true
-  config_vxlan    = true
-  hub             = local.hub2
-  hub-peer_vxlan  = local.hub2_peer_vxlan
+  config_fgcp  = true
+  config_hub   = true
+  config_vxlan = true
+
+  hub            = local.hub2
+  hub-peer_vxlan = local.hub2_peer_vxlan
 }
 #---------------------------------------------------------------------------------
 # Create FGT cluster spoke
@@ -63,15 +65,18 @@ module "fgt-config_spoke" {
   rsa-public-key = tls_private_key.ssh.public_key_openssh
   api_key        = random_string.api_key.result
 
-  subnet_cidrs         = local.subnet_cidrs
-  fgt-active-ni_ips    = local.fgt-active-ni_ips
-  fgt-passive-ni_ips   = local.fgt-passive-ni_ips
+  subnet_cidrs       = local.subnet_cidrs
+  fgt-active-ni_ips  = local.fgt-active-ni_ips
+  fgt-passive-ni_ips = local.fgt-passive-ni_ips
 
   config_fgcp  = true
   config_spoke = true
-  hubs         = local.hubs
-  spoke        = local.spoke
+
+  hubs  = local.hubs
+  spoke = local.spoke
 }
+
+
 
 
 #-----------------------------------------------------------------------

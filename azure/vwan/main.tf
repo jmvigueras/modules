@@ -19,29 +19,6 @@ resource "azurerm_virtual_hub" "vhub" {
   tags = var.tags
 }
 
-/*
-// Create public IP for RouterServer vHUB in VNET FGT
-resource "azurerm_public_ip" "public-ip-vhub-rs" {
-  count               = var.subnet-fgt_ids == null ? 0 : 1
-  name                = "${var.prefix}-vhub-rs-pip"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  allocation_method   = "Static"
-  sku                 = "Standard"
-
-  tags = var.tags
-}
-
-// Create Route Server in VNET FGT
-resource "azurerm_virtual_hub_ip" "vhub_ip_vnet-fgt" {
-  count                        = var.subnet-fgt_ids == null ? 0 : 1
-  name                         = "${var.prefix}-vhub_ip_vnet-fgt_routeserver"
-  virtual_hub_id               = azurerm_virtual_hub.vhub.id
-  public_ip_address_id         = azurerm_public_ip.public-ip-vhub-rs[0].id
-  subnet_id                    = var.subnet-fgt_ids["rs"]
-}
-*/
-
 //Create connection to provided VNET FGT
 resource "azurerm_virtual_hub_connection" "vhub_connnection_vnet-fgt" {
   name                      = "${var.prefix}-cx-vnet-fgt"

@@ -108,6 +108,7 @@ data "template_file" "fgt_sdwan-config" {
     localid           = var.spoke["id"]
     local_bgp-asn     = var.spoke["bgp-asn"]
     local_router-id   = var.fgt-active-ni_ips["mgmt"]
+    local_network     = var.spoke["cidr"]
     sdwan_port        = var.public_port
     private_port      = var.config_tgw-gre ? var.tgw_gre_interface_name : var.private_port
     count             = count.index + 1
@@ -125,12 +126,13 @@ data "template_file" "fgt_vpn-config" {
     localid               = var.hub["id"]
     local_bgp-asn         = var.hub["bgp-asn_hub"]
     local_router-id       = var.fgt-active-ni_ips["mgmt"]
+    local_network         = var.hub["cidr"]
     mode-cfg              = var.hub["mode-cfg"]
     site_private-ip_start = cidrhost(cidrsubnet(var.hub["vpn_cidr"], 1, count.index), 2)
     site_private-ip_end   = cidrhost(cidrsubnet(var.hub["vpn_cidr"], 1, count.index), 14)
     site_private-ip_mask  = cidrnetmask(cidrsubnet(var.hub["vpn_cidr"], 1, count.index))
+    site_bgp-asn          = var.hub["bgp-asn_spoke"]
     vpn_psk               = var.hub["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hub["vpn_psk"]
-    bgp-asn_spoke         = var.hub["bgp-asn_spoke"]
     vpn_cidr              = cidrsubnet(var.hub["vpn_cidr"], 1, count.index)
     vpn_port              = var.public_port
     private_port          = var.config_tgw-gre ? var.tgw_gre_interface_name : var.private_port
@@ -180,7 +182,7 @@ data "template_file" "fgt_active_tgw-gre-config" {
     local_ip         = cidrhost(var.tgw_inside_cidr[0], 1)
     remote_ip_1      = cidrhost(var.tgw_inside_cidr[0], 2)
     remote_ip_2      = cidrhost(var.tgw_inside_cidr[0], 3)
-    route_map_out    = "rm_prepending_out_0"
+    route_map_out    = var.config_fgsp ? "rm_prepending_out_0" : ""
     public_port      = var.public_port
     local_bgp-asn    = var.config_hub ? var.hub["bgp-asn_hub"] : var.config_spoke ? var.spoke["bgp-asn"] : var.bgp-asn_default
   }

@@ -31,7 +31,7 @@ locals {
     bgp-asn_spoke     = "65000"
     vpn_cidr          = "10.10.10.0/24"
     vpn_psk           = "secret-key-123"
-    cidr              = "172.20.0.0/23"
+    cidr              = local.hub1_spoke_vpc_cidr
     ike-version       = "2"
     network_id        = "1"
     dpd-retryinterval = "5"
@@ -43,14 +43,17 @@ locals {
     bgp-asn_spoke     = "65000"
     vpn_cidr          = "10.10.20.0/24"
     vpn_psk           = "secret-key-123"
-    cidr              = "172.30.0.0/23"
+    cidr              = "172.16.0.0/12"
     ike-version       = "2"
     network_id        = "1"
     dpd-retryinterval = "5"
     mode-cfg          = true
   }
 
-  vpc-spoke_cidr = "172.20.100.0/23"
+  hub1_fgt_vpc_cidr   = "172.20.0.0/23"
+  hub1_spoke_vpc_cidr = "172.20.100.0/23"
+  
+  hub2_fgt_vpc_cidr  = "172.30.0.0/23"
 
   tgw_bgp-asn     = "65515"
   tgw_cidr        = ["172.20.10.0/24"]

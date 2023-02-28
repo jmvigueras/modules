@@ -41,10 +41,10 @@ locals {
     vni       = "1100"
   }
   vhub_peer = ["172.30.110.68", "172.30.110.69"]
-  rs_peer   = [
+  rs_peer = [
     ["172.30.100.132", "172.30.100.133"]
   ]
-  gwlb_vxlan  = {
+  gwlb_vxlan = {
     vdi_ext  = "800"
     vdi_int  = "801"
     port_ext = "10800"
