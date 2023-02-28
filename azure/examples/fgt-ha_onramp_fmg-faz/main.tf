@@ -22,11 +22,11 @@ module "fgt_config" {
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
 
-  config_fgcp  = true
-  config_fmg   = true
-  config_faz   = true
-  fmg_ip       = module.fgt_vnet.fmg_ni_ips["private"]
-  faz_ip       = module.fgt_vnet.faz_ni_ips["private"]
+  config_fgcp = true
+  config_fmg  = true
+  config_faz  = true
+  fmg_ip      = module.fgt_vnet.fmg_ni_ips["private"]
+  faz_ip      = module.fgt_vnet.faz_ni_ips["private"]
 
   vpc-spoke_cidr = [module.fgt_vnet.subnet_cidrs["bastion"]]
 }

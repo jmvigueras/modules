@@ -15,26 +15,26 @@ variable "admin_port" {
 }
 
 variable "subnet_az1_ids" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "subnet_az2_ids" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "subnet_az1_cidrs" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "subnet_az2_cidrs" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "vpc-sec_id" {
-  type = string
+  type    = string
   default = null
 }

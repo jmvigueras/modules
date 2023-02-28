@@ -22,9 +22,9 @@ module "fgt_config" {
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
 
-  config_fgsp  = true
-  config_ars   = true
-  rs_peer      = module.rs.rs_peer
+  config_fgsp = true
+  config_ars  = true
+  rs_peer     = module.rs.rs_peer
 
   vpc-spoke_cidr = [module.fgt_vnet.subnet_cidrs["bastion"]]
 }
@@ -99,7 +99,7 @@ module "rs" {
   tags                = local.tags
 
   subnet_ids   = module.vnet-spoke-fgt.subnet_ids["routeserver"]
-  fgt_bgp-asn  = local.fgt_bgp-asn 
+  fgt_bgp-asn  = local.fgt_bgp-asn
   fgt1_peer-ip = module.fgt_vnet.fgt-active-ni_ips["private"]
   fgt2_peer-ip = module.fgt_vnet.fgt-passive-ni_ips["private"]
 }

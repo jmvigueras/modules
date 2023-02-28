@@ -2,10 +2,10 @@ locals {
   #-----------------------------------------------------------------------------------------------------
   # General variables
   #-----------------------------------------------------------------------------------------------------
-  resource_group_name      = null                 // a new resource group will be created if null
+  resource_group_name      = null // a new resource group will be created if null
   location                 = "francecentral"
-  storage-account_endpoint = null                 // a new resource group will be created if null
-  prefix                   = "demo-fgt-ha-vwan"   // prefix added to all resources created
+  storage-account_endpoint = null               // a new resource group will be created if null
+  prefix                   = "demo-fgt-ha-vwan" // prefix added to all resources created
 
   admin_port     = "8443"
   admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
@@ -26,8 +26,8 @@ locals {
   config_gwlb        = true
   ilb_ip             = cidrhost(module.fgt_spoke_vnet.subnet_cidrs["private"], 9)
   backend-probe_port = "8008"
-  
-  gwlb_ip =  cidrhost(module.fgt_spoke_vnet.subnet_cidrs["private"], 8)
+
+  gwlb_ip = cidrhost(module.fgt_spoke_vnet.subnet_cidrs["private"], 8)
   gwlb_vxlan = {
     vdi_ext  = "800"
     vdi_int  = "801"
@@ -40,7 +40,7 @@ locals {
   #-----------------------------------------------------------------------------------------------------
   vhub_cidr             = "172.30.14.0/23"
   vhub_vnet-spoke_cidrs = ["172.30.18.0/23"]
-  
+
   #-----------------------------------------------------------------------------------------------------
   # FGT HUB locals
   #-----------------------------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ locals {
     vni       = "1100"
   }
 
-  fgt_vnet-spoke_cidrs  = ["172.30.16.0/23"]
+  fgt_vnet-spoke_cidrs = ["172.30.16.0/23"]
 
 
   #-----------------------------------------------------------------------------------------------------

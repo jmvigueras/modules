@@ -4,8 +4,8 @@ locals {
   #-----------------------------------------------------------------------------------------------------
   resource_group_name      = null // a new resource group will be created if null
   location                 = "francecentral"
-  storage-account_endpoint = null             // a new resource group will be created if null
-  prefix                   = "demo-fgt-xlb"   // prefix added to all resources created
+  storage-account_endpoint = null           // a new resource group will be created if null
+  prefix                   = "demo-fgt-xlb" // prefix added to all resources created
 
   admin_port     = "8443"
   admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
@@ -20,7 +20,7 @@ locals {
     Deploy  = "module-fgt-ha-xlb"
     Project = "terraform-fortinet"
   }
-  
+
   fgt_vnet_cidr = "172.30.0.0/23"
 
   #-----------------------------------------------------------------------------------------------------

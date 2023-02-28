@@ -13,3 +13,7 @@ output "virtual_router_ips" {
 output "virtual_hub_id" {
   value = azurerm_virtual_hub.vhub.id
 }
+
+output "vwan_id" {
+  value = azurerm_virtual_wan.vwan.id
+}

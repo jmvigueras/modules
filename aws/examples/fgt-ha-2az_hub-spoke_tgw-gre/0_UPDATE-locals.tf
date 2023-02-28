@@ -52,8 +52,8 @@ locals {
 
   hub1_fgt_vpc_cidr   = "172.20.0.0/23"
   hub1_spoke_vpc_cidr = "172.20.100.0/23"
-  
-  hub2_fgt_vpc_cidr  = "172.30.0.0/23"
+
+  hub2_fgt_vpc_cidr = "172.30.0.0/23"
 
   tgw_bgp-asn     = "65515"
   tgw_cidr        = ["172.20.10.0/24"]

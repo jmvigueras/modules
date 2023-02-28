@@ -3,8 +3,8 @@
 # ------------------------------------------------------------------
 # Create and attach the eip to the units
 resource "aws_eip" "fgt_active_eip_public" {
-  vpc                       = true
-  network_interface         = aws_network_interface.ni-active-public.id
+  vpc               = true
+  network_interface = aws_network_interface.ni-active-public.id
   tags = {
     Name = "${var.prefix}-fgt_active_eip_public"
   }

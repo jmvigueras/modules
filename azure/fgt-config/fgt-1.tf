@@ -54,7 +54,7 @@ data "template_file" "fgt_active" {
     fgt_sdwan-config      = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
     fgt_vpn-config        = var.config_hub ? data.template_file.fgt_vpn-config.0.rendered : ""
     fgt_vxlan-config      = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
-    fgt_vhub-config       = var.config_vhub ? data.template_file.fgt_vhub-config.0.rendered : ""                    
+    fgt_vhub-config       = var.config_vhub ? data.template_file.fgt_vhub-config.0.rendered : ""
     fgt_ars-config        = var.config_ars ? data.template_file.fgt_ars-config.0.rendered : ""
     fgt_gwlb-vxlan-config = var.config_gwlb-vxlan ? data.template_file.fgt_gwlb-vxlan-config.rendered : ""
     fgt_fmg-config        = var.config_fmg ? data.template_file.fgt_1_fmg-config.rendered : ""
@@ -189,7 +189,7 @@ data "template_file" "fgt_gwlb-vxlan-config" {
 }
 
 data "template_file" "fgt_vhub-config" {
-  count    = var.config_fgsp ? 2 : 1
+  count = var.config_fgsp ? 2 : 1
   template = templatefile("${path.module}/templates/az_fgt-vhub.conf", {
     vhub_peer       = var.vhub_peer
     vhub_bgp-asn    = var.vhub_bgp-asn[0]
@@ -200,7 +200,7 @@ data "template_file" "fgt_vhub-config" {
 }
 
 data "template_file" "fgt_ars-config" {
-  count    = var.config_fgsp ? 2 : 1
+  count = var.config_fgsp ? 2 : 1
   template = templatefile("${path.module}/templates/az_fgt-ars.conf", {
     rs_peers        = var.rs_peer
     rs_bgp-asn      = var.rs_bgp-asn[0]

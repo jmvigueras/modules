@@ -306,8 +306,8 @@ variable "license_file_2" {
 
 variable "keypair" {
   description = "Provide a keypair for accessing the FortiGate instances"
-  type      = string
-  default   = null
+  type        = string
+  default     = null
 }
 
 // SSH RSA public key for KeyPair if not exists

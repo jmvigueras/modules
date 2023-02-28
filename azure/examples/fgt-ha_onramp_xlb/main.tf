@@ -22,7 +22,7 @@ module "fgt_config" {
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
 
-  config_fgcp  = true
+  config_fgcp    = true
   vpc-spoke_cidr = [module.fgt_vnet.subnet_cidrs["bastion"]]
 }
 
