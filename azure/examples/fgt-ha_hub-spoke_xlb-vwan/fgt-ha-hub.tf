@@ -39,7 +39,6 @@ module "fgt_hub_config" {
 
   vpc-spoke_cidr = [module.fgt_vnet.subnet_cidrs["bastion"]]
 }
-
 // Create FGT cluster as HUB-ADVPN
 // (Example with a full scenario deployment with all modules)
 module "fgt_hub" {
@@ -62,7 +61,6 @@ module "fgt_hub" {
 
   fgt_passive = true
 }
-
 // Module VNET for FGT
 // - This module will generate VNET and network intefaces for FGT cluster
 module "fgt_hub_vnet" {
@@ -77,7 +75,6 @@ module "fgt_hub_vnet" {
   admin_port    = local.admin_port
   admin_cidr    = local.admin_cidr
 }
-
 
 ###########################################################################
 # Deploy complete architecture with other modules used as input in module
@@ -106,7 +103,6 @@ module "vwan" {
   fgt-cluster_passive-ip = module.fgt_hub_vnet.fgt-passive-ni_ips["private"]
   fgt-cluster_bgp-asn    = local.hub1["bgp-asn_hub"]
 }
-
 // Module VNET spoke vHUB
 // - This module will generate VNET spoke to connecto to vHUB 
 module "vnet-spoke-vhub" {
@@ -120,7 +116,6 @@ module "vnet-spoke-vhub" {
   vnet-spoke_cidrs = local.vhub_vnet-spoke_cidrs
   vnet-fgt         = null
 }
-
 // Module VNET spoke VNET FGT
 // - This module will generate VNET spoke to connecto to VNET FGT
 // - Module will peer VNET to VNET FGT
@@ -139,7 +134,6 @@ module "vnet-spoke-fgt" {
     name = module.fgt_hub_vnet.vnet["name"]
   }
 }
-
 // Create load balancers
 module "xlb" {
   depends_on = [module.fgt_hub_vnet]
@@ -174,7 +168,6 @@ module "xlb" {
     fgt2_private = module.fgt_hub_vnet.fgt-passive-ni_ips["private"]
   }
 }
-
 // Create load balancers
 module "rs" {
   depends_on = [module.vnet-spoke-fgt, module.fgt_hub_vnet]
@@ -190,7 +183,6 @@ module "rs" {
   fgt1_peer-ip = module.fgt_hub_vnet.fgt-active-ni_ips["private"]
   fgt2_peer-ip = module.fgt_hub_vnet.fgt-passive-ni_ips["private"]
 }
-
 // Create virtual machines
 module "vm_hub_vnet-spoke-fgt" {
   source = "../../new-vm_rsa-ssh"
@@ -208,7 +200,7 @@ module "vm_hub_vnet-spoke-fgt" {
     module.vnet-spoke-fgt.ni_ids["subnet2"][0]
   ]
 }
-
+// Create VM in spoke vNet
 module "vm_hub_vnet-spoke-vhub" {
   source = "../../new-vm_rsa-ssh"
 
