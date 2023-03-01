@@ -128,27 +128,27 @@ variable "config_vxlan_private" {
 }
 variable "hub-peer_vxlan_name" {
   type    = string
-  default = "vxlan-hub"  //must be less than 9 caracters
+  default = "vxlan-hub" //must be less than 9 caracters
 }
 // Details for vxlan connection to hub (simulated L2/MPLS)
 variable "hub-peer_vxlan_public" {
   type = map(string)
   default = {
-    bgp-asn   = "65000"
+    bgp-asn     = "65000"
     external-ip = "" // leave in blank if you don't know public IP jet
-    remote-ip = "10.10.3.1"
-    local-ip  = "10.10.3.2"
-    vni       = "1100"
+    remote-ip   = "10.10.3.1"
+    local-ip    = "10.10.3.2"
+    vni         = "1100"
   }
 }
 variable "hub-peer_vxlan_private" {
   type = map(string)
   default = {
-    bgp-asn   = "65000"
+    bgp-asn     = "65000"
     external-ip = "" // leave in blank if you don't know public IP jet
-    remote-ip = "10.10.30.1"
-    local-ip  = "10.10.30.2"
-    vni       = "1100"
+    remote-ip   = "10.10.30.1"
+    local-ip    = "10.10.30.2"
+    vni         = "1100"
   }
 }
 
