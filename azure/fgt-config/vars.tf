@@ -67,12 +67,32 @@ variable "hubs" {
 # - config_hub   = false (default) 
 # - config_vxlan = false (default)
 #-----------------------------------------------------------------------------------
-variable "config_hub" {
+variable "config_hub_public" {
   type    = bool
   default = false
 }
+variable "config_hub_private" {
+  type    = bool
+  default = false
+}
+// Variable to create a a VPN HUB public interface
+variable "hub_public" {
+  type = map(any)
+  default = {
+    id                = "HUB"
+    bgp-asn_hub       = "65000"
+    bgp-asn_spoke     = "65000"
+    vpn_cidr          = "10.10.1.0/24"
+    vpn_psk           = "secret-key-123"
+    cidr              = "172.30.0.0/24"
+    ike-version       = "2"
+    network_id        = "1"
+    dpd-retryinterval = "5"
+    mode-cfg          = true
+  }
+}
 // Variable to create a a VPN HUB
-variable "hub" {
+variable "hub_private" {
   type = map(any)
   default = {
     id                = "HUB"
@@ -80,23 +100,52 @@ variable "hub" {
     bgp-asn_spoke     = "65000"
     vpn_cidr          = "10.10.10.0/24"
     vpn_psk           = "secret-key-123"
-    cidr              = "192.168.0.0/24"
+    cidr              = "172.30.0.0/24"
     ike-version       = "2"
     network_id        = "1"
     dpd-retryinterval = "5"
     mode-cfg          = true
   }
 }
-variable "config_vxlan" {
+
+variable "vpn_public_name" {
+  type    = string
+  default = "vpn-public"
+}
+
+variable "vpn_private_name" {
+  type    = string
+  default = "vpn-private"
+}
+
+variable "config_vxlan_public" {
   type    = bool
   default = false
 }
+variable "config_vxlan_private" {
+  type    = bool
+  default = false
+}
+variable "hub-peer_vxlan_name" {
+  type    = string
+  default = "vxlan-hub"  //must be less than 9 caracters
+}
 // Details for vxlan connection to hub (simulated L2/MPLS)
-variable "hub-peer_vxlan" {
+variable "hub-peer_vxlan_public" {
   type = map(string)
   default = {
     bgp-asn   = "65000"
-    public-ip = "" // leave in blank if you don't know public IP jet
+    external-ip = "" // leave in blank if you don't know public IP jet
+    remote-ip = "10.10.3.1"
+    local-ip  = "10.10.3.2"
+    vni       = "1100"
+  }
+}
+variable "hub-peer_vxlan_private" {
+  type = map(string)
+  default = {
+    bgp-asn   = "65000"
+    external-ip = "" // leave in blank if you don't know public IP jet
     remote-ip = "10.10.30.1"
     local-ip  = "10.10.30.2"
     vni       = "1100"

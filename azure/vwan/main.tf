@@ -26,7 +26,7 @@ resource "azurerm_virtual_hub_route_table" "vhub_rt_spoke" {
   labels         = ["rt-spoke"]
 
   route {
-    name              = "${var.prefix}-rt-spoke-default"
+    name              = "rt-spoke-default"
     destinations_type = "CIDR"
     destinations      = ["0.0.0.0/0"]
     next_hop_type     = "ResourceId"

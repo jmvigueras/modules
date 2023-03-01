@@ -16,15 +16,19 @@ module "fgt-config_hub1" {
   fgt-active-ni_ips  = local.fgt-active-ni_ips
   fgt-passive-ni_ips = local.fgt-passive-ni_ips
 
-  config_fgsp       = true
-  config_hub        = true
-  config_vhub       = true
-  config_ars        = true
-  config_vxlan      = true
-  config_gwlb-vxlan = true
+  config_fgsp        = true
+  config_hub_public  = true
+  config_hub_private = true
+  config_vhub        = true
+  config_ars         = true
+  config_vxlan_public   = true
+  config_vxlan_private  = true
+  config_gwlb-vxlan  = true
 
-  hub            = local.hub1
-  hub-peer_vxlan = local.hub1_peer_vxlan
+  hub_public     = local.hub1_public
+  hub_private    = local.hub1_private
+  hub-peer_vxlan_public = local.hub1_peer_vxlan_public
+  hub-peer_vxlan_private = local.hub1_peer_vxlan_private
   vhub_peer      = local.vhub_peer
   rs_peer        = local.rs_peer
   gwlb_vxlan     = local.gwlb_vxlan
@@ -46,12 +50,18 @@ module "fgt-config_hub2" {
   fgt-active-ni_ips  = local.fgt-active-ni_ips
   fgt-passive-ni_ips = local.fgt-passive-ni_ips
 
-  config_fgcp  = true
-  config_hub   = true
-  config_vxlan = true
+  config_fgcp        = true
+  config_hub_public  = true
+  config_hub_private = true
+  config_spoke       = false
+  config_vxlan_public   = true
+  config_vxlan_private  = true
 
-  hub            = local.hub2
-  hub-peer_vxlan = local.hub2_peer_vxlan
+  hub_public     = local.hub2_public
+  hub_private    = local.hub2_private
+  hub-peer_vxlan_public = local.hub2_peer_vxlan_public
+  hub-peer_vxlan_private = local.hub2_peer_vxlan_private
+  hubs           = local.hubs_hub
 }
 #---------------------------------------------------------------------------------
 # Create FGT cluster spoke

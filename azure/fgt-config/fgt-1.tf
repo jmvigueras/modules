@@ -24,7 +24,7 @@ data "template_file" "fgt_active" {
   template = file("${path.module}/templates/fgt-all.conf")
 
   vars = {
-    fgt_id         = var.config_spoke ? "${var.spoke["id"]}-1" : "${var.hub["id"]}-1"
+    fgt_id         = var.config_spoke ? "${var.spoke["id"]}-1" : "${var.hub_public["id"]}-1"
     admin_port     = var.admin_port
     admin_cidr     = var.admin_cidr
     adminusername  = "admin"
@@ -46,20 +46,22 @@ data "template_file" "fgt_active" {
     mgmt_mask    = cidrnetmask(var.subnet_cidrs["mgmt"])
     mgmt_gw      = cidrhost(var.subnet_cidrs["mgmt"], 1)
 
-    fgt_sdn-config        = data.template_file.fgt_sdn-config.rendered
-    fgt_ha-fgcp-config    = var.config_fgcp ? data.template_file.fgt_ha-fgcp-active-config.rendered : ""
-    fgt_ha-fgsp-config    = var.config_fgsp ? data.template_file.fgt_ha-fgsp-active-config.rendered : ""
-    fgt_bgp-config        = var.config_spoke || var.config_hub ? "" : data.template_file.fgt_bgp-config.rendered
-    fgt_static-config     = var.vpc-spoke_cidr != null ? data.template_file.fgt_static-config.rendered : ""
-    fgt_sdwan-config      = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
-    fgt_vpn-config        = var.config_hub ? data.template_file.fgt_vpn-config.0.rendered : ""
-    fgt_vxlan-config      = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
-    fgt_vhub-config       = var.config_vhub ? data.template_file.fgt_vhub-config.0.rendered : ""
-    fgt_ars-config        = var.config_ars ? data.template_file.fgt_ars-config.0.rendered : ""
-    fgt_gwlb-vxlan-config = var.config_gwlb-vxlan ? data.template_file.fgt_gwlb-vxlan-config.rendered : ""
-    fgt_fmg-config        = var.config_fmg ? data.template_file.fgt_1_fmg-config.rendered : ""
-    fgt_faz-config        = var.config_faz ? data.template_file.fgt_1_faz-config.rendered : ""
-    fgt_extra-config      = var.fgt_active_extra-config
+    fgt_sdn-config         = data.template_file.fgt_sdn-config.rendered
+    fgt_ha-fgcp-config     = var.config_fgcp ? data.template_file.fgt_ha-fgcp-active-config.rendered : ""
+    fgt_ha-fgsp-config     = var.config_fgsp ? data.template_file.fgt_ha-fgsp-active-config.rendered : ""
+    fgt_bgp-config         = var.config_spoke || var.config_hub_public ? "" : data.template_file.fgt_bgp-config.rendered
+    fgt_static-config      = var.vpc-spoke_cidr != null ? data.template_file.fgt_static-config.rendered : ""
+    fgt_sdwan-config       = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
+    fgt_vpn-public-config  = var.config_hub_public ? data.template_file.fgt_vpn-public-config.0.rendered : ""
+    fgt_vpn-private-config = var.config_hub_private ? data.template_file.fgt_vpn-private-config.0.rendered : ""
+    fgt_vxlan-public-config = var.config_vxlan_public ? data.template_file.fgt_vxlan-public-config.rendered : ""
+    fgt_vxlan-private-config = var.config_vxlan_private ? data.template_file.fgt_vxlan-private-config.rendered : ""
+    fgt_vhub-config        = var.config_vhub ? data.template_file.fgt_vhub-config.0.rendered : ""
+    fgt_ars-config         = var.config_ars ? data.template_file.fgt_ars-config.0.rendered : ""
+    fgt_gwlb-vxlan-config  = var.config_gwlb-vxlan ? data.template_file.fgt_gwlb-vxlan-config.rendered : ""
+    fgt_fmg-config         = var.config_fmg ? data.template_file.fgt_1_fmg-config.rendered : ""
+    fgt_faz-config         = var.config_faz ? data.template_file.fgt_1_faz-config.rendered : ""
+    fgt_extra-config       = var.fgt_active_extra-config
   }
 }
 
@@ -122,26 +124,53 @@ data "template_file" "fgt_sdwan-config" {
   }
 }
 
-data "template_file" "fgt_vpn-config" {
+data "template_file" "fgt_vpn-public-config" {
   count    = var.config_fgsp ? 2 : 1
   template = file("${path.module}/templates/fgt-vpn.conf")
   vars = {
-    hub_private-ip        = cidrhost(cidrsubnet(var.hub["vpn_cidr"], 1, count.index), 1)
-    network_id            = var.hub["network_id"]
-    ike-version           = var.hub["ike-version"]
-    dpd-retryinterval     = var.hub["dpd-retryinterval"]
-    localid               = var.hub["id"]
-    local_bgp-asn         = var.hub["bgp-asn_hub"]
+    hub_private-ip        = cidrhost(cidrsubnet(var.hub_public["vpn_cidr"], 1, count.index), 1)
+    network_id            = var.hub_public["network_id"]
+    ike-version           = var.hub_public["ike-version"]
+    dpd-retryinterval     = var.hub_public["dpd-retryinterval"]
+    localid               = var.hub_public["id"]
+    local_bgp-asn         = var.hub_public["bgp-asn_hub"]
     local_router-id       = var.fgt-active-ni_ips["mgmt"]
-    local_network         = var.hub["cidr"]
-    mode-cfg              = var.hub["mode-cfg"]
-    site_private-ip_start = cidrhost(cidrsubnet(var.hub["vpn_cidr"], 1, count.index), 2)
-    site_private-ip_end   = cidrhost(cidrsubnet(var.hub["vpn_cidr"], 1, count.index), 14)
-    site_private-ip_mask  = cidrnetmask(cidrsubnet(var.hub["vpn_cidr"], 1, count.index))
-    site_bgp-asn          = var.hub["bgp-asn_spoke"]
-    vpn_psk               = var.hub["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hub["vpn_psk"]
-    vpn_cidr              = cidrsubnet(var.hub["vpn_cidr"], 1, count.index)
+    local_network         = var.hub_public["cidr"]
+    mode-cfg              = var.hub_public["mode-cfg"]
+    site_private-ip_start = cidrhost(cidrsubnet(var.hub_public["vpn_cidr"], 1, count.index), 2)
+    site_private-ip_end   = cidrhost(cidrsubnet(var.hub_public["vpn_cidr"], 1, count.index), 14)
+    site_private-ip_mask  = cidrnetmask(cidrsubnet(var.hub_public["vpn_cidr"], 1, count.index))
+    site_bgp-asn          = var.hub_public["bgp-asn_spoke"]
+    vpn_psk               = var.hub_public["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hub_public["vpn_psk"]
+    vpn_cidr              = cidrsubnet(var.hub_public["vpn_cidr"], 1, count.index)
     vpn_port              = var.public_port
+    vpn_name              = var.vpn_public_name
+    private_port          = var.private_port
+    route_map_out         = "rm_prepending_out_${count.index}"
+  }
+}
+
+data "template_file" "fgt_vpn-private-config" {
+  count    = var.config_fgsp ? 2 : 1
+  template = file("${path.module}/templates/fgt-vpn.conf")
+  vars = {
+    hub_private-ip        = cidrhost(cidrsubnet(var.hub_private["vpn_cidr"], 1, count.index), 1)
+    network_id            = var.hub_private["network_id"]
+    ike-version           = var.hub_private["ike-version"]
+    dpd-retryinterval     = var.hub_private["dpd-retryinterval"]
+    localid               = var.hub_private["id"]
+    local_bgp-asn         = var.hub_private["bgp-asn_hub"]
+    local_router-id       = var.fgt-active-ni_ips["mgmt"]
+    local_network         = var.hub_private["cidr"]
+    mode-cfg              = var.hub_private["mode-cfg"]
+    site_private-ip_start = cidrhost(cidrsubnet(var.hub_private["vpn_cidr"], 1, count.index), 2)
+    site_private-ip_end   = cidrhost(cidrsubnet(var.hub_private["vpn_cidr"], 1, count.index), 14)
+    site_private-ip_mask  = cidrnetmask(cidrsubnet(var.hub_private["vpn_cidr"], 1, count.index))
+    site_bgp-asn          = var.hub_private["bgp-asn_spoke"]
+    vpn_psk               = var.hub_private["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hub_private["vpn_psk"]
+    vpn_cidr              = cidrsubnet(var.hub_private["vpn_cidr"], 1, count.index)
+    vpn_port              = var.private_port
+    vpn_name              = var.vpn_private_name
     private_port          = var.private_port
     route_map_out         = "rm_prepending_out_${count.index}"
   }
@@ -155,16 +184,33 @@ data "template_file" "fgt_bgp-config" {
   }
 }
 
-data "template_file" "fgt_vxlan-config" {
+data "template_file" "fgt_vxlan-public-config" {
   template = file("${path.module}/templates/fgt-vxlan.conf")
   vars = {
-    vni          = var.hub-peer_vxlan["vni"]
-    public-ip    = var.hub-peer_vxlan["public-ip"]
-    remote-ip    = var.hub-peer_vxlan["remote-ip"]
-    local-ip     = var.hub-peer_vxlan["local-ip"]
-    bgp-asn      = var.hub-peer_vxlan["bgp-asn"]
+    vni          = var.hub-peer_vxlan_public["vni"]
+    external-ip  = var.hub-peer_vxlan_public["external-ip"]
+    remote-ip    = var.hub-peer_vxlan_public["remote-ip"]
+    local-ip     = var.hub-peer_vxlan_public["local-ip"]
+    bgp-asn      = var.hub-peer_vxlan_public["bgp-asn"]
     vxlan_port   = var.public_port
     private_port = var.private_port
+    vpn_name     = var.vpn_public_name
+    vxlan_name   = var.hub-peer_vxlan_name
+  }
+}
+
+data "template_file" "fgt_vxlan-private-config" {
+  template = file("${path.module}/templates/fgt-vxlan.conf")
+  vars = {
+    vni          = var.hub-peer_vxlan_private["vni"]
+    external-ip  = var.hub-peer_vxlan_private["external-ip"]
+    remote-ip    = var.hub-peer_vxlan_private["remote-ip"]
+    local-ip     = var.hub-peer_vxlan_private["local-ip"]
+    bgp-asn      = var.hub-peer_vxlan_private["bgp-asn"]
+    vxlan_port   = var.private_port
+    private_port = var.private_port
+    vpn_name     = var.vpn_public_name
+    vxlan_name   = var.hub-peer_vxlan_name
   }
 }
 
@@ -193,7 +239,7 @@ data "template_file" "fgt_vhub-config" {
   template = templatefile("${path.module}/templates/az_fgt-vhub.conf", {
     vhub_peer       = var.vhub_peer
     vhub_bgp-asn    = var.vhub_bgp-asn[0]
-    local_bgp-asn   = var.config_hub ? var.hub["bgp-asn_hub"] : var.config_spoke ? var.spoke["bgp-asn"] : var.bgp-asn_default
+    local_bgp-asn   = var.config_hub_public ? var.hub_public["bgp-asn_hub"] : var.config_spoke ? var.spoke["bgp-asn"] : var.bgp-asn_default
     local_router-id = var.fgt-active-ni_ips["mgmt"]
     route_map_out   = "rm_prepending_out_${count.index}"
   })
@@ -204,7 +250,7 @@ data "template_file" "fgt_ars-config" {
   template = templatefile("${path.module}/templates/az_fgt-ars.conf", {
     rs_peers        = var.rs_peer
     rs_bgp-asn      = var.rs_bgp-asn[0]
-    local_bgp-asn   = var.config_hub ? var.hub["bgp-asn_hub"] : var.config_spoke ? var.spoke["bgp-asn"] : var.bgp-asn_default
+    local_bgp-asn   = var.config_hub_public ? var.hub_public["bgp-asn_hub"] : var.config_spoke ? var.spoke["bgp-asn"] : var.bgp-asn_default
     local_router-id = var.fgt-active-ni_ips["mgmt"]
     route_map_out   = "rm_prepending_out_${count.index}"
   })
