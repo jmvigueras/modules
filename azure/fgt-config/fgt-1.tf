@@ -126,7 +126,7 @@ data "template_file" "fgt_vpn-active-config" {
   count    = length(var.hub)
   template = file("${path.module}/templates/fgt-vpn.conf")
   vars = {
-    hub_private_ip        = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, count.index), 1)
+    hub_private_ip        = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, 0), 1)
     network_id            = var.hub[count.index]["network_id"]
     ike_version           = var.hub[count.index]["ike_version"]
     dpd_retryinterval     = var.hub[count.index]["dpd_retryinterval"]
