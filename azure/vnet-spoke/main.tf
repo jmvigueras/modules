@@ -70,6 +70,19 @@ resource "azurerm_subnet" "vnet-spoke_subnet_pl-s" {
 ######################################################################
 ## Create Network Interfaces in subnet 1 y 2 for test VM
 ######################################################################
+// Create public IP address for NI subnet_1
+resource "azurerm_public_ip" "ni_subnet_1_pip" {
+  count               = length(var.vnet-spoke_cidrs)
+  name                = "${var.prefix}-subnet-1-pip-${count.index + 1}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  sku_tier            = "Regional"
+
+  tags = var.tags
+}
+
 // Network Interface VM Test Spoke-1 subnet 1
 resource "azurerm_network_interface" "ni_subnet_1" {
   count               = length(var.vnet-spoke_cidrs)
@@ -83,7 +96,21 @@ resource "azurerm_network_interface" "ni_subnet_1" {
     private_ip_address_allocation = "Static"
     private_ip_address            = cidrhost(azurerm_subnet.vnet-spoke_subnet_1[count.index].address_prefixes[0], 10)
     primary                       = true
+    public_ip_address_id          = azurerm_public_ip.ni_subnet_1_pip[count.index].id
   }
+
+  tags = var.tags
+}
+
+// Create public IP address for NI subnet_2
+resource "azurerm_public_ip" "ni_subnet_2_pip" {
+  count               = length(var.vnet-spoke_cidrs)
+  name                = "${var.prefix}-subnet-2-pip-${count.index + 1}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  sku_tier            = "Regional"
 
   tags = var.tags
 }
@@ -101,6 +128,7 @@ resource "azurerm_network_interface" "ni_subnet_2" {
     private_ip_address_allocation = "Static"
     private_ip_address            = cidrhost(azurerm_subnet.vnet-spoke_subnet_2[count.index].address_prefixes[0], 10)
     primary                       = true
+    public_ip_address_id          = azurerm_public_ip.ni_subnet_2_pip[count.index].id
   }
 
   tags = var.tags

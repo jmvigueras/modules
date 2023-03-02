@@ -5,7 +5,7 @@ variable "client_secret" {}
 variable "tenant_id" {}
 
 // Resource group name
-variable "resourcegroup_name" {
+variable "resource_group_name" {
   type    = string
   default = null
 }

@@ -34,3 +34,7 @@ output "ni_ids" {
 output "ni_ips" {
   value = module.vnet-spoke.ni_ips
 }
+
+output "ni_pips" {
+  value = module.vnet-spoke.ni_pips
+}
