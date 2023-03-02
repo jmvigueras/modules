@@ -20,7 +20,7 @@ variable "config_ha_port" {
 #-----------------------------------------------------------------------------------
 # Default BGP configuration
 #-----------------------------------------------------------------------------------
-variable "bgp-asn_default" {
+variable "bgp_asn_default" {
   type    = string
   default = "65000"
 }
@@ -39,7 +39,7 @@ variable "spoke" {
   default = {
     id      = "spoke"
     cidr    = "192.168.0.0/24"
-    bgp-asn = "65011"
+    bgp_asn = "65011"
   }
 }
 // Details to crate VPN connections
@@ -48,33 +48,25 @@ variable "hubs" {
   default = [
     {
       id                = "HUB"
-      bgp-asn           = "65000"
-      public-ip         = "11.11.11.11"
-      hub-ip            = "172.20.30.1"
-      site-ip           = "172.20.30.10" // set to "" if VPN mode-cfg is enable
-      hck-srv-ip        = "172.20.30.1"
+      bgp_asn           = "65000"
+      external_ip       = "11.11.11.11"
+      hub_ip            = "172.20.30.1"
+      site_ip           = "172.20.30.10" // set to "" if VPN mode_cfg is enable
+      hck_ip            = "172.20.30.1"
       vpn_psk           = "secret"
       cidr              = "172.20.30.0/24"
-      ike-version       = "2"
+      ike_version       = "2"
       network_id        = "1"
-      dpd-retryinterval = "5"
+      dpd_retryinterval = "5"
+      sdwan_port        = "public"
     }
   ]
 }
 
 #-----------------------------------------------------------------------------------
-# Predefined variables for HUB
+# Predefined variables for HUB vpn
 # - config_hub   = false (default) 
-# - config_vxlan = false (default)
 #-----------------------------------------------------------------------------------
-variable "config_hub_public" {
-  type    = bool
-  default = false
-}
-variable "config_hub_private" {
-  type    = bool
-  default = false
-}
 variable "config_hub" {
   type    = bool
   default = false
@@ -85,75 +77,36 @@ variable "hub" {
   default = [
     {
       id                = "HUB"
-      bgp-asn_hub       = "65000"
-      bgp-asn_spoke     = "65000"
+      bgp_asn_hub       = "65000"
+      bgp_asn_spoke     = "65000"
       vpn_cidr          = "10.1.1.0/24"
       vpn_psk           = "secret-key-123"
       cidr              = "172.30.0.0/24"
-      ike-version       = "2"
+      ike_version       = "2"
       network_id        = "1"
-      dpd-retryinterval = "5"
-      mode-cfg          = true
+      dpd_retryinterval = "5"
+      mode_cfg          = true
       vpn_port          = "public"
     },
     {
       id                = "HUB"
-      bgp-asn_hub       = "65000"
-      bgp-asn_spoke     = "65000"
+      bgp_asn_hub       = "65000"
+      bgp_asn_spoke     = "65000"
       vpn_cidr          = "10.1.10.0/24"
       vpn_psk           = "secret-key-123"
       cidr              = "172.30.0.0/24"
-      ike-version       = "2"
+      ike_version       = "2"
       network_id        = "1"
-      dpd-retryinterval = "5"
-      mode-cfg          = true
+      dpd_retryinterval = "5"
+      mode_cfg          = true
       vpn_port          = "private"
     }
   ]
 }
-// Variable to create a a VPN HUB public interface
-variable "hub_public" {
-  type = map(any)
-  default = {
-    id                = "HUB"
-    bgp-asn_hub       = "65000"
-    bgp-asn_spoke     = "65000"
-    vpn_cidr          = "10.10.1.0/24"
-    vpn_psk           = "secret-key-123"
-    cidr              = "172.30.0.0/24"
-    ike-version       = "2"
-    network_id        = "1"
-    dpd-retryinterval = "5"
-    mode-cfg          = true
-  }
-}
-// Variable to create a a VPN HUB
-variable "hub_private" {
-  type = map(any)
-  default = {
-    id                = "HUB"
-    bgp-asn_hub       = "65000"
-    bgp-asn_spoke     = "65000"
-    vpn_cidr          = "10.10.10.0/24"
-    vpn_psk           = "secret-key-123"
-    cidr              = "172.30.0.0/24"
-    ike-version       = "2"
-    network_id        = "1"
-    dpd-retryinterval = "5"
-    mode-cfg          = true
-  }
-}
-
-variable "vpn_public_name" {
-  type    = string
-  default = "vpn-port1"
-}
-
-variable "vpn_private_name" {
-  type    = string
-  default = "vpn-port2"
-}
-
+#-----------------------------------------------------------------------------------
+# Predefined variables for HUB vxlan
+# - config_vxlan = false (default)
+#-----------------------------------------------------------------------------------
 variable "config_vxlan" {
   type    = bool
   default = false
@@ -166,24 +119,23 @@ variable "hub_peer_vxlan" {
   type = list(map(string))
   default = [
     {
-      bgp-asn     = "65000"
-      external-ip = "20.216.155.67"
-      remote-ip   = "10.0.3.2"
-      local-ip    = "10.0.3.1"
+      bgp_asn     = "65000"
+      external_ip = "20.216.155.67"
+      remote_ip   = "10.0.3.2"
+      local_ip    = "10.0.3.1"
       vni         = "1100"
       vxlan_port  = "public"
     },
     {
-      bgp-asn     = "65000"
-      external-ip = "172.30.0.106"
-      remote-ip   = "10.0.30.2"
-      local-ip    = "10.0.30.1"
+      bgp_asn     = "65000"
+      external_ip = "172.30.0.106"
+      remote_ip   = "10.0.30.2"
+      local_ip    = "10.0.30.1"
       vni         = "1100"
       vxlan_port  = "private"
     }
   ]
 }
-
 
 #-----------------------------------------------------------------------------------
 # Predefined variables to vHUB connection
@@ -193,7 +145,7 @@ variable "config_vhub" {
   type    = bool
   default = false
 }
-variable "vhub_bgp-asn" {
+variable "vhub_bgp_asn" {
   type    = list(string)
   default = ["65515"]
 }
@@ -211,7 +163,7 @@ variable "config_ars" {
   type    = bool
   default = false
 }
-variable "rs_bgp-asn" {
+variable "rs_bgp_asn" {
   type    = list(string)
   default = ["65515"]
 }
@@ -245,7 +197,6 @@ variable "gwlb_ip" {
   type    = string
   default = "172.30.3.15"
 }
-
 
 #-----------------------------------------------------------------------------------
 # Predefined variables for FMG 

@@ -52,7 +52,6 @@ module "fgt-config_hub2" {
 
   hub            = local.hub2
   hub_peer_vxlan = local.hub2_peer_vxlan
-  hubs           = local.hubs_hub
 }
 #---------------------------------------------------------------------------------
 # Create FGT cluster spoke
