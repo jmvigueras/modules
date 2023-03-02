@@ -62,6 +62,20 @@ output "ni_pips" {
   }
 }
 
+output "ni_ids_subnet_1" {
+  value = azurerm_network_interface.ni_subnet_1.*.id
+}
+output "ni_ids_subnet_2" {
+  value = azurerm_network_interface.ni_subnet_2.*.id
+}
+
+output "ni_pips_subnet_1" {
+  value = azurerm_public_ip.ni_subnet_1_pip.*.ip_address
+}
+output "ni_pips_subnet_2" {
+  value = azurerm_public_ip.ni_subnet_2_pip.*.ip_address
+}
+
 output "ni_ips" {
   value = {
     subnet1 = azurerm_network_interface.ni_subnet_1.*.private_ip_addresses
