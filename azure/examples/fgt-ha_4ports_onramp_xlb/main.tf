@@ -106,5 +106,3 @@ module "xlb" {
     fgt2_private = module.fgt_vnet.fgt-passive-ni_ips["private"]
   }
 }
-
-

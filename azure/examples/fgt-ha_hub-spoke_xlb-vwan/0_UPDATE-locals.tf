@@ -44,47 +44,58 @@ locals {
   #-----------------------------------------------------------------------------------------------------
   # FGT HUB locals
   #-----------------------------------------------------------------------------------------------------
-  hub1 = {
-    id                = "HUB1"
-    bgp-asn_hub       = "65000"
-    bgp-asn_spoke     = "65000"
-    vpn_cidr          = "10.10.10.0/24"
-    vpn_psk           = "secret-key-123"
-    cidr              = "172.30.100.0/24"
-    ike-version       = "2"
-    network_id        = "1"
-    dpd-retryinterval = "5"
-    mode-cfg          = true
-  }
-  hub2 = {
-    id                = "HUB2"
-    bgp-asn_hub       = "65000"
-    bgp-asn_spoke     = "65000"
-    vpn_cidr          = "10.10.20.0/24"
-    vpn_psk           = "secret-key-123"
-    cidr              = "172.30.200.0/24"
-    ike-version       = "2"
-    network_id        = "1"
-    dpd-retryinterval = "5"
-    mode-cfg          = true
-  }
-  hub1_peer_vxlan = {
-    bgp-asn   = local.hub2["bgp-asn_hub"]
-    public-ip = ""
-    remote-ip = "10.10.30.2"
-    local-ip  = "10.10.30.1"
-    vni       = "1100"
-  }
-  hub2_peer_vxlan = {
-    bgp-asn   = local.hub1["bgp-asn_hub"]
-    public-ip = ""
-    remote-ip = "10.10.30.1"
-    local-ip  = "10.10.30.2"
-    vni       = "1100"
-  }
+  hub1 = [
+    {
+      id                = "HUB1"
+      bgp-asn_hub       = "65000"
+      bgp-asn_spoke     = "65000"
+      vpn_cidr          = "10.10.10.0/24"
+      vpn_psk           = "secret-key-123"
+      cidr              = "172.30.100.0/24"
+      ike-version       = "2"
+      network_id        = "1"
+      dpd-retryinterval = "5"
+      mode-cfg          = true
+      vpn_port          = "public"
+    }
+  ]
+  hub2 = [
+    {
+      id                = "HUB2"
+      bgp-asn_hub       = "65000"
+      bgp-asn_spoke     = "65000"
+      vpn_cidr          = "10.10.20.0/24"
+      vpn_psk           = "secret-key-123"
+      cidr              = "172.30.200.0/24"
+      ike-version       = "2"
+      network_id        = "1"
+      dpd-retryinterval = "5"
+      mode-cfg          = true
+      vpn_port          = "public"
+    }
+  ]
+  hub1_peer_vxlan = [
+    {
+      bgp-asn     = local.hub2[0]["bgp-asn_hub"]
+      external-ip = ""
+      remote-ip   = "10.10.30.2"
+      local-ip    = "10.10.30.1"
+      vni         = "1100"
+      vxlan_port  = "public"
+    }
+  ]
+  hub2_peer_vxlan = [
+    {
+      bgp-asn     = local.hub1[0]["bgp-asn_hub"]
+      external-ip = ""
+      remote-ip   = "10.10.30.1"
+      local-ip    = "10.10.30.2"
+      vni         = "1100"
+      vxlan_port  = "public"
+    }
+  ]
 
   fgt_vnet-spoke_cidrs = ["172.30.16.0/23"]
-
 
   #-----------------------------------------------------------------------------------------------------
   # FGT Spoke locals
@@ -96,43 +107,43 @@ locals {
   }
   hubs = [
     {
-      id                = local.hub1["id"]
-      bgp-asn           = local.hub1["bgp-asn_hub"]
+      id                = local.hub1[0]["id"]
+      bgp-asn           = local.hub1[0]["bgp-asn_hub"]
       public-ip         = module.fgt_hub_vnet.fgt-active-public-ip
-      hub-ip            = cidrhost(cidrsubnet(local.hub1["vpn_cidr"], 1, 0), 1)
+      hub-ip            = cidrhost(cidrsubnet(local.hub1[0]["vpn_cidr"], 1, 0), 1)
       site-ip           = "" // set to "" if VPN mode-cfg is enable
-      hck-srv-ip        = cidrhost(cidrsubnet(local.hub1["vpn_cidr"], 1, 0), 1)
-      vpn_psk           = local.hub1["vpn_psk"]
-      cidr              = local.hub1["cidr"]
-      ike-version       = local.hub1["ike-version"]
-      network_id        = local.hub1["network_id"]
-      dpd-retryinterval = local.hub1["dpd-retryinterval"]
+      hck-srv-ip        = cidrhost(cidrsubnet(local.hub1[0]["vpn_cidr"], 1, 0), 1)
+      vpn_psk           = local.hub1[0]["vpn_psk"]
+      cidr              = local.hub1[0]["cidr"]
+      ike-version       = local.hub1[0]["ike-version"]
+      network_id        = local.hub1[0]["network_id"]
+      dpd-retryinterval = local.hub1[0]["dpd-retryinterval"]
     },
     {
-      id                = local.hub1["id"]
-      bgp-asn           = local.hub1["bgp-asn_hub"]
+      id                = local.hub1[0]["id"]
+      bgp-asn           = local.hub1[0]["bgp-asn_hub"]
       public-ip         = module.fgt_hub_vnet.fgt-passive-public-ip
-      hub-ip            = cidrhost(cidrsubnet(local.hub1["vpn_cidr"], 1, 1), 1)
+      hub-ip            = cidrhost(cidrsubnet(local.hub1[0]["vpn_cidr"], 1, 1), 1)
       site-ip           = "" // set to "" if VPN mode-cfg is enable
-      hck-srv-ip        = cidrhost(cidrsubnet(local.hub1["vpn_cidr"], 1, 1), 1)
-      vpn_psk           = local.hub1["vpn_psk"]
-      cidr              = local.hub1["cidr"]
-      ike-version       = local.hub1["ike-version"]
-      network_id        = local.hub1["network_id"]
-      dpd-retryinterval = local.hub1["dpd-retryinterval"]
+      hck-srv-ip        = cidrhost(cidrsubnet(local.hub1[0]["vpn_cidr"], 1, 1), 1)
+      vpn_psk           = local.hub1[0]["vpn_psk"]
+      cidr              = local.hub1[0]["cidr"]
+      ike-version       = local.hub1[0]["ike-version"]
+      network_id        = local.hub1[0]["network_id"]
+      dpd-retryinterval = local.hub1[0]["dpd-retryinterval"]
     },
     {
-      id                = local.hub2["id"]
-      bgp-asn           = local.hub2["bgp-asn_hub"]
+      id                = local.hub2[0]["id"]
+      bgp-asn           = local.hub2[0]["bgp-asn_hub"]
       public-ip         = "22.22.22.22"
-      hub-ip            = cidrhost(cidrsubnet(local.hub2["vpn_cidr"], 0, 0), 1)
+      hub-ip            = cidrhost(cidrsubnet(local.hub2[0]["vpn_cidr"], 0, 0), 1)
       site-ip           = "" // set to "" if VPN mode-cfg is enable
-      hck-srv-ip        = cidrhost(cidrsubnet(local.hub2["vpn_cidr"], 0, 0), 1)
-      vpn_psk           = local.hub2["vpn_psk"]
-      cidr              = local.hub2["cidr"]
-      ike-version       = local.hub2["ike-version"]
-      network_id        = local.hub2["network_id"]
-      dpd-retryinterval = local.hub2["dpd-retryinterval"]
+      hck-srv-ip        = cidrhost(cidrsubnet(local.hub2[0]["vpn_cidr"], 0, 0), 1)
+      vpn_psk           = local.hub2[0]["vpn_psk"]
+      cidr              = local.hub2[0]["cidr"]
+      ike-version       = local.hub2[0]["ike-version"]
+      network_id        = local.hub2[0]["network_id"]
+      dpd-retryinterval = local.hub2[0]["dpd-retryinterval"]
     }
   ]
 }

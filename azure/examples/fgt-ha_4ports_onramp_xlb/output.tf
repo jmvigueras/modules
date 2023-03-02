@@ -8,4 +8,3 @@ output "fgt" {
     vpn_psk      = module.fgt_config.vpn_psk
   }
 }
-

@@ -31,13 +31,13 @@ module "fgt_hub_config" {
   config_vxlan      = true
   config_gwlb-vxlan = true
   hub               = local.hub1
-  hub-peer_vxlan    = local.hub1_peer_vxlan
+  hub_peer_vxlan    = local.hub1_peer_vxlan
   vhub_peer         = module.vwan.virtual_router_ips
   rs_peer           = module.rs.rs_peer
   gwlb_vxlan        = local.gwlb_vxlan
   gwlb_ip           = local.gwlb_ip
 
-  vpc-spoke_cidr = [module.fgt_vnet.subnet_cidrs["bastion"]]
+  vpc-spoke_cidr = [module.fgt_hub_vnet.subnet_cidrs["bastion"]]
 }
 // Create FGT cluster as HUB-ADVPN
 // (Example with a full scenario deployment with all modules)
@@ -71,7 +71,7 @@ module "fgt_hub_vnet" {
   resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
   tags                = local.tags
 
-  vnet-fgt_cidr = local.hub1["cidr"]
+  vnet-fgt_cidr = local.hub1[0]["cidr"]
   admin_port    = local.admin_port
   admin_cidr    = local.admin_cidr
 }
@@ -101,7 +101,7 @@ module "vwan" {
   vnet-fgt_id            = module.fgt_hub_vnet.vnet["id"]
   fgt-cluster_active-ip  = module.fgt_hub_vnet.fgt-active-ni_ips["private"]
   fgt-cluster_passive-ip = module.fgt_hub_vnet.fgt-passive-ni_ips["private"]
-  fgt-cluster_bgp-asn    = local.hub1["bgp-asn_hub"]
+  fgt-cluster_bgp-asn    = local.hub1[0]["bgp-asn_hub"]
 }
 // Module VNET spoke vHUB
 // - This module will generate VNET spoke to connecto to vHUB 
@@ -179,7 +179,7 @@ module "rs" {
   tags                = local.tags
 
   subnet_ids   = module.vnet-spoke-fgt.subnet_ids["routeserver"]
-  fgt_bgp-asn  = local.hub1["bgp-asn_hub"]
+  fgt_bgp-asn  = local.hub1[0]["bgp-asn_hub"]
   fgt1_peer-ip = module.fgt_hub_vnet.fgt-active-ni_ips["private"]
   fgt2_peer-ip = module.fgt_hub_vnet.fgt-passive-ni_ips["private"]
 }

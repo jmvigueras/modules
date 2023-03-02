@@ -75,6 +75,42 @@ variable "config_hub_private" {
   type    = bool
   default = false
 }
+variable "config_hub" {
+  type    = bool
+  default = false
+}
+// Variable to create a a VPN HUB public interface
+variable "hub" {
+  type = list(map(string))
+  default = [
+    {
+      id                = "HUB"
+      bgp-asn_hub       = "65000"
+      bgp-asn_spoke     = "65000"
+      vpn_cidr          = "10.1.1.0/24"
+      vpn_psk           = "secret-key-123"
+      cidr              = "172.30.0.0/24"
+      ike-version       = "2"
+      network_id        = "1"
+      dpd-retryinterval = "5"
+      mode-cfg          = true
+      vpn_port          = "public"
+    },
+    {
+      id                = "HUB"
+      bgp-asn_hub       = "65000"
+      bgp-asn_spoke     = "65000"
+      vpn_cidr          = "10.1.10.0/24"
+      vpn_psk           = "secret-key-123"
+      cidr              = "172.30.0.0/24"
+      ike-version       = "2"
+      network_id        = "1"
+      dpd-retryinterval = "5"
+      mode-cfg          = true
+      vpn_port          = "private"
+    }
+  ]
+}
 // Variable to create a a VPN HUB public interface
 variable "hub_public" {
   type = map(any)
@@ -110,47 +146,44 @@ variable "hub_private" {
 
 variable "vpn_public_name" {
   type    = string
-  default = "vpn-public"
+  default = "vpn-port1"
 }
 
 variable "vpn_private_name" {
   type    = string
-  default = "vpn-private"
+  default = "vpn-port2"
 }
 
-variable "config_vxlan_public" {
+variable "config_vxlan" {
   type    = bool
   default = false
 }
-variable "config_vxlan_private" {
-  type    = bool
-  default = false
-}
-variable "hub-peer_vxlan_name" {
+variable "hub_peer_vxlan_name" {
   type    = string
-  default = "vxlan-hub" //must be less than 9 caracters
+  default = "vxlan" //must be less than 9 caracters
 }
-// Details for vxlan connection to hub (simulated L2/MPLS)
-variable "hub-peer_vxlan_public" {
-  type = map(string)
-  default = {
-    bgp-asn     = "65000"
-    external-ip = "" // leave in blank if you don't know public IP jet
-    remote-ip   = "10.10.3.1"
-    local-ip    = "10.10.3.2"
-    vni         = "1100"
-  }
+variable "hub_peer_vxlan" {
+  type = list(map(string))
+  default = [
+    {
+      bgp-asn     = "65000"
+      external-ip = "20.216.155.67"
+      remote-ip   = "10.0.3.2"
+      local-ip    = "10.0.3.1"
+      vni         = "1100"
+      vxlan_port  = "public"
+    },
+    {
+      bgp-asn     = "65000"
+      external-ip = "172.30.0.106"
+      remote-ip   = "10.0.30.2"
+      local-ip    = "10.0.30.1"
+      vni         = "1100"
+      vxlan_port  = "private"
+    }
+  ]
 }
-variable "hub-peer_vxlan_private" {
-  type = map(string)
-  default = {
-    bgp-asn     = "65000"
-    external-ip = "" // leave in blank if you don't know public IP jet
-    remote-ip   = "10.10.30.1"
-    local-ip    = "10.10.30.2"
-    vni         = "1100"
-  }
-}
+
 
 #-----------------------------------------------------------------------------------
 # Predefined variables to vHUB connection
@@ -354,6 +387,16 @@ variable "fgt-passive-ni_ips" {
 variable "subnet_cidrs" {
   type    = map(string)
   default = null
+}
+
+variable "ports" {
+  type = map(string)
+  default = {
+    public  = "port1"
+    private = "port2"
+    mgtm    = "port3"
+    ha_port = "port3"
+  }
 }
 
 variable "public_port" {
