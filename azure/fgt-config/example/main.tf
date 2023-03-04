@@ -16,7 +16,8 @@ module "fgt-config_hub1" {
   fgt-active-ni_ips  = local.fgt-active-ni_ips
   fgt-passive-ni_ips = local.fgt-passive-ni_ips
 
-  config_fgsp       = true
+  config_fgcp       = local.hub1_cluster_type == "fgcp" ? true : false
+  config_fgsp       = local.hub1_cluster_type == "fgsp" ? true : false
   config_hub        = true
   config_vhub       = true
   config_ars        = true
@@ -46,7 +47,8 @@ module "fgt-config_hub2" {
   fgt-active-ni_ips  = local.fgt-active-ni_ips
   fgt-passive-ni_ips = local.fgt-passive-ni_ips
 
-  config_fgcp  = true
+  config_fgcp  = local.hub2_cluster_type == "fgcp" ? true : false
+  config_fgsp  = local.hub2_cluster_type == "fgsp" ? true : false
   config_hub   = true
   config_vxlan = true
 
@@ -69,7 +71,8 @@ module "fgt-config_spoke" {
   fgt-active-ni_ips  = local.fgt-active-ni_ips
   fgt-passive-ni_ips = local.fgt-passive-ni_ips
 
-  config_fgcp  = true
+  config_fgcp  = local.spoke_cluster_type == "fgcp" ? true : false
+  config_fgsp  = local.spoke_cluster_type == "fgsp" ? true : false
   config_spoke = true
 
   hubs  = local.hubs
