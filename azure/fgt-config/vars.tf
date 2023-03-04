@@ -270,24 +270,24 @@ variable "faz_fgt-2_source-ip" {
 #-----------------------------------------------------------------------------------
 variable "subscription_id" {
   type    = string
-  default = ""
+  default = null
 }
 variable "client_id" {
   type    = string
-  default = ""
+  default = null
 }
 variable "client_secret" {
   type    = string
-  default = ""
+  default = null
 }
 variable "tenant_id" {
   type    = string
-  default = ""
+  default = null
 }
 
 variable "resource_group_name" {
   type    = string
-  default = ""
+  default = null
 }
 
 variable "admin_cidr" {

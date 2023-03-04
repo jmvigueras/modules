@@ -66,11 +66,11 @@ data "template_file" "fgt_active" {
 data "template_file" "fgt_sdn-config" {
   template = file("${path.module}/templates/az_fgt-sdn.conf")
   vars = {
-    tenant              = var.tenant_id
-    subscription        = var.subscription_id
-    clientid            = var.client_id
-    clientsecret        = var.client_secret
-    resource_group_name = var.resource_group_name
+    tenant              = var.tenant_id != null ? var.tenant_id : ""
+    subscription        = var.subscription_id != null ? var.subscription_id : ""
+    clientid            = var.client_id != null ? var.client_id : ""
+    clientsecret        = var.client_secret != null ? var.client_secret  : ""
+    resource_group_name = var.resource_group_name != null ? var.resource_group_name : ""
   }
 }
 

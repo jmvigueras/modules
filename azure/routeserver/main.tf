@@ -22,7 +22,7 @@ resource "azurerm_route_server" "rs" {
 }
 
 // Create BGP connections
-resource "azurerm_route_server_bgp_connection" "rs-spokec-bgp-fgt-active" {
+resource "azurerm_route_server_bgp_connection" "rs-spoke-bgp-fgt-active" {
   count           = length(var.subnet_ids)
   name            = "${var.prefix}-bgp-fgt-active"
   route_server_id = azurerm_route_server.rs[count.index].id
@@ -30,7 +30,7 @@ resource "azurerm_route_server_bgp_connection" "rs-spokec-bgp-fgt-active" {
   peer_ip         = var.fgt1_peer-ip
 }
 
-resource "azurerm_route_server_bgp_connection" "rs-spokec-bgp-fgt-passive" {
+resource "azurerm_route_server_bgp_connection" "rs-spoke-bgp-fgt-passive" {
   count           = length(var.subnet_ids)
   name            = "${var.prefix}-bgp-fgt-passive"
   route_server_id = azurerm_route_server.rs[count.index].id
