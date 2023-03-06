@@ -2,13 +2,13 @@ locals {
   # ----------------------------------------------------------------------------------
   # Subnet cidrs (UPDATE IF NEEDED)
   # ----------------------------------------------------------------------------------
-  subnet_ha_cidr          = cidrsubnet(var.vpc-sec_cidr, 3, 0)
-  subnet_mgmt_cidr        = cidrsubnet(var.vpc-sec_cidr, 3, 1)
-  subnet_public_cidr      = cidrsubnet(var.vpc-sec_cidr, 3, 2)
-  subnet_private_cidr     = cidrsubnet(var.vpc-sec_cidr, 3, 3)
-  subnet_bastion_cidr     = cidrsubnet(var.vpc-sec_cidr, 3, 4)
-  subnet_vgw_cidr         = cidrsubnet(var.vpc-sec_cidr, 3, 5)
-  subnet_routeserver_cidr = cidrsubnet(var.vpc-sec_cidr, 3, 6)
+  subnet_ha_cidr          = cidrsubnet(var.vnet-fgt_cidr, 3, 0)
+  subnet_mgmt_cidr        = cidrsubnet(var.vnet-fgt_cidr, 3, 1)
+  subnet_public_cidr      = cidrsubnet(var.vnet-fgt_cidr, 3, 2)
+  subnet_private_cidr     = cidrsubnet(var.vnet-fgt_cidr, 3, 3)
+  subnet_bastion_cidr     = cidrsubnet(var.vnet-fgt_cidr, 3, 4)
+  subnet_vgw_cidr         = cidrsubnet(var.vnet-fgt_cidr, 3, 5)
+  subnet_routeserver_cidr = cidrsubnet(var.vnet-fgt_cidr, 3, 6)
 
   # ----------------------------------------------------------------------------------
   # FGT IP (UPDATE IF NEEDED)

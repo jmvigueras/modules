@@ -21,6 +21,7 @@ resource "aws_route_table" "rt-public" {
     Name = "${var.prefix}-rt-public"
   }
 }
+
 # Route private
 resource "aws_route_table" "rt-bastion" {
   vpc_id = aws_vpc.vpc-sec.id

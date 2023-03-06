@@ -101,7 +101,7 @@ module "vwan" {
   vnet-fgt_id            = module.fgt_hub_vnet.vnet["id"]
   fgt-cluster_active-ip  = module.fgt_hub_vnet.fgt-active-ni_ips["private"]
   fgt-cluster_passive-ip = module.fgt_hub_vnet.fgt-passive-ni_ips["private"]
-  fgt-cluster_bgp-asn    = local.hub1[0]["bgp-asn_hub"]
+  fgt-cluster_bgp-asn    = local.hub1[0]["bgp_asn_hub"]
 }
 // Module VNET spoke vHUB
 // - This module will generate VNET spoke to connecto to vHUB 
@@ -179,7 +179,7 @@ module "rs" {
   tags                = local.tags
 
   subnet_ids   = module.vnet-spoke-fgt.subnet_ids["routeserver"]
-  fgt_bgp-asn  = local.hub1[0]["bgp-asn_hub"]
+  fgt_bgp-asn  = local.hub1[0]["bgp_asn_hub"]
   fgt1_peer-ip = module.fgt_hub_vnet.fgt-active-ni_ips["private"]
   fgt2_peer-ip = module.fgt_hub_vnet.fgt-passive-ni_ips["private"]
 }
