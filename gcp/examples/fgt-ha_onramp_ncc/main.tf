@@ -26,7 +26,8 @@ module "fgt_config" {
   fgt-active-ni_ips  = module.fgt_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips = module.fgt_vpc.fgt-passive-ni_ips
 
-  config_fgsp  = true
+  config_fgcp  = local.cluster_type == "fgcp" ? true : false
+  config_fgsp  = local.cluster_type == "fgsp" ? true : false
   config_spoke = true
   config_ncc   = true
   spoke        = local.onramp
@@ -57,7 +58,8 @@ module "fgt" {
   fgt_config_1 = module.fgt_config.fgt_config_1
   fgt_config_2 = module.fgt_config.fgt_config_2
 
-  fgt_passive = local.fgt_passive
+  config_fgsp  = local.cluster_type == "fgsp" ? true : false
+  fgt_passive  = local.fgt_passive
 }
 #------------------------------------------------------------------------------------------------------------
 # Create NCC Router Applicance (private)

@@ -24,35 +24,32 @@ variable "location" {
   default = "francecentral"
 }
 
-// Subnet private details
-// - Subnet private interfaces of FGT
-variable "subnet_private" {
-  type = map(any)
-  default = {
-    cidr    = "172.31.3.0/24"
-    id      = ""
-    vnet_id = ""
-  }
+// Map of subnet IDs VNet FGT
+variable "subnet_ids" {
+  type    = map(any)
+  default = null
 }
 
-// Fortigate cluster interface ids
-variable "fgt-ni_ids" {
-  type = map(any)
-  default = {
-    fgt1_private = "ni-xx"
-    fgt2_private = "ni-xx"
-    fgt1_public  = "ni-xx"
-    fgt2_public  = "ni-xx"
-  }
+// Map of subnet CIDRS VNet FGT
+variable "subnet_cidrs" {
+  type    = map(any)
+  default = null
 }
 
-// Fortigate cluster interface ips
-variable "fgt-ni_ips" {
-  type = map(any)
-  default = {
-    fgt1_private = "172.31.3.10"
-    fgt2_private = "172.31.3.11"
-  }
+// VNET ID of FGT VNET for peering
+variable "vnet-fgt" {
+  type    = map(any)
+  default = null
+}
+
+// Fortigate IPs
+variable "fgt-active-ni_ips" {
+  type    = map(string)
+  default = null
+}
+variable "fgt-passive-ni_ips" {
+  type    = map(string)
+  default = null
 }
 
 // Region for deployment

@@ -19,7 +19,7 @@ variable "private_route_names" {
   type = list(string)
   default = null
 }
-variable "cluster_public_ip_names" {
+variable "public_ip_names" {
   type = list(string)
   default = null
 }

@@ -23,7 +23,8 @@ module "fgt_spoke_config" {
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
 
-  config_fgcp  = true
+  config_fgcp  = local.spoke_cluster_type == "fgcp" ? true : false
+  config_fgsp  = local.spoke_cluster_type == "fgsp" ? true : false
   config_spoke = true
   spoke        = local.spoke
   hubs         = local.hubs
@@ -64,6 +65,22 @@ module "fgt_spoke_vnet" {
   admin_cidr    = local.admin_cidr
 }
 
+// Create VM in spoke vNet
+module "vm_fgt_spoke_bastion" {
+  source = "../../new-vm_rsa-ssh"
+
+  prefix                   = "${local.prefix}-spoke-vhub"
+  location                 = local.location
+  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  tags                     = local.tags
+  storage-account_endpoint = local.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : local.storage-account_endpoint
+  admin_username           = local.admin_username
+  rsa-public-key           = tls_private_key.ssh.public_key_openssh
+
+  vm_ni_ids = [
+    module.fgt_spoke_vnet.bastion-ni_id
+  ]
+}
 
 
 

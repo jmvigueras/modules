@@ -7,31 +7,42 @@ locals {
   storage-account_endpoint = null               // a new resource group will be created if null
   prefix                   = "demo-fgt-faz-fmg" // prefix added to all resources created
 
-  admin_port     = "8443"
-  admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
   admin_username = "azureadmin"
   admin_password = "Terraform123#"
-
-  fgt_license_type = "payg"
-  fgt_size         = "Standard_F4"
-  fgt_version      = "latest"
-
-  faz_license_type = "byol"
-  faz_license_file = "./licenses/licenseFAZ.lic"
-  fmg_license_type = "byol"
-  fmg_license_file = "./licenses/licenseFMG.lic"
 
   tags = {
     Deploy  = "module-fgt-ha-xlb"
     Project = "terraform-fortinet"
   }
 
+  #-----------------------------------------------------------------------------------------------------
+  # FGT
+  #-----------------------------------------------------------------------------------------------------
+  fgt_license_type = "payg"
+  fgt_size         = "Standard_F4"
+  fgt_version      = "latest"
+
+  admin_port = "8443"
+  admin_cidr = "${chomp(data.http.my-public-ip.body)}/32"
+
   fgt_vnet_cidr = "172.30.0.0/23"
+
+  #-----------------------------------------------------------------------------------------------------
+  # FAZ and FMG
+  #-----------------------------------------------------------------------------------------------------
+  faz_license_type = "byol"
+  faz_license_file = "./licenses/licenseFAZ.lic"
+  fmg_license_type = "byol"
+  fmg_license_file = "./licenses/licenseFMG.lic"
 }
+
+
+
+
 
 #-----------------------------------------------------------------------
 # Necessary variables
-
+#-----------------------------------------------------------------------
 data "http" "my-public-ip" {
   url = "http://ifconfig.me/ip"
 }

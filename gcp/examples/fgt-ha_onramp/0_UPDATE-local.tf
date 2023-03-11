@@ -5,7 +5,7 @@ locals {
   region = "europe-west2"
   zone1  = "europe-west2-a"
   zone2  = "europe-west2-a"
-  prefix = "demo-fgt-xlb"
+  prefix = "demo-fgt-sdn"
   #-----------------------------------------------------------------------------------------------------
   # FGT
   #-----------------------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ locals {
     bgp-asn = "65000"
   }
 
-  cluster_type = "fgsp"
+  cluster_type = "fgcp"
   fgt_passive  = true
   #-----------------------------------------------------------------------------------------------------
   # VPC spokes peered to VPC private

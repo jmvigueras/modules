@@ -4,7 +4,7 @@ resource "aws_instance" "fgt_active" {
   instance_type        = var.instance_type
   availability_zone    = var.region["az1"]
   key_name             = var.keypair
-  iam_instance_profile = aws_iam_instance_profile.APICall_profile.name
+  iam_instance_profile = aws_iam_instance_profile.fgt-apicall-profile.name
   user_data            = var.fgt_config_1
   network_interface {
     device_index         = 0
@@ -30,7 +30,7 @@ resource "aws_instance" "fgt_passive" {
   instance_type        = var.instance_type
   availability_zone    = var.region["az2"]
   key_name             = var.keypair
-  iam_instance_profile = aws_iam_instance_profile.APICall_profile.name
+  iam_instance_profile = aws_iam_instance_profile.fgt-apicall-profile.name
   user_data            = var.fgt_config_2
   network_interface {
     device_index         = 0

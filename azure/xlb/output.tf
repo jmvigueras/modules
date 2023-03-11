@@ -3,7 +3,7 @@ output "ilb_private-ip" {
 }
 
 output "elb_public-ip" {
-  value = azurerm_public_ip.elb-pip.ip_address
+  value = azurerm_public_ip.elb_pip.ip_address
 }
 
 output "gwlb_frontip_config_id" {

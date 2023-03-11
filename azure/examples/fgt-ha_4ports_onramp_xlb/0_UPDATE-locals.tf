@@ -29,7 +29,6 @@ locals {
   config_gwlb        = false
   ilb_ip             = cidrhost(module.fgt_vnet.subnet_cidrs["private"], 9)
   backend-probe_port = "8008"
-
 }
 
 

@@ -7,20 +7,21 @@ locals {
   storage-account_endpoint = null           // a new resource group will be created if null
   prefix                   = "demo-fgt-xlb" // prefix added to all resources created
 
+  tags = {
+    Deploy  = "module-fgt-ha-xlb"
+    Project = "terraform-fortinet"
+  }
+  #-----------------------------------------------------------------------------------------------------
+  # FGT
+  #-----------------------------------------------------------------------------------------------------
   admin_port     = "8443"
   admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
   admin_username = "azureadmin"
   admin_password = "Terraform123#"
 
-  license_type = "payg"
-  fgt_size     = "Standard_F4"
-  fgt_version  = "latest"
-
-  tags = {
-    Deploy  = "module-fgt-ha-xlb"
-    Project = "terraform-fortinet"
-  }
-
+  license_type  = "payg"
+  fgt_size      = "Standard_F4"
+  fgt_version   = "latest"
   fgt_vnet_cidr = "172.30.0.0/23"
 
   #-----------------------------------------------------------------------------------------------------
@@ -37,6 +38,7 @@ locals {
 
 #-----------------------------------------------------------------------
 # Necessary variables
+#-----------------------------------------------------------------------
 
 data "http" "my-public-ip" {
   url = "http://ifconfig.me/ip"

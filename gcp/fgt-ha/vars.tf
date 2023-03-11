@@ -94,17 +94,22 @@ variable "gcp-user_name" {
   default = null
 }
 
-variable "fgt-active-ni_ips"{
+variable "fgt-active-ni_ips" {
   type    = map(string)
   default = null
 }
 
-variable "fgt-passive-ni_ips"{
+variable "fgt-passive-ni_ips" {
   type    = map(string)
   default = null
 }
 
-variable "subnet_names"{
+variable "subnet_names" {
   type    = map(string)
   default = null
+}
+
+variable "config_fgsp" {
+  type    = bool
+  default = false
 }

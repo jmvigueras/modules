@@ -3,7 +3,7 @@ output "fgt_active_id" {
 }
 
 output "fgt_passive_id" {
-  value = google_compute_instance.fgt-passive.*.instance_id
+  value = var.config_fgsp ? google_compute_instance.fgt-passive_fgsp.*.instance_id : google_compute_instance.fgt-passive_fgcp.*.instance_id
 }
 
 output "fgt_active_self_link" {
@@ -11,7 +11,7 @@ output "fgt_active_self_link" {
 }
 
 output "fgt_passive_self_link" {
-  value = google_compute_instance.fgt-passive.*.self_link
+  value = var.config_fgsp ? google_compute_instance.fgt-passive_fgsp.*.self_link : google_compute_instance.fgt-passive_fgcp.*.self_link
 }
 
 output "fgt_active_eip_mgmt" {
@@ -23,9 +23,9 @@ output "fgt_passive_eip_mgmt" {
 }
 
 output "fgt_active_eip_public" {
-  value = google_compute_address.active-public-ip.address
+  value = google_compute_address.active-public-ip.*.address
 }
 
 output "fgt_passive_eip_public" {
-  value = google_compute_address.active-public-ip.*.address 
+  value = google_compute_address.active-public-ip.*.address
 }

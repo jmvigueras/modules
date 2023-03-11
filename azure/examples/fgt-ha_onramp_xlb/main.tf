@@ -80,25 +80,11 @@ module "xlb" {
   ilb_ip             = local.ilb_ip
   backend-probe_port = local.backend-probe_port
 
-  subnet_private = {
-    cidr    = module.fgt_vnet.subnet_cidrs["private"]
-    id      = module.fgt_vnet.subnet_ids["private"]
-    vnet_id = module.fgt_vnet.vnet["id"]
-  }
-
-  fgt-ni_ids = {
-    fgt1_public  = module.fgt_vnet.fgt-active-ni_ids["public"]
-    fgt1_private = module.fgt_vnet.fgt-active-ni_ids["private"]
-    fgt2_public  = module.fgt_vnet.fgt-passive-ni_ids["public"]
-    fgt2_private = module.fgt_vnet.fgt-passive-ni_ids["private"]
-  }
-
-  fgt-ni_ips = {
-    fgt1_public  = module.fgt_vnet.fgt-active-ni_ips["public"]
-    fgt1_private = module.fgt_vnet.fgt-active-ni_ips["private"]
-    fgt2_public  = module.fgt_vnet.fgt-passive-ni_ips["public"]
-    fgt2_private = module.fgt_vnet.fgt-passive-ni_ips["private"]
-  }
+  vnet-fgt           = module.fgt_vnet.vnet
+  subnet_ids         = module.fgt_vnet.subnet_ids
+  subnet_cidrs       = module.fgt_vnet.subnet_cidrs
+  fgt-active-ni_ips  = module.fgt_vnet.fgt-active-ni_ips
+  fgt-passive-ni_ips = module.fgt_vnet.fgt-passive-ni_ips
 }
 
 

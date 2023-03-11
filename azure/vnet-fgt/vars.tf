@@ -27,7 +27,7 @@ variable "tags" {
 // CIDR range for VNET Fortigate - Security VNET
 variable "vnet-fgt_cidr" {
   type    = string
-  default = "172.30.0.0/20"
+  default = "172.30.0.0/23"
 }
 
 // enable accelerate network, either true or false, default is false

@@ -4,24 +4,16 @@ locals {
   #-----------------------------------------------------------------------------------------------------
   resource_group_name      = null // a new resource group will be created if null
   location                 = "francecentral"
-  storage-account_endpoint = null               // a new resource group will be created if null
-  prefix                   = "demo-fgt-ha-vwan" // prefix added to all resources created
-
-  admin_port     = "8443"
-  admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
-  admin_username = "azureadmin"
-  admin_password = "Terraform123#"
-
-  license_type = "payg"
-  fgt_size     = "Standard_F4"
-  fgt_version  = "latest"
+  storage-account_endpoint = null                 // a new resource group will be created if null
+  prefix                   = "demo-fgt-hub-spoke" // prefix added to all resources created
 
   tags = {
     Deploy  = "module-fgt-ha-xlb"
     Project = "terraform-fortinet"
   }
+
   #-----------------------------------------------------------------------------------------------------
-  # LB locals
+  # LB
   #-----------------------------------------------------------------------------------------------------
   config_gwlb        = true
   ilb_ip             = cidrhost(module.fgt_spoke_vnet.subnet_cidrs["private"], 9)
@@ -42,9 +34,23 @@ locals {
   vhub_vnet-spoke_cidrs = ["172.30.18.0/23"]
 
   #-----------------------------------------------------------------------------------------------------
-  # FGT HUB locals
+  # FGT
   #-----------------------------------------------------------------------------------------------------
-  hub1 = [
+  admin_port     = "8443"
+  admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
+  admin_username = "azureadmin"
+  admin_password = "Terraform123#"
+
+  license_type = "payg"
+  fgt_size     = "Standard_F4"
+  fgt_version  = "latest"
+
+  #-----------------------------------------------------------------------------------------------------
+  # FGT HUB
+  #-----------------------------------------------------------------------------------------------------
+  hub_cluster_type = "fgsp"
+
+  hub = [
     {
       id                = "HUB1"
       bgp_asn_hub       = "65000"
@@ -57,26 +63,24 @@ locals {
       dpd_retryinterval = "5"
       mode_cfg          = true
       vpn_port          = "public"
-    }
-  ]
-  hub2 = [
+    },
     {
-      id                = "HUB2"
+      id                = "HUB1"
       bgp_asn_hub       = "65000"
       bgp_asn_spoke     = "65000"
-      vpn_cidr          = "10.0.2.0/24"
+      vpn_cidr          = "10.0.10.0/24"
       vpn_psk           = "secret-key-123"
-      cidr              = "172.30.0.0/23"
+      cidr              = "172.20.0.0/23"
       ike_version       = "2"
       network_id        = "1"
       dpd_retryinterval = "5"
       mode_cfg          = true
-      vpn_port          = "public"
+      vpn_port          = "private"
     }
   ]
-  hub1_peer_vxlan = [
+  hub_peer_vxlan = [
     {
-      bgp_asn     = local.hub2[0]["bgp_asn_hub"]
+      bgp_asn     = "65000"
       external_ip = ""
       remote_ip   = "10.10.30.2"
       local_ip    = "10.10.30.1"
@@ -84,75 +88,61 @@ locals {
       vxlan_port  = "public"
     }
   ]
-  hub2_peer_vxlan = [
-    {
-      bgp_asn     = local.hub1[0]["bgp_asn_hub"]
-      external_ip = ""
-      remote_ip   = "10.10.30.1"
-      local_ip    = "10.10.30.2"
-      vni         = "1100"
-      vxlan_port  = "public"
-    }
-  ]
 
-  fgt_vnet-spoke_cidrs = ["172.30.16.0/23"]
+  hub_vnet-spoke_cidrs = ["172.30.16.0/23"]
 
   #-----------------------------------------------------------------------------------------------------
-  # FGT Spoke locals
+  # FGT Spoke
   #-----------------------------------------------------------------------------------------------------
+  spoke_cluster_type = "fgcp"
+
   spoke = {
     id      = "spoke-1"
     cidr    = "172.30.0.0/24"
     bgp_asn = "65000"
   }
-  hubs = [
+
+  hubs = concat(local.hubs_fgcp, local.hub_cluster_type == "fgsp" ? local.hubs_fgsp : [])
+
+  hubs_fgcp = [for hub in local.hub :
     {
-      id                = local.hub1[0]["id"]
-      bgp_asn           = local.hub1[0]["bgp_asn_hub"]
-      external_ip       = module.fgt_hub_vnet.fgt-active-public-ip
-      hub_ip            = cidrhost(cidrsubnet(local.hub1[0]["vpn_cidr"], 1, 0), 1)
-      site_ip           = "" // set to "" if VPN mode-cfg is enable
-      hck_ip            = cidrhost(cidrsubnet(local.hub1[0]["vpn_cidr"], 1, 0), 1)
-      vpn_psk           = local.hub1[0]["vpn_psk"]
-      cidr              = local.hub1[0]["cidr"]
-      ike_version       = local.hub1[0]["ike_version"]
-      network_id        = local.hub1[0]["network_id"]
-      dpd_retryinterval = local.hub1[0]["dpd_retryinterval"]
-      sdwan_port        = "public"
-    },
+      id                = hub["id"]
+      bgp_asn           = hub["bgp_asn_hub"]
+      external_ip       = hub["vpn_port"] == "public" ? module.xlb.elb_public-ip : local.ilb_ip
+      hub_ip            = cidrhost(cidrsubnet(hub["vpn_cidr"], local.hub_cluster_type == "fgsp" ? 1 : 0, 0), 1)
+      site_ip           = hub["mode_cfg"] ? "" : cidrhost(cidrsubnet(hub["vpn_cidr"], local.hub_cluster_type == "fgsp" ? 1 : 0, 0), 2)
+      hck_ip            = cidrhost(cidrsubnet(hub["vpn_cidr"], local.hub_cluster_type == "fgsp" ? 1 : 0, 0), 1)
+      vpn_psk           = hub["vpn_psk"]
+      cidr              = hub["cidr"]
+      ike_version       = hub["ike_version"]
+      network_id        = hub["network_id"]
+      dpd_retryinterval = hub["dpd_retryinterval"]
+      sdwan_port        = hub["vpn_port"]
+    }
+  ]
+  hubs_fgsp = [for hub in local.hub :
     {
-      id                = local.hub1[0]["id"]
-      bgp_asn           = local.hub1[0]["bgp_asn_hub"]
-      external_ip       = module.fgt_hub_vnet.fgt-passive-public-ip
-      hub_ip            = cidrhost(cidrsubnet(local.hub1[0]["vpn_cidr"], 1, 1), 1)
-      site_ip           = "" // set to "" if VPN mode-cfg is enable
-      hck_ip            = cidrhost(cidrsubnet(local.hub1[0]["vpn_cidr"], 1, 1), 1)
-      vpn_psk           = local.hub1[0]["vpn_psk"]
-      cidr              = local.hub1[0]["cidr"]
-      ike_version       = local.hub1[0]["ike_version"]
-      network_id        = local.hub1[0]["network_id"]
-      dpd_retryinterval = local.hub1[0]["dpd_retryinterval"]
-      sdwan_port        = "public"
-    },
-    {
-      id                = local.hub2[0]["id"]
-      bgp_asn           = local.hub2[0]["bgp_asn_hub"]
-      external_ip       = "22.22.22.22"
-      hub_ip            = cidrhost(cidrsubnet(local.hub2[0]["vpn_cidr"], 0, 0), 1)
-      site_ip           = "" // set to "" if VPN mode-cfg is enable
-      hck_ip            = cidrhost(cidrsubnet(local.hub2[0]["vpn_cidr"], 0, 0), 1)
-      vpn_psk           = local.hub2[0]["vpn_psk"]
-      cidr              = local.hub2[0]["cidr"]
-      ike_version       = local.hub2[0]["ike_version"]
-      network_id        = local.hub2[0]["network_id"]
-      dpd_retryinterval = local.hub2[0]["dpd_retryinterval"]
-      sdwan_port        = "public"
+      id                = hub["id"]
+      bgp_asn           = hub["bgp_asn_hub"]
+      external_ip       = hub["vpn_port"] == "public" ? module.xlb.elb_public-ip : local.ilb_ip
+      hub_ip            = cidrhost(cidrsubnet(hub["vpn_cidr"], 1, 1), 1)
+      site_ip           = hub["mode_cfg"] ? "" : cidrhost(cidrsubnet(hub["vpn_cidr"], 1, 1), 2)
+      hck_ip            = cidrhost(cidrsubnet(hub["vpn_cidr"], 1, 1), 1)
+      vpn_psk           = hub["vpn_psk"]
+      cidr              = hub["cidr"]
+      ike_version       = hub["ike_version"]
+      network_id        = hub["network_id"]
+      dpd_retryinterval = hub["dpd_retryinterval"]
+      sdwan_port        = hub["vpn_port"]
     }
   ]
 }
 
+
+
 #-----------------------------------------------------------------------
 # Necessary variables
+#-----------------------------------------------------------------------
 
 data "http" "my-public-ip" {
   url = "http://ifconfig.me/ip"
