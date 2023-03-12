@@ -4,39 +4,34 @@ locals {
   #-----------------------------------------------------------------------------------------------------
   resource_group_name      = null // a new resource group will be created if null
   location                 = "francecentral"
-  storage-account_endpoint = null                 // a new resource group will be created if null
-  prefix                   = "demo-fgt-ha-4ports" // prefix added to all resources created
+  storage-account_endpoint = null           // a new resource group will be created if null
+  prefix                   = "demo-fgt-sdn" // prefix added to all resources created
 
+  tags = {
+    Deploy  = "module-fgt-ha-xlb"
+    Project = "terraform-fortinet"
+  }
+  #-----------------------------------------------------------------------------------------------------
+  # FGT
+  #-----------------------------------------------------------------------------------------------------
   admin_port     = "8443"
   admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
   admin_username = "azureadmin"
   admin_password = "Terraform123#"
 
-  #-----------------------------------------------------------------------------------------------------
-  # FGT
-  #-----------------------------------------------------------------------------------------------------
-  license_type = "payg"
-  fgt_size     = "Standard_F4"
-  fgt_version  = "6.4.11"
-
-  fgt_vnet_cidr = "172.30.0.0/24"
-
-  tags = {
-    Deploy  = "demo-fgt-ha-4ports"
-    Project = "terraform-fortinet"
-  }
-
-  #-----------------------------------------------------------------------------------------------------
-  # LB locals
-  #-----------------------------------------------------------------------------------------------------
-  config_gwlb        = false
-  ilb_ip             = cidrhost(module.fgt_vnet.subnet_cidrs["private"], 9)
-  backend-probe_port = "8008"
+  license_type  = "payg"
+  fgt_size      = "Standard_F4"
+  fgt_version   = "latest"
+  fgt_vnet_cidr = "172.30.0.0/23"
 }
+
+
+
 
 
 #-----------------------------------------------------------------------
 # Necessary variables
+#-----------------------------------------------------------------------
 
 data "http" "my-public-ip" {
   url = "http://ifconfig.me/ip"

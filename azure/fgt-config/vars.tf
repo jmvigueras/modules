@@ -335,6 +335,26 @@ variable "fgt-passive-ni_ips" {
   default = null
 }
 
+variable "fgt-active-ni_names" {
+  type    = map(string)
+  default = null
+}
+
+variable "fgt-passive-ni_names" {
+  type    = map(string)
+  default = null
+}
+
+variable "route_table" {
+  type    = string
+  default = null
+}
+
+variable "fgt_pip" {
+  type    = string
+  default = null
+}
+
 variable "subnet_cidrs" {
   type    = map(string)
   default = null

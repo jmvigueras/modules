@@ -77,7 +77,6 @@ resource "azurerm_network_security_rule" "nsr-egress-mgmt-ha-all" {
   network_security_group_name = azurerm_network_security_group.nsg-mgmt-ha.name
 }
 
-
 resource "azurerm_network_security_group" "nsg-public" {
   name                = "${var.prefix}-nsg-public"
   location            = var.location
@@ -86,7 +85,7 @@ resource "azurerm_network_security_group" "nsg-public" {
   tags = var.tags
 }
 
-resource "azurerm_network_security_rule" "nsr-ingress-public-tcp" {
+resource "azurerm_network_security_rule" "nsr-ingress-public-vxlan-4789" {
   name                        = "${var.prefix}-nsr-ingress-vxlan-4789"
   priority                    = 1000
   direction                   = "Inbound"
@@ -122,6 +121,20 @@ resource "azurerm_network_security_rule" "nsr-ingress-public-ipsec-4500" {
   protocol                    = "Udp"
   source_port_range           = "*"
   destination_port_range      = "4500"
+  source_address_prefix       = "0.0.0.0/0"
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.nsg-public.name
+}
+
+resource "azurerm_network_security_rule" "nsr-ingress-public-icmp" {
+  name                        = "${var.prefix}-nsr-ingress-icmp"
+  priority                    = 1003
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Icmp"
+  source_port_range           = "*"
+  destination_port_range      = "*"
   source_address_prefix       = "0.0.0.0/0"
   destination_address_prefix  = "*"
   resource_group_name         = var.resource_group_name

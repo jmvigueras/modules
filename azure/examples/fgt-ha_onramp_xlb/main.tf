@@ -17,10 +17,14 @@ module "fgt_config" {
   fgt-active-ni_ips  = module.fgt_vnet.fgt-active-ni_ips
   fgt-passive-ni_ips = module.fgt_vnet.fgt-passive-ni_ips
 
-  subscription_id = var.subscription_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  tenant_id       = var.tenant_id
+  # Config for SDN connector
+  # - API calls (optional)
+  subscription_id     = var.subscription_id
+  client_id           = var.client_id
+  client_secret       = var.client_secret
+  tenant_id           = var.tenant_id
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  # -
 
   config_fgcp    = true
   vpc-spoke_cidr = [module.fgt_vnet.subnet_cidrs["bastion"]]
@@ -31,7 +35,7 @@ module "fgt_config" {
 module "fgt" {
   source = "../../fgt-ha"
 
-  prefix                   = "${local.prefix}-spoke"
+  prefix                   = local.prefix
   location                 = local.location
   resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
   tags                     = local.tags

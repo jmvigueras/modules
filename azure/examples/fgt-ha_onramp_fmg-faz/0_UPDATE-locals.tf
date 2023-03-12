@@ -11,7 +11,7 @@ locals {
   admin_password = "Terraform123#"
 
   tags = {
-    Deploy  = "module-fgt-ha-xlb"
+    Deploy  = "demo-fgt-faz-fmg"
     Project = "terraform-fortinet"
   }
 

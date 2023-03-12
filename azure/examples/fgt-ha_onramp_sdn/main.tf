@@ -18,17 +18,20 @@ module "fgt_config" {
   fgt-passive-ni_ips = module.fgt_vnet.fgt-passive-ni_ips
 
   # Config for SDN connector
-  # - API calls (optional)
-  subscription_id = var.subscription_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  tenant_id       = var.tenant_id
+  # - API calls
+  subscription_id      = var.subscription_id
+  client_id            = var.client_id
+  client_secret        = var.client_secret
+  tenant_id            = var.tenant_id
   resource_group_name  = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  # - HA failover
+  route_table          = "${local.prefix}-rt-default"
+  fgt_pip              = module.fgt_vnet.fgt-active-public-name
+  fgt-active-ni_names  = module.fgt_vnet.fgt-active-ni_names
+  fgt-passive-ni_names = module.fgt_vnet.fgt-passive-ni_names
   # -
 
-  config_fgsp = true
-  config_ars  = true
-  rs_peer     = module.rs.rs_peer
+  config_fgcp = true
 
   vpc-spoke_cidr = [module.fgt_vnet.subnet_cidrs["bastion"]]
 }
@@ -73,55 +76,21 @@ module "fgt_vnet" {
   admin_cidr    = local.admin_cidr
 }
 
-// Module VNET spoke VNET FGT
-// - This module will generate VNET spoke to connecto to VNET FGT
-// - Module will peer VNET to VNET FGT
-module "vnet-spoke-fgt" {
-  depends_on = [module.fgt_vnet]
-  source     = "git::github.com/jmvigueras/modules//azure/vnet-spoke"
-
-  prefix              = "${local.prefix}-fgt"
+#--------------------------------------------------------------------------------
+# Create route table default (example of route table)
+#--------------------------------------------------------------------------------
+// Route-table definition
+resource "azurerm_route_table" "rt-default" {
+  name                = "${local.prefix}-rt-default"
   location            = local.location
   resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
-  tags                = local.tags
 
-  vnet-spoke_cidrs = local.fgt_vnet-spoke_cidrs
-  vnet-fgt = {
-    id   = module.fgt_vnet.vnet["id"]
-    name = module.fgt_vnet.vnet["name"]
+  disable_bgp_route_propagation = false
+
+  route {
+    name                   = "default"
+    address_prefix         = "0.0.0.0/0"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = module.fgt_vnet.fgt-active-ni_ips["private"]
   }
-}
-
-// Create Azure Route Servers
-module "rs" {
-  depends_on = [module.vnet-spoke-fgt, module.fgt_vnet]
-  source     = "git::github.com/jmvigueras/modules//azure/routeserver"
-
-  prefix              = local.prefix
-  location            = local.location
-  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
-  tags                = local.tags
-
-  subnet_ids   = module.vnet-spoke-fgt.subnet_ids["routeserver"]
-  fgt_bgp-asn  = local.fgt_bgp-asn
-  fgt1_peer-ip = module.fgt_vnet.fgt-active-ni_ips["private"]
-  fgt2_peer-ip = module.fgt_vnet.fgt-passive-ni_ips["private"]
-}
-
-// Create virtual machines
-module "vm_vnet-spoke-fgt" {
-  source = "../../new-vm_rsa-ssh"
-
-  prefix                   = "${local.prefix}-spoke-fgt"
-  location                 = local.location
-  resource_group_name      = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
-  tags                     = local.tags
-  storage-account_endpoint = local.storage-account_endpoint == null ? azurerm_storage_account.storageaccount[0].primary_blob_endpoint : local.storage-account_endpoint
-  admin_username           = local.admin_username
-  rsa-public-key           = tls_private_key.ssh.public_key_openssh
-
-  vm_ni_ids = [
-    module.vnet-spoke-fgt.ni_ids["subnet1"][0],
-    module.vnet-spoke-fgt.ni_ids["subnet2"][0]
-  ]
 }

@@ -28,7 +28,7 @@ data "template_file" "fgt_passive" {
     mgmt_mask    = cidrnetmask(var.subnet_cidrs["mgmt"])
     mgmt_gw      = cidrhost(var.subnet_cidrs["mgmt"], 1)
 
-    fgt_sdn-config        = data.template_file.fgt_sdn-config.rendered
+    fgt_sdn-config        = data.template_file.fgt_2_sdn-config.rendered
     fgt_ha-fgcp-config    = var.config_fgcp ? data.template_file.fgt_ha-fgcp-passive-config.rendered : ""
     fgt_ha-fgsp-config    = var.config_fgsp ? data.template_file.fgt_ha-fgsp-passive-config.rendered : ""
     fgt_bgp-config        = var.config_spoke || var.config_hub ? "" : data.template_file.fgt_bgp-config.rendered
@@ -44,6 +44,23 @@ data "template_file" "fgt_passive" {
     fgt_extra-config      = var.fgt_passive_extra-config
   }
 }
+
+data "template_file" "fgt_2_sdn-config" {
+  template = file("${path.module}/templates/az_fgt-sdn.conf")
+  vars = {
+    tenant              = var.tenant_id != null ? var.tenant_id : ""
+    subscription        = var.subscription_id != null ? var.subscription_id : ""
+    clientid            = var.client_id != null ? var.client_id : ""
+    clientsecret        = var.client_secret != null ? var.client_secret  : ""
+    resource_group_name = var.resource_group_name != null ? var.resource_group_name : ""
+    
+    fgt_ni      = var.fgt-passive-ni_names != null ? var.fgt-passive-ni_names["public"] : ""
+    fgt_pip     = var.fgt_pip != null ? var.fgt_pip : ""
+    route_table = var.route_table != null ? var.route_table : ""
+    fgt_ip      = var.fgt-passive-ni_ips["private"]
+  }
+}
+
 
 data "template_file" "fgt_ha-fgcp-passive-config" {
   template = file("${path.module}/templates/fgt-ha-fgcp.conf")
