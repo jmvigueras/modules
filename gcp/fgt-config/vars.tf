@@ -15,11 +15,11 @@ variable "config_fgsp" {
 #-----------------------------------------------------------------------------------
 # Route to change by SDN connector when FGCP and no LB
 #-----------------------------------------------------------------------------------
-variable "private_route_names" {
+variable "route_tables" {
   type = list(string)
   default = null
 }
-variable "public_ip_names" {
+variable "cluster_pips" {
   type = list(string)
   default = null
 }

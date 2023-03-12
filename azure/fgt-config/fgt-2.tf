@@ -55,7 +55,7 @@ data "template_file" "fgt_2_sdn-config" {
     resource_group_name = var.resource_group_name != null ? var.resource_group_name : ""
     
     fgt_ni      = var.fgt-passive-ni_names != null ? var.fgt-passive-ni_names["public"] : ""
-    fgt_pip     = var.fgt_pip != null ? var.fgt_pip : ""
+    cluster_pip = var.cluster_pip != null ? var.cluster_pip : ""
     route_table = var.route_table != null ? var.route_table : ""
     fgt_ip      = var.fgt-passive-ni_ips["private"]
   }

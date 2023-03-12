@@ -26,7 +26,7 @@ module "fgt_config" {
   resource_group_name  = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
   # - HA failover
   route_table          = "${local.prefix}-rt-default"
-  fgt_pip              = module.fgt_vnet.fgt-active-public-name
+  cluster_pip          = module.fgt_vnet.fgt-active-public-name
   fgt-active-ni_names  = module.fgt_vnet.fgt-active-ni_names
   fgt-passive-ni_names = module.fgt_vnet.fgt-passive-ni_names
   # -

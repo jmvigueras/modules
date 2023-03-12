@@ -350,7 +350,7 @@ variable "route_table" {
   default = null
 }
 
-variable "fgt_pip" {
+variable "cluster_pip" {
   type    = string
   default = null
 }

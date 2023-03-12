@@ -50,8 +50,8 @@ data "template_file" "fgt_active" {
 
 data "template_file" "fgt_sdn-config" {
   template = templatefile("${path.module}/templates/gcp_fgt-sdn.conf", {
-    cluster_ips = var.config_fgcp && var.public_ip_names != null ?  var.public_ip_names : null
-    routes      = var.config_fgcp && var.private_route_names != null ?  var.private_route_names : null
+    cluster_pips = var.config_fgcp && var.cluster_pips != null ?  var.cluster_pips : null
+    route_tables = var.config_fgcp && var.route_tables != null ?  var.route_tables : null
   })
 }
 

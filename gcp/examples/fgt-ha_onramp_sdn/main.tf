@@ -33,8 +33,8 @@ module "fgt_config" {
   spoke        = local.onramp
   ilb_ip       = module.fgt_vpc.ilb_ip
 
-  public_ip_names     = ["${local.prefix}-active-public-ip"]
-  private_route_names = [google_compute_route.private_route_to_fgt_default.name]
+  cluster_pips = ["${local.prefix}-active-public-ip"]
+  route_tables = [google_compute_route.private_route_to_fgt_default.name]
 
   vpc-spoke_cidr = concat(local.vpc_spoke-subnet_cidrs, [module.fgt_vpc.subnet_cidrs["bastion"]])
 }
