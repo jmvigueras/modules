@@ -6,12 +6,12 @@ output "fgt-passive-mgmt-ip" {
   value = module.vnet-fgt.fgt-passive-mgmt-ip
 }
 
-output "active-public-ip_ip" {
-  value = module.vnet-fgt.fgt-active-public-ip
+output "cluster-public-ip_ip" {
+  value = module.vnet-fgt.cluster-public-ip_ip
 }
 
-output "active-public-ip_name" {
-  value = module.vnet-fgt.fgt-active-public-name
+output "cluster-public-ip_name" {
+  value = module.vnet-fgt.cluster-public-ip_name
 }
 
 output "vnet" {

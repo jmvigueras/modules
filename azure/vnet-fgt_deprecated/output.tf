@@ -91,6 +91,42 @@ output "bastion-ni_id" {
   value = azurerm_network_interface.ni-bastion.id
 }
 
+output "fmg_public-ip" {
+  value = azurerm_public_ip.fmg_public-ip.ip_address
+}
+
+output "faz_public-ip" {
+  value = azurerm_public_ip.faz_public-ip.ip_address
+}
+
+output "faz_ni_ids" {
+  value = {
+    public  = azurerm_network_interface.faz_ni_public.id
+    private = azurerm_network_interface.faz_ni_private.id
+  }
+}
+
+output "faz_ni_ips" {
+  value = {
+    public  = azurerm_network_interface.faz_ni_public.private_ip_address
+    private = azurerm_network_interface.faz_ni_private.private_ip_address
+  }
+}
+
+output "fmg_ni_ids" {
+  value = {
+    public  = azurerm_network_interface.fmg_ni_public.id
+    private = azurerm_network_interface.fmg_ni_private.id
+  }
+}
+
+output "fmg_ni_ips" {
+  value = {
+    public  = azurerm_network_interface.fmg_ni_public.private_ip_address
+    private = azurerm_network_interface.fmg_ni_private.private_ip_address
+  }
+}
+
 output "subnet_cidrs" {
   value = {
     mgmt    = azurerm_subnet.subnet-hamgmt.address_prefixes[0]
@@ -126,12 +162,11 @@ output "subnet_ids" {
 
 output "nsg_ids" {
   value = {
-    mgmt            = azurerm_network_security_group.nsg-mgmt-ha.id
-    public          = azurerm_network_security_group.nsg-public.id
-    private         = azurerm_network_security_group.nsg-private.id
-    bastion         = azurerm_network_security_group.nsg_bastion_admin_cidr.id
-    bastion_default = azurerm_network_security_group.nsg_bastion_default.id
-    public_default  = azurerm_network_security_group.nsg-public-default.id
+    mgmt    = azurerm_network_security_group.nsg-mgmt-ha.id
+    public  = azurerm_network_security_group.nsg-public.id
+    private = azurerm_network_security_group.nsg-private.id
+    bastion = azurerm_network_security_group.nsg-bastion.id
+    faz-fmg = azurerm_network_security_group.nsg-faz-fmg.id
   }
 }
 

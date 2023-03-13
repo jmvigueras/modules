@@ -42,18 +42,16 @@ variable "fmg_extra-config" {
   default = ""
 }
 
+variable "fmg_ni_ids" {
+  type    = map(string)
+  default = null
+}
+
 variable "fmg_ni_ips" {
   type    = map(string)
   default = null
 }
 
-// Map of subnet IDs VNet FGT
-variable "subnet_ids" {
-  type    = map(string)
-  default = null
-}
-
-// Map of subnet CIDRS VNet FGT
 variable "subnet_cidrs" {
   type    = map(string)
   default = null

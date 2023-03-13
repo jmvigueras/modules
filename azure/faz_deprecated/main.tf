@@ -1,55 +1,10 @@
-#------------------------------------------------------------------------------
-# Create FAZ interfaces
-#------------------------------------------------------------------------------
-// FAZ public IP
-resource "azurerm_public_ip" "faz_public-ip" {
-  name                = "${var.prefix}-faz-public-ip"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-  sku_tier            = "Regional"
-
-  tags = var.tags
-}
-// FAZ Network Interface (public subnet)
-resource "azurerm_network_interface" "faz_ni_public" {
-  name                = "${var.prefix}-faz-ni-public"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-
-  ip_configuration {
-    name                          = "ipconfig1"
-    subnet_id                     = var.subnet_ids["public"]
-    private_ip_address_allocation = "Static"
-    private_ip_address            = local.faz_ni_public_ip
-    primary                       = true
-    public_ip_address_id          = azurerm_public_ip.faz_public-ip.id
-  }
-  tags = var.tags
-}
-// FAZ Network Interface (private subnet)
-resource "azurerm_network_interface" "faz_ni_private" {
-  name                = "${var.prefix}-faz-ni-private"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-
-  ip_configuration {
-    name                          = "ipconfig1"
-    subnet_id                     = var.subnet_ids["private"]
-    private_ip_address_allocation = "Static"
-    private_ip_address            = local.faz_ni_private_ip
-  }
-  tags = var.tags
-}
-
-# Create FAZ virtual machine
+# Create FMG virtual machine
 resource "azurerm_virtual_machine" "faz" {
   name                         = "${var.prefix}-faz"
   location                     = var.location
   resource_group_name          = var.resource_group_name
-  network_interface_ids        = [local.faz_ni_ids[var.faz_ni_0], local.faz_ni_ids[var.faz_ni_1]]
-  primary_network_interface_id = local.faz_ni_ids[var.faz_ni_0]
+  network_interface_ids        = [var.faz_ni_ids[var.faz_ni_0], var.faz_ni_ids[var.faz_ni_1]]
+  primary_network_interface_id = var.faz_ni_ids[var.faz_ni_0]
   vm_size                      = var.size
 
   lifecycle {
@@ -113,11 +68,11 @@ data "template_file" "faz_config" {
     admin_username   = var.admin_username
     rsa-public-key   = trimspace(var.rsa-public-key)
     public_port      = var.public_port
-    public_ip        = local.faz_ni_public_ip
+    public_ip        = var.faz_ni_ips["public"]
     public_mask      = cidrnetmask(var.subnet_cidrs["public"])
     public_gw        = cidrhost(var.subnet_cidrs["public"], 1)
     private_port     = var.private_port
-    private_ip       = local.faz_ni_private_ip
+    private_ip       = var.faz_ni_ips["private"]
     private_mask     = cidrnetmask(var.subnet_cidrs["private"])
     private_gw       = cidrhost(var.subnet_cidrs["private"], 1)
     faz_extra-config = var.faz_extra-config

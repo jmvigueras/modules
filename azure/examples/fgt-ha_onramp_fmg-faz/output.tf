@@ -11,14 +11,14 @@ output "fgt" {
 
 output "faz" {
   value = {
-    faz_mgmt = "https://${module.fgt_vnet.faz_public-ip}"
+    faz_mgmt = "https://${module.faz.faz_public_ip}"
     faz_pass = local.admin_password
   }
 }
 
 output "fmg" {
   value = {
-    fmg_mgmt = "https://${module.fgt_vnet.fmg_public-ip}"
+    fmg_mgmt = "https://${module.fmg.fmg_public_ip}"
     fmg_pass = local.admin_password
   }
 }

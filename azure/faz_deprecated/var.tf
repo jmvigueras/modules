@@ -27,7 +27,7 @@ variable "prefix" {
 variable "tags" {
   type = map(any)
   default = {
-    Deploy  = "module-fmg"
+    Deploy  = "module-faz"
     Project = "terraform-fortinet"
   }
 }
@@ -37,34 +37,32 @@ variable "location" {
   default = "francecentral"
 }
 
-variable "fmg_extra-config" {
+variable "faz_extra-config" {
   type    = string
   default = ""
 }
 
-variable "fmg_ni_ips" {
+variable "faz_ni_ids" {
   type    = map(string)
   default = null
 }
 
-// Map of subnet IDs VNet FGT
-variable "subnet_ids" {
+variable "faz_ni_ips" {
   type    = map(string)
   default = null
 }
 
-// Map of subnet CIDRS VNet FGT
 variable "subnet_cidrs" {
   type    = map(string)
   default = null
 }
 
 // AMI
-variable "fmg_sku" {
+variable "faz_sku" {
   type = map(string)
   default = {
     payg = ""
-    byol = "fortinet-fortimanager"
+    byol = "fortinet-fortianalyzer"
   }
 }
 
@@ -73,12 +71,12 @@ variable "publisher" {
   default = "fortinet"
 }
 
-variable "fmg_offer" {
+variable "faz_offer" {
   type    = string
-  default = "fortinet-fortimanager"
+  default = "fortinet-fortianalyzer"
 }
 
-variable "fmg_version" {
+variable "faz_version" {
   type    = string
   default = "latest"
 }
@@ -88,11 +86,12 @@ variable "size" {
   default = "Standard_D2s_v3"
 }
 
-variable "fmg_ni_0" {
+variable "faz_ni_0" {
   type    = string
   default = "public"
 }
-variable "fmg_ni_1" {
+
+variable "faz_ni_1" {
   type    = string
   default = "private"
 }
@@ -121,7 +120,7 @@ variable "api_key" {
 // Provide the license type for FortiGate-VM Instances, either byol or payg.
 variable "license_type" {
   type    = string
-  default = "byol"
+  default = "payg"
 }
 
 // license file for the active fgt

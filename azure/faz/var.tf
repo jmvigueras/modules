@@ -42,16 +42,18 @@ variable "faz_extra-config" {
   default = ""
 }
 
-variable "faz_ni_ids" {
-  type    = map(string)
-  default = null
-}
-
 variable "faz_ni_ips" {
   type    = map(string)
   default = null
 }
 
+// Map of subnet IDs VNet FGT
+variable "subnet_ids" {
+  type    = map(string)
+  default = null
+}
+
+// Map of subnet CIDRS VNet FGT
 variable "subnet_cidrs" {
   type    = map(string)
   default = null

@@ -21,4 +21,9 @@ locals {
   fgt-2_ni_private_ip = cidrhost(local.subnet_private_cidr, 11)
 
   bastion_ni_ip = cidrhost(local.subnet_bastion_cidr, 10)
+
+  faz_ni_public_ip  = cidrhost(local.subnet_public_cidr, 12)
+  faz_ni_private_ip = cidrhost(local.subnet_bastion_cidr, 12)
+  fmg_ni_public_ip  = cidrhost(local.subnet_public_cidr, 13)
+  fmg_ni_private_ip = cidrhost(local.subnet_bastion_cidr, 13)
 }

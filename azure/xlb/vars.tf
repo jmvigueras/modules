@@ -12,7 +12,7 @@ variable "prefix" {
 
 // Azure resourcers tags
 variable "tags" {
-  type = map(any)
+  type = map(string)
   default = {
     deploy = "module-xlb"
   }
@@ -26,19 +26,19 @@ variable "location" {
 
 // Map of subnet IDs VNet FGT
 variable "subnet_ids" {
-  type    = map(any)
+  type    = map(string)
   default = null
 }
 
 // Map of subnet CIDRS VNet FGT
 variable "subnet_cidrs" {
-  type    = map(any)
+  type    = map(string)
   default = null
 }
 
 // VNET ID of FGT VNET for peering
 variable "vnet-fgt" {
-  type    = map(any)
+  type    = map(string)
   default = null
 }
 
@@ -70,7 +70,7 @@ variable "ilb_ip" {
 
 // Fortigate vxlan vdi and port config
 variable "gwlb_vxlan" {
-  type = map(any)
+  type = map(string)
   default = {
     vdi_ext  = "800"
     vdi_int  = "801"
