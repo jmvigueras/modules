@@ -1,5 +1,5 @@
 #------------------------------------------------------------------
-# Create FGT HUB 
+# Create FGT 
 # - Create cluster FGCP config
 # - Create FGCP instances
 # - Create vNet
@@ -19,11 +19,11 @@ module "fgt_config" {
 
   # Config for SDN connector
   # - API calls
-  subscription_id      = var.subscription_id
-  client_id            = var.client_id
-  client_secret        = var.client_secret
-  tenant_id            = var.tenant_id
-  resource_group_name  = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  subscription_id     = var.subscription_id
+  client_id           = var.client_id
+  client_secret       = var.client_secret
+  tenant_id           = var.tenant_id
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
   # - HA failover
   route_table          = "${local.prefix}-rt-default"
   cluster_pip          = module.fgt_vnet.fgt-active-public-name

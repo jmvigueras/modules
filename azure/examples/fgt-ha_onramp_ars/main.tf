@@ -19,11 +19,15 @@ module "fgt_config" {
 
   # Config for SDN connector
   # - API calls (optional)
-  subscription_id = var.subscription_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  tenant_id       = var.tenant_id
-  resource_group_name  = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  subscription_id     = var.subscription_id
+  client_id           = var.client_id
+  client_secret       = var.client_secret
+  tenant_id           = var.tenant_id
+  resource_group_name = local.resource_group_name == null ? azurerm_resource_group.rg[0].name : local.resource_group_name
+  # - HA failover
+  cluster_pip          = module.fgt_vnet.fgt-active-public-name
+  fgt-active-ni_names  = module.fgt_vnet.fgt-active-ni_names
+  fgt-passive-ni_names = module.fgt_vnet.fgt-passive-ni_names
   # -
 
   config_fgsp = true
@@ -78,7 +82,7 @@ module "fgt_vnet" {
 // - Module will peer VNET to VNET FGT
 module "vnet-spoke-fgt" {
   depends_on = [module.fgt_vnet]
-  source     = "git::github.com/jmvigueras/modules//azure/vnet-spoke"
+  source     = "../../vnet-spoke"
 
   prefix              = "${local.prefix}-fgt"
   location            = local.location
@@ -95,7 +99,7 @@ module "vnet-spoke-fgt" {
 // Create Azure Route Servers
 module "rs" {
   depends_on = [module.vnet-spoke-fgt, module.fgt_vnet]
-  source     = "git::github.com/jmvigueras/modules//azure/routeserver"
+  source     = "../../routeserver"
 
   prefix              = local.prefix
   location            = local.location

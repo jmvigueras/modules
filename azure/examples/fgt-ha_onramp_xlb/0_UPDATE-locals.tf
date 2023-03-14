@@ -8,7 +8,7 @@ locals {
   prefix                   = "demo-fgt-xlb" // prefix added to all resources created
 
   tags = {
-    Deploy  = "demo-fgt-xlb" 
+    Deploy  = "demo-fgt-xlb"
     Project = "terraform-fortinet"
   }
   #-----------------------------------------------------------------------------------------------------
