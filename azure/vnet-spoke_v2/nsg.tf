@@ -37,7 +37,13 @@ resource "azurerm_network_security_rule" "nsr_spoke_egress_allow_all" {
 }
 
 # Connect the security group to Bastion Subnet
-resource "azurerm_subnet_network_security_group_association" "ni_subnet_1-nsg-association" {
+resource "azurerm_subnet_network_security_group_association" "subnet_1_nsg_association" {
   subnet_id                 = azurerm_subnet.vnet-spoke_subnet_1.id
+  network_security_group_id = azurerm_network_security_group.nsg_spoke.id
+}
+
+# Connect the security group to Bastion Subnet
+resource "azurerm_subnet_network_security_group_association" "subnet_2_nsg_association" {
+  subnet_id                 = azurerm_subnet.vnet-spoke_subnet_2.id
   network_security_group_id = azurerm_network_security_group.nsg_spoke.id
 }

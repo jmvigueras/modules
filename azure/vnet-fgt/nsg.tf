@@ -285,11 +285,7 @@ resource "azurerm_network_security_rule" "nsr_bastion_admin_cidr_egress_allow_al
   resource_group_name         = var.resource_group_name
   network_security_group_name = azurerm_network_security_group.nsg_bastion_admin_cidr.name
 }
-# Connect the security group to the network interfaces Bastion
-resource "azurerm_network_interface_security_group_association" "ni_bastion_nsg" {
-  network_interface_id      = azurerm_network_interface.ni-bastion.id
-  network_security_group_id = azurerm_network_security_group.nsg_bastion_admin_cidr.id
-}
+
 # NSG allow all access 
 resource "azurerm_network_security_group" "nsg_bastion_default" {
   name                = "${var.prefix}-nsg-bastion-default"
