@@ -203,31 +203,3 @@ resource "azurerm_network_interface" "ni-passive-private" {
 
   tags = var.tags
 }
-
-// Bastion public IP
-resource "azurerm_public_ip" "bastion-public-ip" {
-  name                = "${var.prefix}-bastion-public-ip"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-  sku_tier            = "Regional"
-
-  tags = var.tags
-}
-// Bastion Network Interface
-resource "azurerm_network_interface" "ni-bastion" {
-  name                = "${var.prefix}-ni-bastion"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-
-  ip_configuration {
-    name                          = "ipconfig1"
-    subnet_id                     = azurerm_subnet.subnet-bastion.id
-    private_ip_address_allocation = "Static"
-    private_ip_address            = local.bastion_ni_ip
-    primary                       = true
-    public_ip_address_id          = azurerm_public_ip.bastion-public-ip.id
-  }
-  tags = var.tags
-}

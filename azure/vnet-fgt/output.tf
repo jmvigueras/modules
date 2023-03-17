@@ -22,10 +22,6 @@ output "fgt-passive-public-name" {
   value = azurerm_public_ip.passive-public-ip.name
 }
 
-output "bastion-public-ip_ip" {
-  value = azurerm_public_ip.bastion-public-ip.ip_address
-}
-
 output "vnet" {
   value = {
     name = azurerm_virtual_network.vnet-fgt.name
@@ -85,10 +81,6 @@ output "fgt-passive-ni_ips" {
     public  = azurerm_network_interface.ni-passive-public.private_ip_address
     private = azurerm_network_interface.ni-passive-private.private_ip_address
   }
-}
-
-output "bastion-ni_id" {
-  value = azurerm_network_interface.ni-bastion.id
 }
 
 output "subnet_cidrs" {
