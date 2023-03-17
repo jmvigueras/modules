@@ -39,40 +39,5 @@ output "subnet_cidrs" {
 }
 
 output "nsg_ids" {
-  value = azurerm_network_security_group.nsg-hub-spoke.id
-}
-
-output "ni_ids" {
-  value = {
-    subnet1 = azurerm_network_interface.ni_subnet_1.id
-    subnet2 = azurerm_network_interface.ni_subnet_2.id
-  }
-}
-
-output "ni_pips" {
-  value = {
-    subnet1 = azurerm_public_ip.ni_subnet_1_pip.ip_address
-    subnet2 = azurerm_public_ip.ni_subnet_1_pip.ip_address
-  }
-}
-
-output "ni_ids_subnet_1" {
-  value = azurerm_network_interface.ni_subnet_1.id
-}
-output "ni_ids_subnet_2" {
-  value = azurerm_network_interface.ni_subnet_2.id
-}
-
-output "ni_pips_subnet_1" {
-  value = azurerm_public_ip.ni_subnet_1_pip.ip_address
-}
-output "ni_pips_subnet_2" {
-  value = azurerm_public_ip.ni_subnet_2_pip.ip_address
-}
-
-output "ni_ips" {
-  value = {
-    subnet1 = azurerm_network_interface.ni_subnet_1.private_ip_addresses
-    subnet2 = azurerm_network_interface.ni_subnet_2.private_ip_addresses
-  }
+  value = azurerm_network_security_group.nsg_spoke.id
 }
