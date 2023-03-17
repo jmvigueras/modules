@@ -21,7 +21,7 @@ resource "azurerm_network_interface" "vm_ni" {
   ip_configuration {
     name                          = "ipconfig1"
     subnet_id                     = var.subnet_id
-    private_ip_address            = var.ni_ip == null ? cidrhost(azurerm_subnet.var.subnet_cird, 10) : var.ni_ip
+    private_ip_address            = var.ni_ip == null ? cidrhost(var.subnet_cird, 10) : var.ni_ip
     primary                       = true
     public_ip_address_id          = azurerm_public_ip.vm_ni_pip.id
   }
