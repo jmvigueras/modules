@@ -1,7 +1,6 @@
-###################################
-#Create External LB
-##################################
-
+#------------------------------------------------------------------------
+# Create External LB
+#------------------------------------------------------------------------
 resource "azurerm_public_ip" "elb_pip" {
   name                = "${var.prefix}-elb-pip"
   location            = var.location
@@ -53,45 +52,49 @@ resource "azurerm_lb_backend_address_pool_address" "elb_backend_fgt_2" {
 }
 
 // Create Load Balancing Rules
-resource "azurerm_lb_rule" "lbrule-tcp80" {
+resource "azurerm_lb_rule" "elb_rule_tcp_80" {
   loadbalancer_id                = azurerm_lb.elb.id
-  name                           = "lbrule-http"
+  name                           = "elb-rule-http"
   protocol                       = "Tcp"
   frontend_port                  = 80
   backend_port                   = 80
   frontend_ip_configuration_name = "${var.prefix}-elb-frontend"
   probe_id                       = azurerm_lb_probe.elb_probe.id
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elb_backend.id]
+  load_distribution              = "SourceIP"
 }
-resource "azurerm_lb_rule" "lbrule-upd500" {
+resource "azurerm_lb_rule" "elb_rule_upd_500" {
   loadbalancer_id                = azurerm_lb.elb.id
-  name                           = "lbrule-udp500"
+  name                           = "elb-rule-udp-500"
   protocol                       = "Udp"
   frontend_port                  = 500
   backend_port                   = 500
   frontend_ip_configuration_name = "${var.prefix}-elb-frontend"
   probe_id                       = azurerm_lb_probe.elb_probe.id
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elb_backend.id]
+  load_distribution              = "SourceIP"
 }
-resource "azurerm_lb_rule" "lbrule-udp4500" {
+resource "azurerm_lb_rule" "elb_rule_udp_4500" {
   loadbalancer_id                = azurerm_lb.elb.id
-  name                           = "lbrule-udp4500"
+  name                           = "elb-rule-udp-4500"
   protocol                       = "Udp"
   frontend_port                  = 4500
   backend_port                   = 4500
   frontend_ip_configuration_name = "${var.prefix}-elb-frontend"
   probe_id                       = azurerm_lb_probe.elb_probe.id
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elb_backend.id]
+  load_distribution              = "SourceIP"
 }
-resource "azurerm_lb_rule" "lbrule-udp4789" {
+resource "azurerm_lb_rule" "elb_rule_udp_4789" {
   loadbalancer_id                = azurerm_lb.elb.id
-  name                           = "lbrule-udp4789"
+  name                           = "elb-rule-udp-4789"
   protocol                       = "Udp"
   frontend_port                  = 4789
   backend_port                   = 4789
   frontend_ip_configuration_name = "${var.prefix}-elb-frontend"
   probe_id                       = azurerm_lb_probe.elb_probe.id
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elb_backend.id]
+  load_distribution              = "SourceIP"
 }
 
 /*

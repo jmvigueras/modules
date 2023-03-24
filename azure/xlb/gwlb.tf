@@ -1,6 +1,6 @@
-###################################
-#Create Gateway LB
-##################################
+#------------------------------------------------------------------------
+# Create Gateway LB
+#------------------------------------------------------------------------
 resource "azurerm_lb" "gwlb" {
   count               = var.config_gwlb ? 1 : 0
   name                = "${var.prefix}-GatewayLoadBalancer"
@@ -61,10 +61,10 @@ resource "azurerm_lb_probe" "gwlb_probe" {
   protocol            = "Tcp"
 }
 
-resource "azurerm_lb_rule" "gwlb_haports_rule" {
+resource "azurerm_lb_rule" "gwlb_rule_haport" {
   count                          = var.config_gwlb ? 1 : 0
   loadbalancer_id                = azurerm_lb.gwlb[0].id
-  name                           = "gwlb_haports_rule"
+  name                           = "gwlb-rule-haport"
   protocol                       = "All"
   frontend_port                  = 0
   backend_port                   = 0

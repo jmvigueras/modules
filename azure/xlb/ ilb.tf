@@ -1,6 +1,6 @@
-###################################
-#Create Internal LB
-##################################
+#------------------------------------------------------------------------
+# Create Internal LB
+#------------------------------------------------------------------------
 
 // Create Load Balancer
 resource "azurerm_lb" "ilb" {
@@ -46,15 +46,16 @@ resource "azurerm_lb_probe" "ilb_probe" {
   protocol            = "Tcp"
 }
 
-resource "azurerm_lb_rule" "lb_haports_rule" {
+resource "azurerm_lb_rule" "ilb_rule_haport" {
   loadbalancer_id                = azurerm_lb.ilb.id
-  name                           = "lb_haports_rule"
+  name                           = "ilb-rule-haport"
   protocol                       = "All"
   frontend_port                  = 0
   backend_port                   = 0
   frontend_ip_configuration_name = "${var.prefix}-ilb-frontend"
   probe_id                       = azurerm_lb_probe.ilb_probe.id
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.ilb_backend.id]
+  load_distribution              = "SourceIP"
 }
 
 /*
