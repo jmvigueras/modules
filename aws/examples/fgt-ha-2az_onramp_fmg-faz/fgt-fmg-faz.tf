@@ -21,8 +21,8 @@ module "fgt_onramp_config" {
   config_fgcp = true
   config_fmg  = true
   config_faz  = true
-  fmg_ip      = module.fgt_onramp_vpc.fmg_ni_ips["private"]
-  faz_ip      = module.fgt_onramp_vpc.faz_ni_ips["private"]
+  fmg_ip      = module.fmg.ni_ips["private"]
+  faz_ip      = module.faz.ni_ips["private"]
 
   vpc-spoke_cidr = local.vpc-spoke_cidr
 }
@@ -75,8 +75,14 @@ module "faz" {
   license_type = "byol"
   license_file = "./licenses/licenseFAZ.lic"
 
-  faz_ni_ids = module.fgt_onramp_vpc.faz_ni_ids
-  faz_ni_ips = module.fgt_onramp_vpc.faz_ni_ips
+  nsg_ids = {
+    public  = [module.fgt_onramp_vpc.nsg_ids["allow_all"]]
+    private = [module.fgt_onramp_vpc.nsg_ids["bastion"]]
+  }
+  subnet_ids = {
+    public  = module.fgt_onramp_vpc.subnet_az1_ids["public"]
+    private = module.fgt_onramp_vpc.subnet_az1_ids["bastion"]
+  }
   subnet_cidrs = {
     public  = module.fgt_onramp_vpc.subnet_az1_cidrs["public"]
     private = module.fgt_onramp_vpc.subnet_az1_cidrs["bastion"]
@@ -95,8 +101,14 @@ module "fmg" {
   license_type = "byol"
   license_file = "./licenses/licenseFMG.lic"
 
-  fmg_ni_ids = module.fgt_onramp_vpc.fmg_ni_ids
-  fmg_ni_ips = module.fgt_onramp_vpc.fmg_ni_ips
+  nsg_ids = {
+    public  = [module.fgt_onramp_vpc.nsg_ids["allow_all"]]
+    private = [module.fgt_onramp_vpc.nsg_ids["bastion"]]
+  }
+  subnet_ids = {
+    public  = module.fgt_onramp_vpc.subnet_az1_ids["public"]
+    private = module.fgt_onramp_vpc.subnet_az1_ids["bastion"]
+  }
   subnet_cidrs = {
     public  = module.fgt_onramp_vpc.subnet_az1_cidrs["public"]
     private = module.fgt_onramp_vpc.subnet_az1_cidrs["bastion"]

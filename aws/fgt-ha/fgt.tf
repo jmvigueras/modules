@@ -1,3 +1,40 @@
+# ------------------------------------------------------------------
+# Create EIPs
+# ------------------------------------------------------------------
+# Create EIP active public NI
+resource "aws_eip" "fgt_active_eip_public" {
+  vpc               = true
+  network_interface = var.fgt-active-ni_ids["public"]
+  tags = {
+    Name = "${var.prefix}-fgt_active_eip_public"
+  }
+}
+# Create EIP active MGTM NI
+resource "aws_eip" "fgt_active_eip_mgmt" {
+  vpc               = true
+  network_interface = var.fgt-active-ni_ids["mgmt"]
+  tags = {
+    Name = "${var.prefix}-fgt_active_eip_mgmt"
+  }
+}
+# Create EIP passive MGTM NI
+resource "aws_eip" "fgt_passive_eip_mgmt" {
+  vpc               = true
+  network_interface = var.fgt-passive-ni_ids["mgmt"]
+  tags = {
+    Name = "${var.prefix}-fgt_passive_eip_mgmt"
+  }
+}
+# Create EIP passive FGT if FGSP true
+resource "aws_eip" "fgt_passive_eip_public" {
+  count             = var.fgt_ha_fgsp ? 1 : 0
+  vpc               = true
+  network_interface = var.fgt-passive-ni_ids["public"]
+  tags = {
+    Name = "${var.prefix}-fgt_passive_eip_public"
+  }
+}
+
 # Create the instance FGT AZ1 Active
 resource "aws_instance" "fgt_active" {
   ami                  = var.license_type == "byol" ? data.aws_ami_ids.fgt_amis_byol.ids[0] : data.aws_ami_ids.fgt_amis_payg.ids[0]
@@ -6,6 +43,17 @@ resource "aws_instance" "fgt_active" {
   key_name             = var.keypair
   iam_instance_profile = aws_iam_instance_profile.fgt-apicall-profile.name
   user_data            = var.fgt_config_1
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  root_block_device {
+    encrypted = true
+  }
+  ebs_block_device {
+     encrypted = true
+     device_name = "/dev/sdb"
+  }
   network_interface {
     device_index         = 0
     network_interface_id = var.fgt-active-ni_ids[var.fgt_ni_0]
@@ -32,6 +80,17 @@ resource "aws_instance" "fgt_passive" {
   key_name             = var.keypair
   iam_instance_profile = aws_iam_instance_profile.fgt-apicall-profile.name
   user_data            = var.fgt_config_2
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
+  root_block_device {
+    encrypted = true
+  }
+  ebs_block_device {
+     encrypted = true
+     device_name = "/dev/sdb"
+  }
   network_interface {
     device_index         = 0
     network_interface_id = var.fgt-passive-ni_ids[var.fgt_ni_0]

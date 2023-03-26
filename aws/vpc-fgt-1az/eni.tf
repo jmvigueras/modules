@@ -1,43 +1,4 @@
 # ------------------------------------------------------------------
-# Create EIPs
-# ------------------------------------------------------------------
-# Create and attach the eip to the units
-resource "aws_eip" "fgt_active_eip_public" {
-  vpc                       = true
-  network_interface         = aws_network_interface.ni-active-public.id
-  associate_with_private_ip = local.fgt_ni_public_ip_float
-  tags = {
-    Name = "${var.prefix}-fgt_active_eip_public"
-  }
-}
-
-resource "aws_eip" "fgt_active_eip_mgmt" {
-  vpc               = true
-  network_interface = aws_network_interface.ni-active-mgmt.id
-  tags = {
-    Name = "${var.prefix}-fgt_active_eip_mgmt"
-  }
-}
-
-# Create and attach the eip to the units
-resource "aws_eip" "fgt_passive_eip_mgmt" {
-  vpc               = true
-  network_interface = aws_network_interface.ni-passive-mgmt.id
-  tags = {
-    Name = "${var.prefix}-fgt_passive_eip_mgmt"
-  }
-}
-
-# Create and attach the eip to the units
-resource "aws_eip" "fgt_passive_eip_public" {
-  vpc               = true
-  network_interface = aws_network_interface.ni-passive-public.id
-  tags = {
-    Name = "${var.prefix}-fgt_passive_eip_public"
-  }
-}
-
-# ------------------------------------------------------------------
 # Create all the eni interfaces FGT active
 # ------------------------------------------------------------------
 resource "aws_network_interface" "ni-active-mgmt" {
@@ -103,6 +64,7 @@ resource "aws_network_interface" "ni-passive-private" {
   }
 }
 
+/*
 # ------------------------------------------------------------------
 # Create all the eni interfaces Bastion
 # ------------------------------------------------------------------
@@ -115,6 +77,7 @@ resource "aws_network_interface" "ni-bastion-az1" {
     Name = "${var.prefix}-ni-bastion-az1"
   }
 }
+
 
 # ------------------------------------------------------------------
 # Create all the eni interfaces FAZ
@@ -161,3 +124,45 @@ resource "aws_network_interface" "ni-fmg-private" {
     Name = "${var.prefix}-ni-fmg-private"
   }
 }
+*/
+
+/*
+# ------------------------------------------------------------------
+# Create EIPs
+# ------------------------------------------------------------------
+# Create and attach the eip to the units
+resource "aws_eip" "fgt_active_eip_public" {
+  vpc                       = true
+  network_interface         = aws_network_interface.ni-active-public.id
+  associate_with_private_ip = local.fgt_ni_public_ip_float
+  tags = {
+    Name = "${var.prefix}-fgt_active_eip_public"
+  }
+}
+
+resource "aws_eip" "fgt_active_eip_mgmt" {
+  vpc               = true
+  network_interface = aws_network_interface.ni-active-mgmt.id
+  tags = {
+    Name = "${var.prefix}-fgt_active_eip_mgmt"
+  }
+}
+
+# Create and attach the eip to the units
+resource "aws_eip" "fgt_passive_eip_mgmt" {
+  vpc               = true
+  network_interface = aws_network_interface.ni-passive-mgmt.id
+  tags = {
+    Name = "${var.prefix}-fgt_passive_eip_mgmt"
+  }
+}
+
+# Create and attach the eip to the units
+resource "aws_eip" "fgt_passive_eip_public" {
+  vpc               = true
+  network_interface = aws_network_interface.ni-passive-public.id
+  tags = {
+    Name = "${var.prefix}-fgt_passive_eip_public"
+  }
+}
+*/

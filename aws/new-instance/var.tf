@@ -14,7 +14,34 @@ variable "vm_size" {
   default = "t2.micro"
 }
 
+variable "subnet_id" {
+  type    = string
+  default = null
+}
+
+variable "public_ip" {
+  type    = bool
+  default = true
+}
+
+variable "security_groups" {
+  type    = list(string)
+  default = null
+}
+
 variable "keypair" {
   type    = string
   default = null
+}
+
+variable "disk_size" {
+  type        = number
+  description = "Volumen size of root volumen of Linux Server"
+  default     = 10
+}
+
+variable "disk_type" {
+  type        = string
+  description = "Volumen type of root volumen of Linux Server."
+  default     = "gp2"
 }

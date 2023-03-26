@@ -1,7 +1,11 @@
-output "faz_id" {
+output "id" {
   value = aws_instance.faz.id
 }
 
-output "faz_eip_public" {
+output "ni_ips" {
+  value = local.ni_ips
+}
+
+output "eip_public" {
   value = aws_eip.faz_eip_public.public_ip
 }

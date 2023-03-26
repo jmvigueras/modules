@@ -70,8 +70,10 @@ module "vm_fgt_hub1" {
   source = "../../new-instance"
 
   prefix  = "${local.prefix}-fgt-hub1"
-  ni_id   = module.fgt_hub1_vpc.bastion-ni_ids["az1"]
   keypair = aws_key_pair.keypair.key_name
+
+  subnet_id       = module.fgt_hub1_vpc.subnet_az1_ids["bastion"]
+  security_groups = [module.fgt_hub1_vpc.nsg_ids["bastion"]]
 }
 // Create TGW
 module "tgw_hub1" {
@@ -118,8 +120,10 @@ module "vm_tgw_hub1" {
   source = "../../new-instance"
 
   prefix  = "${local.prefix}-tgw-hub1"
-  ni_id   = module.tgw_hub1_vpc-spoke[count.index].az1-vm-ni_id
   keypair = aws_key_pair.keypair.key_name
+
+  subnet_id       = module.tgw_hub1_vpc-spoke[count.index].subnet_az1_ids["vm"]
+  security_groups = [module.tgw_hub1_vpc-spoke[count.index].nsg_ids["vm"]]
 }
 
 #------------------------------------------------------------------------------
@@ -179,6 +183,8 @@ module "vm_fgt_hub2" {
   source = "../../new-instance"
 
   prefix  = "${local.prefix}-hub2"
-  ni_id   = module.fgt_hub2_vpc.bastion-ni_ids["az1"]
   keypair = aws_key_pair.keypair.key_name
+
+  subnet_id       = module.fgt_hub2_vpc.subnet_az1_ids["bastion"]
+  security_groups = [module.fgt_hub2_vpc.nsg_ids["bastion"]]
 }

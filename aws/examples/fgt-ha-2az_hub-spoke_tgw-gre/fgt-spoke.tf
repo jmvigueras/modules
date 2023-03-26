@@ -64,6 +64,8 @@ module "vm_fgt_spoke" {
   source = "../../new-instance"
 
   prefix  = "${local.prefix}-spoke-${count.index + 1}"
-  ni_id   = module.fgt_spoke_vpc[count.index].bastion-ni_ids["az1"]
   keypair = aws_key_pair.keypair.key_name
+
+  subnet_id       = module.fgt_spoke_vpc[count.index].subnet_az1_ids["bastion"]
+  security_groups = [module.fgt_spoke_vpc[count.index].nsg_ids["bastion"]]
 }

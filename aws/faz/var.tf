@@ -26,18 +26,28 @@ variable "faz_extra-config" {
   default = ""
 }
 
-variable "faz_ni_ids" {
-  type    = map(string)
+variable "faz_ip_public" {
+  type    = string
   default = null
 }
 
-variable "faz_ni_ips" {
+variable "faz_ip_private" {
+  type    = string
+  default = null
+}
+
+variable "subnet_ids" {
   type    = map(string)
   default = null
 }
 
 variable "subnet_cidrs" {
   type    = map(string)
+  default = null
+}
+
+variable "nsg_ids" {
+  type    = map(list(string))
   default = null
 }
 

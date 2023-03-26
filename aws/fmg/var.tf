@@ -26,18 +26,28 @@ variable "fmg_extra-config" {
   default = ""
 }
 
-variable "fmg_ni_ids" {
-  type    = map(string)
+variable "fmg_ip_public" {
+  type    = string
   default = null
 }
 
-variable "fmg_ni_ips" {
-  type    = map(string)
+variable "fmg_ip_private" {
+  type    = string
   default = null
 }
 
 variable "subnet_cidrs" {
   type    = map(string)
+  default = null
+}
+
+variable "subnet_ids" {
+  type    = map(string)
+  default = null
+}
+
+variable "nsg_ids" {
+  type    = map(list(string))
   default = null
 }
 

@@ -56,6 +56,8 @@ module "vm_bastion" {
   source = "../../new-instance"
 
   prefix  = "${local.prefix}-onramp"
-  ni_id   = module.fgt_vpc.bastion-ni_ids["az1"]
   keypair = aws_key_pair.keypair.key_name
+
+  subnet_id       = module.fgt_vpc.subnet_az1_ids["bastion"]
+  security_groups = [module.fgt_vpc.nsg_ids["bastion"]]
 }

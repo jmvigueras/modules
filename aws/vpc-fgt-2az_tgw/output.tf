@@ -1,19 +1,3 @@
-output "fgt_active_eip_mgmt" {
-  value = aws_eip.fgt_active_eip_mgmt.public_ip
-}
-
-output "fgt_passive_eip_mgmt" {
-  value = aws_eip.fgt_passive_eip_mgmt.public_ip
-}
-
-output "fgt_active_eip_public" {
-  value = aws_eip.fgt_active_eip_public.public_ip
-}
-
-output "fgt_passive_eip_public" {
-  value = aws_eip.fgt_passive_eip_public.public_ip
-}
-
 output "fgt-active-ni_ids" {
   value = {
     mgmt    = aws_network_interface.ni-active-mgmt.id
@@ -90,6 +74,26 @@ output "subnet_az2_ids" {
   }
 }
 
+output "vpc-sec_id" {
+  value = aws_vpc.vpc-sec.id
+}
+
+output "nsg_ids" {
+  value = {
+    mgmt      = aws_security_group.nsg-vpc-sec-mgmt.id
+    ha        = aws_security_group.nsg-vpc-sec-ha.id
+    private   = aws_security_group.nsg-vpc-sec-private.id
+    public    = aws_security_group.nsg-vpc-sec-public.id
+    bastion   = aws_security_group.nsg-vpc-sec-bastion.id
+    allow_all = aws_security_group.nsg-vpc-sec-allow-all.id
+  }
+}
+
+output "vpc_tgw-att_id" {
+  value = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-sec.id
+}
+
+/*
 output "bastion-ni_ids" {
   value = {
     az1 = aws_network_interface.ni-bastion-az1.id
@@ -132,19 +136,19 @@ output "fmg_ni_ips" {
   }
 }
 
-output "vpc-sec_id" {
-  value = aws_vpc.vpc-sec.id
+output "fgt_active_eip_mgmt" {
+  value = aws_eip.fgt_active_eip_mgmt.public_ip
 }
 
-output "nsg_ids" {
-  value = {
-    mgmt    = aws_security_group.nsg-vpc-sec-mgmt.id
-    ha      = aws_security_group.nsg-vpc-sec-ha.id
-    private = aws_security_group.nsg-vpc-sec-private.id
-    public  = aws_security_group.nsg-vpc-sec-public.id
-  }
+output "fgt_passive_eip_mgmt" {
+  value = aws_eip.fgt_passive_eip_mgmt.public_ip
 }
 
-output "vpc_tgw-att_id" {
-  value = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-sec.id
+output "fgt_active_eip_public" {
+  value = aws_eip.fgt_active_eip_public.public_ip
 }
+
+output "fgt_passive_eip_public" {
+  value = aws_eip.fgt_passive_eip_public.public_ip
+}
+*/
