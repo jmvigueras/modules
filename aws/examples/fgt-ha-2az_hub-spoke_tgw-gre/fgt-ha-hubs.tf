@@ -160,6 +160,8 @@ module "fgt_hub2_config" {
   config_fgcp = true
   config_hub  = true
   hub         = local.hub2
+
+  vpc-spoke_cidr = [module.fgt_hub2_vpc.subnet_az1_cidrs["bastion"], module.fgt_hub2_vpc.subnet_az2_cidrs["bastion"]]
 }
 // Create FGT instances (Active-Passive)
 module "fgt_hub2" {
