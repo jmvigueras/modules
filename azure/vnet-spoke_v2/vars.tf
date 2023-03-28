@@ -27,13 +27,13 @@ variable "location" {
 
 // List of CIDR ranges for vnets spoke (it will create as much VNET as ranges)
 // (this module will deploy as much VNETs as CIDRS appears)
-variable "vnet-spoke_cidrs" {
+variable "vnet_spoke_cidr" {
   type = string
   default = "172.20.100.0/23"
 }
 
 // VNET ID of FGT VNET for peering
-variable "vnet-fgt" {
+variable "vnet_fgt" {
   type = map(string)
   default = null
 }
