@@ -60,6 +60,6 @@ variable "config_ha_dedicated" {
 }
 
 variable "accelerate" {
-  type    = bool
-  default = false
+  type    = string
+  default = "true"
 }

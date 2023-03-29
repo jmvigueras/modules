@@ -34,7 +34,7 @@ variable "vnet-fgt_cidr" {
 // Make the the instance choosed supports accelerated networking.
 // Check: https://docs.microsoft.com/en-us/azure/virtual-network/accelerated-networking-overview#supported-vm-instances
 variable "accelerate" {
-  default = "false"
+  default = "true"
 }
 
 // HTTPS Port
