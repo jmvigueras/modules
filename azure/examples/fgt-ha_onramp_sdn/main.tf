@@ -94,3 +94,4 @@ resource "azurerm_route_table" "rt-default" {
     next_hop_in_ip_address = module.fgt_vnet.fgt-active-ni_ips["private"]
   }
 }
+

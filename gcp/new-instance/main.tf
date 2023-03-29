@@ -28,18 +28,7 @@ resource "google_compute_instance" "instance" {
   }
   metadata = {
     ssh-keys       = "${var.gcp-user_name}:${var.rsa-public-key}"
-    startup-script = <<-EOF
-      #! /bin/bash /
-      sudo apt-get update
-      sudo apt-get install apache2 -y
-      sudo a2ensite default-ssl
-      sudo a2enmod ssl
-      sudo vm_hostname="$(curl -H "Metadata-Flavor:Google" \
-      http://169.254.169.254/computeMetadata/v1/instance/name)"
-      sudo echo "Page served from: $vm_hostname" | \
-      tee /var/www/html/index.html
-      sudo systemctl restart apache2"
-      EOF
+    startup-script = file("${path.module}/templates/user-data.tpl")
   }
   service_account {
     scopes = ["userinfo-email", "compute-rw", "storage-ro", "cloud-platform"]
@@ -49,8 +38,5 @@ resource "google_compute_instance" "instance" {
     automatic_restart = false
   }
 }
-
-
-
 
 

@@ -36,20 +36,20 @@ resource "azurerm_linux_virtual_machine" "vm" {
   location              = var.location
   size                  = var.vm_size
   network_interface_ids = [azurerm_network_interface.vm_ni.id]
+  
+  custom_data = file("${path.module}/templates/user-data.tpl")
 
   os_disk {
     name                 = "${var.prefix}-disk${random_string.random.result}-vm"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
-
   source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-focal"
     sku       = "20_04-lts"
     version   = "latest"
   }
-
   computer_name                   = "${var.prefix}-vm"
   admin_username                  = var.admin_username
   disable_password_authentication = true
@@ -58,15 +58,11 @@ resource "azurerm_linux_virtual_machine" "vm" {
     username   = var.admin_username
     public_key = trimspace(var.rsa-public-key)
   }
-
   boot_diagnostics {
     storage_account_uri = var.storage-account_endpoint
   }
 }
 
-data "template_file" "lnx_custom_data" {
-  template = file("${path.module}/templates/customdata-lnx.tpl")
-}
 
 # Random string to add at disk name
 resource "random_string" "random" {
