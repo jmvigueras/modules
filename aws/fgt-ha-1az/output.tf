@@ -3,7 +3,7 @@ output "fgt_active_id" {
 }
 
 output "fgt_passive_id" {
-  value = aws_instance.fgt_passive.*.id[0]
+  value = aws_instance.fgt_passive.*.id
 }
 
 output "fgt_active_eip_mgmt" {
@@ -11,7 +11,7 @@ output "fgt_active_eip_mgmt" {
 }
 
 output "fgt_passive_eip_mgmt" {
-  value = aws_eip.fgt_passive_eip_mgmt.*.public_ip[0]
+  value = aws_eip.fgt_passive_eip_mgmt.*.public_ip
 }
 
 output "fgt_active_eip_public" {
@@ -19,5 +19,5 @@ output "fgt_active_eip_public" {
 }
 
 output "fgt_passive_eip_public" {
-  value = aws_eip.fgt_passive_eip_public.*.public_ip[0]
+  value = aws_eip.fgt_passive_eip_public.*.public_ip
 }
