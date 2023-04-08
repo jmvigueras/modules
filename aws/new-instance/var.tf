@@ -45,3 +45,14 @@ variable "disk_type" {
   description = "Volumen type of root volumen of Linux Server."
   default     = "gp2"
 }
+
+variable "user_data" {
+  type        = string
+  description = "Cloud-init script"
+  default     = null
+}
+
+variable "vm_iam_profile" {
+  type        = string
+  default     = null
+}
