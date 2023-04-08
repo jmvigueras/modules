@@ -4,12 +4,17 @@ variable "prefix" {
   default = "terraform"
 }
 
+variable "suffix" {
+  type    = string
+  default = "1"
+}
+
 variable "ni_id" {
   type    = string
   default = null
 }
 
-variable "vm_size" {
+variable "instance_type" {
   type    = string
   default = "t2.micro"
 }
@@ -52,7 +57,7 @@ variable "user_data" {
   default     = null
 }
 
-variable "vm_iam_profile" {
+variable "iam_profile" {
   type        = string
   default     = null
 }

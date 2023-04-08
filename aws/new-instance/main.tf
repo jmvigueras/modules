@@ -3,9 +3,9 @@
 #-----------------------------------------------------------------------------------------------------
 // Create Amazon Linux EC2 Instance
 resource "aws_instance" "vm" {
-  count                       = var.vm_iam_profile != null ? 0 : 1
+  count                       = var.iam_profile != null ? 0 : 1
   ami                         = data.aws_ami.ami_ubuntu.id
-  instance_type               = var.vm_size
+  instance_type               = var.instance_type
   key_name                    = var.keypair
   user_data                   = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
   subnet_id                   = var.subnet_id
@@ -19,16 +19,16 @@ resource "aws_instance" "vm" {
     encrypted             = true
   }
   tags = {
-    Name    = "${var.prefix}-vm"
+    Name    = "${var.prefix}-vm-${var.suffix}"
     Project = var.prefix
   }
 }
 // Create Amazon Linux EC2 Instance
 resource "aws_instance" "vm_iam_profile" {
-  count                       = var.vm_iam_profile != null ? 1 : 0
+  count                       = var.iam_profile != null ? 1 : 0
   ami                         = data.aws_ami.ami_ubuntu.id
-  instance_type               = var.vm_size
-  iam_instance_profile        = var.vm_iam_profile
+  instance_type               = var.instance_type
+  iam_instance_profile        = var.iam_profile
   key_name                    = var.keypair
   user_data                   = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
   subnet_id                   = var.subnet_id
@@ -42,7 +42,7 @@ resource "aws_instance" "vm_iam_profile" {
     encrypted             = true
   }
   tags = {
-    Name    = "${var.prefix}-vm"
+    Name    = "${var.prefix}-vm-${var.suffix}"
     Project = var.prefix
   }
 }
