@@ -101,7 +101,7 @@ resource "aws_ec2_transit_gateway_route" "spoke_tgw_route" {
 // Create test VM on VPC TGW spoke
 module "vm_onramp_az1" {
   count  = local.count
-  source = "../../new-instance"
+  source = "../../new-instance_ni"
 
   prefix  = "${local.prefix}-spoke-${count.index}-az1"
   ni_id   = module.vpc_tgw-spoke[count.index].az1-vm-ni_id
@@ -109,7 +109,7 @@ module "vm_onramp_az1" {
 }
 module "vm_onramp_az2" {
   count  = local.count
-  source = "../../new-instance"
+  source = "../../new-instance_ni"
 
   prefix  = "${local.prefix}-spoke-${count.index}-az2"
   ni_id   = module.vpc_tgw-spoke[count.index].az2-vm-ni_id

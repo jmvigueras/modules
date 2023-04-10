@@ -1,16 +1,13 @@
 #-----------------------------------------------------------------------------------------------------
 # VM LINUX for testing
 #-----------------------------------------------------------------------------------------------------
-// Create Amazon Linux EC2 Instance (default)
+// Create Amazon Linux EC2 Instance
 resource "aws_instance" "vm" {
   count                       = var.iam_profile != null ? 0 : 1
   ami                         = data.aws_ami.ami_ubuntu.id
   instance_type               = var.instance_type
   key_name                    = var.keypair
   user_data                   = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
-  subnet_id                   = var.subnet_id
-  security_groups             = var.security_groups
-  associate_public_ip_address = var.public_ip
    
   root_block_device {
     volume_size           = var.disk_size
@@ -18,12 +15,18 @@ resource "aws_instance" "vm" {
     delete_on_termination = true
     encrypted             = true
   }
+  
+  network_interface {
+    device_index         = 0
+    network_interface_id = var.ni_id
+  }
+
   tags = {
     Name    = "${var.prefix}-vm-${var.suffix}"
     Project = var.prefix
   }
 }
-// Create Amazon Linux EC2 Instance with a provided IAM profile
+// Create Amazon Linux EC2 Instance
 resource "aws_instance" "vm_iam_profile" {
   count                       = var.iam_profile != null ? 1 : 0
   ami                         = data.aws_ami.ami_ubuntu.id
@@ -31,9 +34,6 @@ resource "aws_instance" "vm_iam_profile" {
   iam_instance_profile        = var.iam_profile
   key_name                    = var.keypair
   user_data                   = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
-  subnet_id                   = var.subnet_id
-  security_groups             = var.security_groups
-  associate_public_ip_address = var.public_ip
    
   root_block_device {
     volume_size           = var.disk_size
@@ -41,11 +41,18 @@ resource "aws_instance" "vm_iam_profile" {
     delete_on_termination = true
     encrypted             = true
   }
+
+  network_interface {
+    device_index         = 0
+    network_interface_id = var.ni_id
+  }
+
   tags = {
     Name    = "${var.prefix}-vm-${var.suffix}"
     Project = var.prefix
   }
 }
+
 
 // Retrieve AMI info
 data "aws_ami" "ami_ubuntu" {
@@ -61,6 +68,18 @@ data "aws_ami" "ami_ubuntu" {
     values = ["hvm"]
   }
 }
+/*
+// Amazon Linux 2 AMI
+data "aws_ami" "ami_amazon-linux-2" {
+  most_recent = true
+  owners      = ["amazon"]  
+  
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm*"]
+  }
+}
+*/
 
 
 
