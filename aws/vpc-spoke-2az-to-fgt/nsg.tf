@@ -7,28 +7,16 @@ resource "aws_security_group" "nsg-vpc-vm" {
   vpc_id      = aws_vpc.vpc-spoke.id
 
   ingress {
-    from_port   = 22
-    to_port     = 22
+    from_port   = 0
+    to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = ["${var.admin_cidr}", "172.16.0.0/12", "10.0.0.0/8", "192.168.0.0/16"]
+    cidr_blocks = ["${var.admin_cidr}","192.168.0.0/16","10.0.0.0/8","172.16.0.0/12"]
   }
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["${var.admin_cidr}", "172.16.0.0/12", "10.0.0.0/8", "192.168.0.0/16"]
-  }
-  ingress {
-    from_port   = 5201
-    to_port     = 5201
-    protocol    = "tcp"
-    cidr_blocks = ["${var.admin_cidr}", "172.16.0.0/12", "10.0.0.0/8", "192.168.0.0/16"]
-  }
-  ingress {
-    from_port   = 5201
-    to_port     = 5201
+    from_port   = 0
+    to_port     = 65535
     protocol    = "udp"
-    cidr_blocks = ["${var.admin_cidr}", "172.16.0.0/12", "10.0.0.0/8", "192.168.0.0/16"]
+    cidr_blocks = ["${var.admin_cidr}","192.168.0.0/16","10.0.0.0/8","172.16.0.0/12"]
   }
   ingress {
     from_port   = 8 # the ICMP type number for 'Echo'
