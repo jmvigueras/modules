@@ -1,19 +1,3 @@
-output "az1-vm-ni_id" {
-  value = aws_network_interface.ni-vm-spoke-az1.id
-}
-
-output "az1-vm-ni_ip" {
-  value = aws_network_interface.ni-vm-spoke-az1.private_ip
-}
-
-output "az2-vm-ni_id" {
-  value = aws_network_interface.ni-vm-spoke-az2.id
-}
-
-output "az2-vm-ni_ip" {
-  value = aws_network_interface.ni-vm-spoke-az2.private_ip
-}
-
 output "subnet_az1_cidrs" {
   value = {
     vm   = aws_subnet.subnet-vpc-az1-vm.cidr_block
@@ -67,3 +51,21 @@ output "vpc_igw_id" {
 output "vpc_tgw-att_id" {
   value = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc.id
 }
+
+/*
+output "az1-vm-ni_id" {
+  value = aws_network_interface.ni-vm-spoke-az1.id
+}
+
+output "az1-vm-ni_ip" {
+  value = aws_network_interface.ni-vm-spoke-az1.private_ip
+}
+
+output "az2-vm-ni_id" {
+  value = aws_network_interface.ni-vm-spoke-az2.id
+}
+
+output "az2-vm-ni_ip" {
+  value = aws_network_interface.ni-vm-spoke-az2.private_ip
+}
+*/

@@ -18,6 +18,18 @@ resource "aws_security_group" "nsg-vpc-vm" {
     protocol    = "udp"
     cidr_blocks = ["${var.admin_cidr}","192.168.0.0/16","10.0.0.0/8","172.16.0.0/12"]
   }
+  ingress {
+    from_port   = 8 # the ICMP type number for 'Echo'
+    to_port     = 0 # the ICMP code
+    protocol    = "icmp"
+    cidr_blocks = ["${var.admin_cidr}", "172.16.0.0/12", "10.0.0.0/8", "192.168.0.0/16"]
+  }
+  ingress {
+    from_port   = 0 # the ICMP type number for 'Echo Reply'
+    to_port     = 0 # the ICMP code
+    protocol    = "icmp"
+    cidr_blocks = ["${var.admin_cidr}", "172.16.0.0/12", "10.0.0.0/8", "192.168.0.0/16"]
+  }
   egress {
     from_port   = 0
     to_port     = 0
