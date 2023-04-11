@@ -1,3 +1,4 @@
+/*
 # Create all the eni interfaces for test VM
 resource "aws_network_interface" "ni-vm-az1" {
   subnet_id         = aws_subnet.subnet-vpc-az1-vm.id
@@ -18,3 +19,4 @@ resource "aws_network_interface" "ni-vm-az2" {
     Name = "${var.prefix}-ni-vm-az2"
   }
 }
+*/

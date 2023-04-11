@@ -86,33 +86,6 @@ resource "aws_security_group" "nsg-vpc-sec-ha" {
   }
 }
 
-/* (Future use)
-resource "aws_security_group" "nsg-vpc-sec-mpls" {
-  name        = "${var.prefix}-nsg-vpc-sec-mpls"
-  description = "Allow all traffic for mpls"
-  vpc_id      = aws_vpc.vpc-sec.id
-
-  ingress {
-    description     = "Allow all"
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
-  }
-  egress {
-    description = "Allow all"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name     = "${var.prefix}-nsg-vpc-sec-mpls"
-  }
-}
-*/
-
 resource "aws_security_group" "nsg-vpc-sec-private" {
   name        = "${var.prefix}-nsg-vpc-sec-private"
   description = "Allow all connections from spokes"
@@ -138,27 +111,20 @@ resource "aws_security_group" "nsg-vpc-sec-private" {
   }
 }
 
-
 resource "aws_security_group" "nsg-vpc-sec-public" {
   name        = "${var.prefix}-nsg-vpc-sec-public"
-  description = "Allow IPSEC ADVPN"
+  description = "Allow all tcp/upd traffic and ICMP"
   vpc_id      = aws_vpc.vpc-sec.id
 
   ingress {
-    from_port   = 500
-    to_port     = 500
-    protocol    = "udp"
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    from_port   = 4500
-    to_port     = 4500
-    protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 4789
-    to_port     = 4789
+    from_port   = 0
+    to_port     = 65535
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -213,30 +179,18 @@ resource "aws_security_group" "nsg-vpc-sec-allow-all" {
 
 resource "aws_security_group" "nsg-vpc-sec-bastion" {
   name        = "${var.prefix}-nsg-vpc-sec-bastion"
-  description = "Allow MGMT SSH, HTTP/IPERF from RFC1918 and ICMP traffic"
+  description =  "Allow all tcp and udp and ICMP traffic from admin_cidr and RFC1918"
   vpc_id      = aws_vpc.vpc-sec.id
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["${var.admin_cidr}"]
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 0
+    to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["${var.admin_cidr}","192.168.0.0/16","10.0.0.0/8","172.16.0.0/12"]
   }
   ingress {
-    from_port   = 5201
-    to_port     = 5201
-    protocol    = "tcp"
-    cidr_blocks = ["${var.admin_cidr}","192.168.0.0/16","10.0.0.0/8","172.16.0.0/12"]
-  }
-  ingress {
-    from_port   = 5201
-    to_port     = 5201
+    from_port   = 0
+    to_port     = 65535
     protocol    = "udp"
     cidr_blocks = ["${var.admin_cidr}","192.168.0.0/16","10.0.0.0/8","172.16.0.0/12"]
   }

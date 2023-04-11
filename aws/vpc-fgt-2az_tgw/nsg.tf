@@ -12,35 +12,30 @@ resource "aws_security_group" "nsg-vpc-sec-mgmt" {
     protocol    = "tcp"
     cidr_blocks = ["${var.admin_cidr}"]
   }
-
   ingress {
     from_port   = var.admin_port
     to_port     = var.admin_port
     protocol    = "tcp"
     cidr_blocks = ["${var.admin_cidr}"]
   }
-
   ingress {
     from_port   = 541
     to_port     = 541
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   ingress {
     from_port   = 8 # the ICMP type number for 'Echo'
     to_port     = 0 # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["${var.admin_cidr}"]
   }
-
   ingress {
     from_port   = 0 # the ICMP type number for 'Echo Reply'
     to_port     = 0 # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["${var.admin_cidr}"]
   }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -65,7 +60,6 @@ resource "aws_security_group" "nsg-vpc-sec-ha" {
     protocol    = "-1"
     cidr_blocks = [aws_subnet.subnet-az1-mgmt-ha.cidr_block]
   }
-
   ingress {
     description = "Allow all from FGT az2"
     from_port   = 0
@@ -73,7 +67,6 @@ resource "aws_security_group" "nsg-vpc-sec-ha" {
     protocol    = "-1"
     cidr_blocks = [aws_subnet.subnet-az2-mgmt-ha.cidr_block]
   }
-
   egress {
     description = "Allow all to FGT"
     from_port   = 0
@@ -81,7 +74,6 @@ resource "aws_security_group" "nsg-vpc-sec-ha" {
     protocol    = "-1"
     cidr_blocks = [aws_subnet.subnet-az1-mgmt-ha.cidr_block]
   }
-
   egress {
     description = "Allow all to FGT"
     from_port   = 0
@@ -95,34 +87,6 @@ resource "aws_security_group" "nsg-vpc-sec-ha" {
   }
 }
 
-/* (Future use)
-resource "aws_security_group" "nsg-vpc-sec-mpls" {
-  name        = "${var.prefix}-nsg-vpc-sec-mpls"
-  description = "Allow all traffic for mpls"
-  vpc_id      = aws_vpc.vpc-sec.id
-
-  ingress {
-    description     = "Allow all"
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
-  }
-
-  egress {
-    description = "Allow all"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name     = "${var.prefix}-nsg-vpc-sec-mpls"
-  }
-}
-*/
-
 resource "aws_security_group" "nsg-vpc-sec-private" {
   name        = "${var.prefix}-nsg-vpc-sec-private"
   description = "Allow all connections from spokes"
@@ -135,7 +99,6 @@ resource "aws_security_group" "nsg-vpc-sec-private" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   egress {
     description = "Allow all to spokes"
     from_port   = 0
@@ -152,44 +115,33 @@ resource "aws_security_group" "nsg-vpc-sec-private" {
 
 resource "aws_security_group" "nsg-vpc-sec-public" {
   name        = "${var.prefix}-nsg-vpc-sec-public"
-  description = "Allow IPSEC ADVPN"
+  description = "Allow all tcp/upd traffic and ICMP"
   vpc_id      = aws_vpc.vpc-sec.id
 
   ingress {
-    from_port   = 500
-    to_port     = 500
-    protocol    = "udp"
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   ingress {
-    from_port   = 4500
-    to_port     = 4500
+    from_port   = 0
+    to_port     = 65535
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  ingress {
-    from_port   = 4789
-    to_port     = 4789
-    protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   ingress {
     from_port   = 8 # the ICMP type number for 'Echo'
     to_port     = 0 # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   ingress {
     from_port   = 0 # the ICMP type number for 'Echo Reply'
     to_port     = 0 # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -214,7 +166,6 @@ resource "aws_security_group" "nsg-vpc-sec-allow-all" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   egress {
     description = "Allow all"
     from_port   = 0
@@ -230,30 +181,18 @@ resource "aws_security_group" "nsg-vpc-sec-allow-all" {
 
 resource "aws_security_group" "nsg-vpc-sec-bastion" {
   name        = "${var.prefix}-nsg-vpc-sec-bastion"
-  description = "Allow MGMT SSH and ICMP traffic"
+  description = "Allow all tcp and udp and ICMP traffic from admin_cidr and RFC1918"
   vpc_id      = aws_vpc.vpc-sec.id
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["${var.admin_cidr}"]
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 0
+    to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["${var.admin_cidr}","192.168.0.0/16","10.0.0.0/8","172.16.0.0/12"]
   }
   ingress {
-    from_port   = 5201
-    to_port     = 5201
-    protocol    = "tcp"
-    cidr_blocks = ["${var.admin_cidr}","192.168.0.0/16","10.0.0.0/8","172.16.0.0/12"]
-  }
-  ingress {
-    from_port   = 5201
-    to_port     = 5201
+    from_port   = 0
+    to_port     = 65535
     protocol    = "udp"
     cidr_blocks = ["${var.admin_cidr}","192.168.0.0/16","10.0.0.0/8","172.16.0.0/12"]
   }
@@ -269,7 +208,6 @@ resource "aws_security_group" "nsg-vpc-sec-bastion" {
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   egress {
     from_port   = 0
     to_port     = 0
