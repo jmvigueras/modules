@@ -98,10 +98,10 @@ resource "google_compute_address" "passive-mgmt-public-ip" {
   address_type = "EXTERNAL"
   region       = var.region
 }
-# Create static passive instance management ip
+# Create static passive instance public ip
 resource "google_compute_address" "passive-public-ip" {
   count        = var.fgt-passive-ni_ips != null && var.fgt_passive && var.config_fgsp ? 1 : 0
-  name         = "${var.prefix}-passive-mgmt-public-ip"
+  name         = "${var.prefix}-passive-public-ip"
   address_type = "EXTERNAL"
   region       = var.region
 }
