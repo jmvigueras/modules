@@ -101,7 +101,7 @@ resource "azurerm_network_interface" "ni-active-mgmt" {
   name                          = "${var.prefix}-ni-active-mgmt"
   location                      = var.location
   resource_group_name           = var.resource_group_name
-  enable_accelerated_networking = var.accelerate == "true" ? true : false
+  enable_accelerated_networking = var.accelerate
 
   ip_configuration {
     name                          = "ipconfig1"
@@ -120,7 +120,7 @@ resource "azurerm_network_interface" "ni-active-public" {
   location                      = var.location
   resource_group_name           = var.resource_group_name
   enable_ip_forwarding          = true
-  enable_accelerated_networking = var.accelerate == "true" ? true : false
+  enable_accelerated_networking = var.accelerate
 
   ip_configuration {
     name                          = "ipconfig1"
@@ -138,7 +138,7 @@ resource "azurerm_network_interface" "ni-active-private" {
   location                      = var.location
   resource_group_name           = var.resource_group_name
   enable_ip_forwarding          = true
-  enable_accelerated_networking = var.accelerate == "true" ? true : false
+  enable_accelerated_networking = var.accelerate
 
   ip_configuration {
     name                          = "ipconfig1"
@@ -155,7 +155,7 @@ resource "azurerm_network_interface" "ni-passive-mgmt" {
   name                          = "${var.prefix}-ni-passive-mgmt"
   location                      = var.location
   resource_group_name           = var.resource_group_name
-  enable_accelerated_networking = var.accelerate == "true" ? true : false
+  enable_accelerated_networking = var.accelerate
 
   ip_configuration {
     name                          = "ipconfig1"
@@ -174,7 +174,7 @@ resource "azurerm_network_interface" "ni-passive-public" {
   location                      = var.location
   resource_group_name           = var.resource_group_name
   enable_ip_forwarding          = true
-  enable_accelerated_networking = var.accelerate == "true" ? true : false
+  enable_accelerated_networking = var.accelerate
 
   ip_configuration {
     name                          = "ipconfig1"
@@ -192,7 +192,7 @@ resource "azurerm_network_interface" "ni-passive-private" {
   location                      = var.location
   resource_group_name           = var.resource_group_name
   enable_ip_forwarding          = true
-  enable_accelerated_networking = var.accelerate == "true" ? true : false
+  enable_accelerated_networking = var.accelerate
 
   ip_configuration {
     name                          = "ipconfig1"
