@@ -3,9 +3,12 @@
 apt update -y
 apt install -y iperf3
 apt install -y apache2
-# PHP script to display Instance ID and Availability Zone
+apt install -y curl
+apt install -y netcat
+# Query instance data
 export INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 export AZ=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+# Create new index.html
 cat <<EOF > /var/www/html/index.html
 <!DOCTYPE html>
 <html>
