@@ -167,7 +167,7 @@ resource "aws_route_table" "rt-tgw-az2" {
   vpc_id = aws_vpc.vpc-sec.id
   route {
     cidr_block           = "0.0.0.0/0"
-    network_interface_id = aws_network_interface.ni-passive-private.id
+    network_interface_id = aws_network_interface.ni-active-private.id
   }
   tags = {
     Name = "${var.prefix}-rt-tgw-az2"
