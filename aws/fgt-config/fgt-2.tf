@@ -100,6 +100,7 @@ data "template_file" "fgt_passive_gwlb-geneve-config" {
     subnet-az1-gwlb = var.subnet_active_cidrs["gwlb"]
     subnet-az2-gwlb = var.subnet_passive_cidrs["gwlb"]
     private_port    = var.private_port
+    public_port     = var.public_port
     private_gw      = cidrhost(var.subnet_passive_cidrs["private"], 1)
   }
 }

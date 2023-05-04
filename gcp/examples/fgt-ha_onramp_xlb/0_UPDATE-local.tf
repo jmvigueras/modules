@@ -13,7 +13,7 @@ locals {
   machine      = "n1-standard-4"
 
   admin_port = "8443"
-  admin_cidr = "${chomp(data.http.my-public-ip.body)}/32"
+  admin_cidr = "${chomp(data.http.my-public-ip.response_body)}/32"
 
   onramp = {
     id      = "fgt"

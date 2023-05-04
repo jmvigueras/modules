@@ -43,3 +43,13 @@ variable "backend_interval" {
   type    = number
   default = 10
 }
+
+variable "fgt_1_ip" {
+  type    = string
+  default = null
+}
+
+variable "fgt_2_ip" {
+  type    = string
+  default = null
+}

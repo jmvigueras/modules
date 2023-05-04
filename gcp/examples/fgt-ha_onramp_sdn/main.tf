@@ -65,18 +65,6 @@ module "fgt" {
   fgt_passive = local.fgt_passive
 }
 #------------------------------------------------------------------------------------------------------------
-# Create VPC spokes peered to VPC FGT
-#------------------------------------------------------------------------------------------------------------
-module "vpc_spoke" {
-  source = "../../vpc-spoke"
-
-  prefix = local.prefix
-  region = local.region
-
-  spoke-subnet_cidrs = local.vpc_spoke-subnet_cidrs
-  fgt_vpc_self_link  = module.fgt_vpc.vpc_self_links["private"]
-}
-#------------------------------------------------------------------------------------------------------------
 # Create VM in VPC spokes
 #------------------------------------------------------------------------------------------------------------
 module "vm_spoke" {
@@ -89,9 +77,8 @@ module "vm_spoke" {
   rsa-public-key = trimspace(tls_private_key.ssh-rsa.public_key_openssh)
   gcp-user_name  = split("@", data.google_client_openid_userinfo.me.email)[0]
 
-  subnet_name = module.vpc_spoke.subnet_name
+  subnet_name = [module.fgt_vpc.subnet_names["bastion"]]
 }
-
 #------------------------------------------------------------------------------------------------------------
 # Create private routes in VPC private to FGT
 #------------------------------------------------------------------------------------------------------------

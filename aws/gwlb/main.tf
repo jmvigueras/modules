@@ -1,13 +1,17 @@
 #---------------------------------------------------------------------------
 # GWLB
-# - Target group FGT-active and passive
+# - Create GWLB
+# - Create Endpoint Service
+# - Create Target Group
+# - Create Listener 
+# - Attach Fortigate IPs to target group
 #---------------------------------------------------------------------------
 // Create Gateway LB
 resource "aws_lb" "gwlb" {
   load_balancer_type               = "gateway"
   name                             = "${var.prefix}-gwlb"
   enable_cross_zone_load_balancing = false
-  subnets                          = var.subnet_id
+  subnets                          = var.subnet_ids
 }
 // Create GWLB Service
 resource "aws_vpc_endpoint_service" "gwlb_service" {
@@ -17,10 +21,11 @@ resource "aws_vpc_endpoint_service" "gwlb_service" {
 }
 // Create Gateway LB target group GENEVE
 resource "aws_lb_target_group" "gwlb_target-group" {
-  name     = "${var.prefix}-gwlb-target-group"
-  port     = 6081
-  protocol = "GENEVE"
-  vpc_id   = var.vpc_id
+  name        = "${var.prefix}-gwlb-tg"
+  port        = 6081
+  protocol    = "GENEVE"
+  target_type = "ip"
+  vpc_id      = var.vpc_id
 
   health_check {
     port     = var.backend_port
@@ -37,40 +42,43 @@ resource "aws_lb_listener" "gwlb_listener" {
     type             = "forward"
   }
 }
-
-/*
-#---------------------------------------------------------------------------
-# Create attachments
-# - Target group FGT-active and passive
-#---------------------------------------------------------------------------
-// Create GWLB target group attachemnt to FGT
-resource "aws_lb_target_group_attachment" "gwlb_target-group_attch-1" {
+// Create GWLB target group attachemnt to FGT 1
+resource "aws_lb_target_group_attachment" "gwlb_tg_fgt_1" {
   target_group_arn = aws_lb_target_group.gwlb_target-group.arn
-  target_id        = module.fgt-fgsp.id
+  target_id        = var.fgt_1_ip
 }
-// ELB attachments
-resource "aws_autoscaling_attachment" "gwlb_attch_asg-az1" {
-  autoscaling_group_name = aws_autoscaling_group.fgt_az1_asg-payg.id
-  lb_target_group_arn    = aws_lb_target_group.gwlb_target-group.arn
+// Create GWLB target group attachemnt to FGT 2
+resource "aws_lb_target_group_attachment" "gwlb_tg_fgt_2" {
+  target_group_arn = aws_lb_target_group.gwlb_target-group.arn
+  target_id        = var.fgt_2_ip
 }
-resource "aws_autoscaling_attachment" "gwlb_attch_asg-az2" {
-  autoscaling_group_name = aws_autoscaling_group.fgt_az2_asg-payg.id
-  lb_target_group_arn    = aws_lb_target_group.gwlb_target-group.arn
+// Create VPC endpoints GWLB
+resource "aws_vpc_endpoint" "gwlb_endpoints" {
+  count             = length(var.subnet_ids)
+  service_name      = aws_vpc_endpoint_service.gwlb_service.service_name
+  subnet_ids        = [var.subnet_ids[count.index]]
+  vpc_endpoint_type = "GatewayLoadBalancer"
+  vpc_id            = var.vpc_id
+
+  tags = {
+    Name = "${var.prefix}-gwlb-endpoint-az${count.index + 1}"
+  }
 }
-*/
+
 
 // Principal ARN to discover GWLB Service
 data "aws_caller_identity" "current" {}
 
 // Create GWLB NI resource with NI IDs
 data "aws_network_interface" "gwlb_ni" {
+  count = length(var.subnet_ids)
   filter {
     name   = "description"
     values = ["ELB gwy/${aws_lb.gwlb.name}/*"]
   }
   filter {
     name   = "subnet-id"
-    values = ["${var.subnet_id[count.index]}"]
+    values = ["${var.subnet_ids[count.index]}"]
   }
   filter {
     name   = "status"
