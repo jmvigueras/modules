@@ -36,7 +36,8 @@ module "fgt_hub1_config" {
   fgt-active-ni_ips    = module.fgt_hub1_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips   = module.fgt_hub1_vpc.fgt-passive-ni_ips
 
-  config_fgsp     = true
+  config_fgcp     = local.hub1_cluster_type == "fgcp" ? true : false
+  config_fgsp     = local.hub1_cluster_type == "fgsp" ? true : false
   config_hub      = true
   config_tgw-gre  = true
   hub             = local.hub1
@@ -62,7 +63,7 @@ module "fgt_hub1" {
   fgt_config_1       = module.fgt_hub1_config.fgt_config_1
   fgt_config_2       = module.fgt_hub1_config.fgt_config_2
 
-  fgt_ha_fgsp = true
+  fgt_ha_fgsp = local.hub1_cluster_type == "fgsp" ? true : false
   fgt_passive = true
 }
 // Create VM in bastion subnet
@@ -105,7 +106,7 @@ module "tgw_hub1_connect" {
   prefix         = local.prefix
   vpc_tgw-att_id = module.fgt_hub1_vpc.vpc_tgw-att_id
   tgw_id         = module.tgw_hub1.tgw_id
-  peer_bgp-asn   = local.hub1["bgp-asn_hub"]
+  peer_bgp-asn   = local.hub1[0]["bgp_asn_hub"]
   peer_ip = [
     module.fgt_hub1_vpc.fgt-active-ni_ips["private"],
     module.fgt_hub1_vpc.fgt-passive-ni_ips["private"]
@@ -157,7 +158,8 @@ module "fgt_hub2_config" {
   fgt-active-ni_ips    = module.fgt_hub2_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips   = module.fgt_hub2_vpc.fgt-passive-ni_ips
 
-  config_fgcp = true
+  config_fgcp = local.hub2_cluster_type == "fgcp" ? true : false
+  config_fgsp = local.hub2_cluster_type == "fgsp" ? true : false
   config_hub  = true
   hub         = local.hub2
 
@@ -179,6 +181,9 @@ module "fgt_hub2" {
   fgt-passive-ni_ids = module.fgt_hub2_vpc.fgt-passive-ni_ids
   fgt_config_1       = module.fgt_hub2_config.fgt_config_1
   fgt_config_2       = module.fgt_hub2_config.fgt_config_2
+
+  fgt_ha_fgsp = local.hub2_cluster_type == "fgsp" ? true : false
+  fgt_passive = false
 }
 // Create VM in bastion subnet FGT
 module "vm_fgt_hub2" {

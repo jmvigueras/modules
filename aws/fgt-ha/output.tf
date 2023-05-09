@@ -19,5 +19,5 @@ output "fgt_active_eip_public" {
 }
 
 output "fgt_passive_eip_public" {
-  value = aws_eip.fgt_passive_eip_public.*.public_ip
+  value = var.fgt_ha_fgsp ? aws_eip.fgt_passive_eip_public.*.public_ip[0] : ""
 }

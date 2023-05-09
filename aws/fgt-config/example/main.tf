@@ -17,7 +17,8 @@ module "fgt-config_hub1" {
   fgt-active-ni_ips    = local.fgt-active-ni_ips
   fgt-passive-ni_ips   = local.fgt-passive-ni_ips
 
-  config_fgsp     = true
+  config_fgcp     = local.hub1_cluster_type == "fgcp" ? true : false
+  config_fgsp     = local.hub1_cluster_type == "fgsp" ? true : false
   config_hub      = true
   config_tgw-gre  = true
   config_vxlan    = true
@@ -45,11 +46,12 @@ module "fgt-config_hub2" {
   fgt-active-ni_ips    = local.fgt-active-ni_ips
   fgt-passive-ni_ips   = local.fgt-passive-ni_ips
 
-  config_fgcp     = true
-  config_hub      = true
-  config_vxlan    = true
-  hub             = local.hub2
-  hub-peer_vxlan  = local.hub2_peer_vxlan
+  config_fgcp    = local.hub2_cluster_type == "fgcp" ? true : false
+  config_fgsp    = local.hub2_cluster_type == "fgsp" ? true : false
+  config_hub     = true
+  config_vxlan   = true
+  hub            = local.hub2
+  hub-peer_vxlan = local.hub2_peer_vxlan
 }
 #---------------------------------------------------------------------------------
 # Create FGT cluster spoke
@@ -68,10 +70,14 @@ module "fgt-config_spoke" {
   fgt-active-ni_ips    = local.fgt-active-ni_ips
   fgt-passive-ni_ips   = local.fgt-passive-ni_ips
 
-  config_fgsp  = true
-  config_spoke = true
-  hubs         = local.hubs
-  spoke        = local.spoke
+  config_fgsp        = true
+  config_spoke       = true
+  config_gwlb-geneve = true
+
+  hubs  = local.hubs
+  spoke = local.spoke
+
+  gwlb_e-w_cidrs = ["172.16.0.0/12", "192.168.0.0/16"]
 }
 
 #---------------------------------------------------------------------------------
@@ -91,7 +97,7 @@ module "fgt-config_onramp" {
   fgt-active-ni_ips    = local.fgt-active-ni_ips
   fgt-passive-ni_ips   = local.fgt-passive-ni_ips
 
-  config_fgcp  = true
+  config_fgcp = true
 }
 
 

@@ -18,7 +18,11 @@ module "fgt_config" {
   fgt-active-ni_ips    = module.fgt_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips   = module.fgt_vpc.fgt-passive-ni_ips
 
-  config_fgsp        = true
+  fgt_active_extra-config  = join("\n", data.template_file.fgt_extra-config.*.rendered)
+  fgt_passive_extra-config = join("\n", data.template_file.fgt_extra-config.*.rendered)
+
+  config_fgcp        = local.fgt_cluster_type == "fgcp" ? true : false
+  config_fgsp        = local.fgt_cluster_type == "fgsp" ? true : false
   config_gwlb-geneve = true
   config_spoke       = true
 
@@ -26,11 +30,20 @@ module "fgt_config" {
   spoke = {
     id      = "spoke-1"
     cidr    = local.fgt_vpc_cidr
-    bgp-asn = local.hub["bgp-asn_spoke"]
+    bgp-asn = local.hub[0]["bgp_asn_spoke"]
   }
   hubs = local.hubs
 
-  vpc-spoke_cidr = [module.fgt_vpc.subnet_az1_cidrs["bastion"]]
+  vpc-spoke_cidr = concat([module.fgt_vpc.subnet_az1_cidrs["bastion"]], local.vpc-spoke_cidrs)
+  gwlb_e-w_cidrs = local.vpc-spoke_cidrs
+}
+// Extra config FGT (policy to allow traffic from GWLB to HUB VPN)
+data "template_file" "fgt_extra-config" {
+  count    = length(local.hubs)
+  template = file("./templates/fgt_extra_config.conf")
+  vars = {
+    hub_id = "${local.hubs[count.index]["id"]}"
+  }
 }
 // Create FGT
 module "fgt" {
@@ -49,7 +62,7 @@ module "fgt" {
   fgt_config_1       = module.fgt_config.fgt_config_1
   fgt_config_2       = module.fgt_config.fgt_config_2
 
-  fgt_ha_fgsp = true
+  fgt_ha_fgsp = local.fgt_cluster_type == "fgsp" ? true : false
   fgt_passive = true
 }
 // Create VPC FGT
@@ -117,7 +130,7 @@ module "vm_spoke" {
 module "gwlb" {
   source = "../../gwlb"
 
-  prefix = "${local.prefix}"
+  prefix = local.prefix
 
   fgt_1_ip = module.fgt_vpc.fgt-active-ni_ips["private"]
   fgt_2_ip = module.fgt_vpc.fgt-passive-ni_ips["private"]

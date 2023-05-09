@@ -51,8 +51,8 @@ resource "aws_instance" "fgt_active" {
     encrypted = true
   }
   ebs_block_device {
-     encrypted = true
-     device_name = "/dev/sdb"
+    encrypted   = true
+    device_name = "/dev/sdb"
   }
   network_interface {
     device_index         = 0
@@ -88,8 +88,8 @@ resource "aws_instance" "fgt_passive" {
     encrypted = true
   }
   ebs_block_device {
-     encrypted = true
-     device_name = "/dev/sdb"
+    encrypted   = true
+    device_name = "/dev/sdb"
   }
   network_interface {
     device_index         = 0

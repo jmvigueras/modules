@@ -9,7 +9,7 @@ output "fgt_hub1" {
     fgt-1_pass   = module.fgt_hub1.fgt_active_id
     fgt-2_pass   = module.fgt_hub1.fgt_passive_id
     vpn_psk      = module.fgt_hub1_config.vpn_psk
-    admin_cidr   = "${chomp(data.http.my-public-ip.body)}/32"
+    admin_cidr   = "${chomp(data.http.my-public-ip.response_body)}/32"
     api_key      = module.fgt_hub1_config.api_key
   }
 }
@@ -23,7 +23,7 @@ output "fgt_hub2" {
     fgt-1_pass   = module.fgt_hub2.fgt_active_id
     fgt-2_pass   = module.fgt_hub2.fgt_passive_id
     vpn_psk      = module.fgt_hub2_config.vpn_psk
-    admin_cidr   = "${chomp(data.http.my-public-ip.body)}/32"
+    admin_cidr   = "${chomp(data.http.my-public-ip.response_body)}/32"
     api_key      = module.fgt_hub2_config.api_key
   }
 }
@@ -32,7 +32,7 @@ output "fgt_spoke" {
     username   = "admin"
     fgt-1_mgmt = module.fgt_spoke.*.fgt_active_eip_mgmt
     fgt-1_pass = module.fgt_spoke.*.fgt_active_id
-    admin_cidr = "${chomp(data.http.my-public-ip.body)}/32"
+    admin_cidr = "${chomp(data.http.my-public-ip.response_body)}/32"
     api_key    = module.fgt_spoke_config.*.api_key
   }
 }

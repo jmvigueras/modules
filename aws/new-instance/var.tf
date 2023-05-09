@@ -58,6 +58,6 @@ variable "user_data" {
 }
 
 variable "iam_profile" {
-  type        = string
-  default     = null
+  type    = string
+  default = null
 }

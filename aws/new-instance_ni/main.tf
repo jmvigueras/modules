@@ -3,19 +3,19 @@
 #-----------------------------------------------------------------------------------------------------
 // Create Amazon Linux EC2 Instance
 resource "aws_instance" "vm" {
-  count                       = var.iam_profile != null ? 0 : 1
-  ami                         = data.aws_ami.ami_ubuntu.id
-  instance_type               = var.instance_type
-  key_name                    = var.keypair
-  user_data                   = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
-   
+  count         = var.iam_profile != null ? 0 : 1
+  ami           = data.aws_ami.ami_ubuntu.id
+  instance_type = var.instance_type
+  key_name      = var.keypair
+  user_data     = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
+
   root_block_device {
     volume_size           = var.disk_size
     volume_type           = var.disk_type
     delete_on_termination = true
     encrypted             = true
   }
-  
+
   network_interface {
     device_index         = 0
     network_interface_id = var.ni_id
@@ -28,13 +28,13 @@ resource "aws_instance" "vm" {
 }
 // Create Amazon Linux EC2 Instance
 resource "aws_instance" "vm_iam_profile" {
-  count                       = var.iam_profile != null ? 1 : 0
-  ami                         = data.aws_ami.ami_ubuntu.id
-  instance_type               = var.instance_type
-  iam_instance_profile        = var.iam_profile
-  key_name                    = var.keypair
-  user_data                   = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
-   
+  count                = var.iam_profile != null ? 1 : 0
+  ami                  = data.aws_ami.ami_ubuntu.id
+  instance_type        = var.instance_type
+  iam_instance_profile = var.iam_profile
+  key_name             = var.keypair
+  user_data            = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
+
   root_block_device {
     volume_size           = var.disk_size
     volume_type           = var.disk_type
@@ -57,7 +57,7 @@ resource "aws_instance" "vm_iam_profile" {
 // Retrieve AMI info
 data "aws_ami" "ami_ubuntu" {
   most_recent = true
-  owners = ["099720109477"] # Canonical
+  owners      = ["099720109477"] # Canonical
 
   filter {
     name   = "name"

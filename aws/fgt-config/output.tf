@@ -7,7 +7,7 @@ output "fgt_config_2" {
 }
 
 output "vpn_psk" {
-  value = var.hub["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hub["vpn_psk"]
+  value = var.hub[0]["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hub[0]["vpn_psk"]
 }
 
 output "api_key" {

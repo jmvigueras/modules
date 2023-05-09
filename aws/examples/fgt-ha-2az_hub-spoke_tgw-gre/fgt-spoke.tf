@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------
 // Create VPC spoke
 module "fgt_spoke_vpc" {
-  count  = local.count
+  count  = local.fgt_spoke_count
   source = "../../vpc-fgt-2az"
 
   prefix     = "${local.prefix}-spoke-${count.index + 1}"
@@ -14,11 +14,11 @@ module "fgt_spoke_vpc" {
   admin_port = local.admin_port
   region     = local.region
 
-  vpc-sec_cidr = cidrsubnet(local.spoke["cidr"], ceil(log(local.count, 2)), count.index)
+  vpc-sec_cidr = cidrsubnet(local.spoke["cidr"], ceil(log(local.fgt_spoke_count, 2)), count.index)
 }
 
 module "fgt_spoke_config" {
-  count  = local.count
+  count  = local.fgt_spoke_count
   source = "../../fgt-config"
 
   admin_cidr     = local.admin_cidr
@@ -35,14 +35,14 @@ module "fgt_spoke_config" {
   config_spoke = true
   spoke = {
     id      = "${local.spoke["id"]}-${count.index + 1}"
-    cidr    = cidrsubnet(local.spoke["cidr"], ceil(log(local.count, 2)), count.index)
-    bgp-asn = local.hub1["bgp-asn_spoke"]
+    cidr    = cidrsubnet(local.spoke["cidr"], ceil(log(local.fgt_spoke_count, 2)), count.index)
+    bgp-asn = local.hub1[0]["bgp_asn_spoke"]
   }
   hubs = local.hubs
 }
 
 module "fgt_spoke" {
-  count  = local.count
+  count  = local.fgt_spoke_count
   source = "../../fgt-ha"
 
   prefix        = "${local.prefix}-spoke-${count.index + 1}"
@@ -60,7 +60,7 @@ module "fgt_spoke" {
 }
 // Create VM in subnet bastion FGT spoke
 module "vm_fgt_spoke" {
-  count  = local.count
+  count  = local.fgt_spoke_count
   source = "../../new-instance"
 
   prefix  = "${local.prefix}-spoke-${count.index + 1}"

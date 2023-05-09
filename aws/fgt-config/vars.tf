@@ -15,7 +15,7 @@ variable "config_fgsp" {
 #-----------------------------------------------------------------------------------
 # Default BGP configuration
 #-----------------------------------------------------------------------------------
-variable "bgp-asn_default" {
+variable "bgp_asn_default" {
   type    = string
   default = "65000"
 }
@@ -44,17 +44,18 @@ variable "hubs" {
   type = list(map(string))
   default = [
     {
-      id                = "HUB1"
-      bgp-asn           = "65000"
-      public-ip         = "11.11.11.11"
-      hub-ip            = "172.20.30.1"
-      site-ip           = "172.20.0.10" // set to "" if VPN mode-cfg is enable
-      hck-srv-ip        = "172.20.0.1"
+      id                = "HUB"
+      bgp_asn           = "65000"
+      external_ip       = "11.11.11.11"
+      hub_ip            = "172.20.30.1"
+      site_ip           = "172.20.30.10" // set to "" if VPN mode_cfg is enable
+      hck_ip            = "172.20.30.1"
       vpn_psk           = "secret"
-      cidr              = "172.20.0.0/23"
-      ike-version       = "2"
+      cidr              = "172.20.30.0/24"
+      ike_version       = "2"
       network_id        = "1"
-      dpd-retryinterval = "5"
+      dpd_retryinterval = "5"
+      sdwan_port        = "public"
     }
   ]
 }
@@ -69,21 +70,37 @@ variable "config_hub" {
   default = false
 }
 
-// Variable to create a a VPN HUB
+// Variable to create VPN HUB
 variable "hub" {
-  type = map(any)
-  default = {
-    id                = "fgt"
-    bgp-asn_hub       = "65000"
-    bgp-asn_spoke     = "65000"
-    vpn_cidr          = "10.10.10.0/24"
-    vpn_psk           = "secret-key-123"
-    cidr              = "172.20.0.0/23"
-    ike-version       = "2"
-    network_id        = "1"
-    dpd-retryinterval = "5"
-    mode-cfg          = true
-  }
+  type = list(map(string))
+  default = [
+    {
+      id                = "HUB"
+      bgp_asn_hub       = "65000"
+      bgp_asn_spoke     = "65000"
+      vpn_cidr          = "10.1.1.0/24"
+      vpn_psk           = "secret-key-123"
+      cidr              = "172.30.0.0/24"
+      ike_version       = "2"
+      network_id        = "1"
+      dpd_retryinterval = "5"
+      mode_cfg          = true
+      vpn_port          = "public"
+    },
+    {
+      id                = "HUB"
+      bgp_asn_hub       = "65000"
+      bgp_asn_spoke     = "65000"
+      vpn_cidr          = "10.1.10.0/24"
+      vpn_psk           = "secret-key-123"
+      cidr              = "172.30.0.0/24"
+      ike_version       = "2"
+      network_id        = "1"
+      dpd_retryinterval = "5"
+      mode_cfg          = true
+      vpn_port          = "private"
+    }
+  ]
 }
 
 variable "config_vxlan" {
@@ -144,6 +161,11 @@ variable "config_gwlb-geneve" {
 variable "gwlbe_ip" {
   type    = list(string)
   default = ["172.20.0.66", "172.20.0.194"]
+}
+
+variable "gwlb_e-w_cidrs" {
+  type    = list(string)
+  default = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
 }
 
 #-----------------------------------------------------------------------------------
@@ -270,15 +292,28 @@ variable "subnet_passive_cidrs" {
   default = null
 }
 
-variable "mgmt_port" {
-  type    = string
-  default = "port1"
+variable "ports" {
+  type = map(string)
+  default = {
+    public  = "port1"
+    private = "port2"
+    mgtm    = "port3"
+    ha_port = "port3"
+  }
 }
 variable "public_port" {
   type    = string
-  default = "port2"
+  default = "port1"
 }
 variable "private_port" {
+  type    = string
+  default = "port2"
+}
+variable "mgmt_port" {
+  type    = string
+  default = "port3"
+}
+variable "ha_port" {
   type    = string
   default = "port3"
 }

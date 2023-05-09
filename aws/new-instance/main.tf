@@ -11,7 +11,7 @@ resource "aws_instance" "vm" {
   subnet_id                   = var.subnet_id
   security_groups             = var.security_groups
   associate_public_ip_address = var.public_ip
-   
+
   root_block_device {
     volume_size           = var.disk_size
     volume_type           = var.disk_type
@@ -34,7 +34,7 @@ resource "aws_instance" "vm_iam_profile" {
   subnet_id                   = var.subnet_id
   security_groups             = var.security_groups
   associate_public_ip_address = var.public_ip
-   
+
   root_block_device {
     volume_size           = var.disk_size
     volume_type           = var.disk_type
@@ -50,7 +50,7 @@ resource "aws_instance" "vm_iam_profile" {
 // Retrieve AMI info
 data "aws_ami" "ami_ubuntu" {
   most_recent = true
-  owners = ["099720109477"] # Canonical
+  owners      = ["099720109477"] # Canonical
 
   filter {
     name   = "name"

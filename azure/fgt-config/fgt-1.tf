@@ -69,9 +69,9 @@ data "template_file" "fgt_1_sdn-config" {
     tenant              = var.tenant_id != null ? var.tenant_id : ""
     subscription        = var.subscription_id != null ? var.subscription_id : ""
     clientid            = var.client_id != null ? var.client_id : ""
-    clientsecret        = var.client_secret != null ? var.client_secret  : ""
+    clientsecret        = var.client_secret != null ? var.client_secret : ""
     resource_group_name = var.resource_group_name != null ? var.resource_group_name : ""
-    
+
     fgt_ni      = var.fgt-active-ni_names != null ? var.fgt-active-ni_names["public"] : ""
     cluster_pip = var.cluster_pip != null ? var.cluster_pip : ""
     route_table = var.route_table != null ? var.route_table : ""
@@ -135,7 +135,7 @@ data "template_file" "fgt_vpn-active-config" {
     network_id            = var.hub[count.index]["network_id"]
     ike_version           = var.hub[count.index]["ike_version"]
     dpd_retryinterval     = var.hub[count.index]["dpd_retryinterval"]
-    local_id               = var.hub[count.index]["id"]
+    local_id              = var.hub[count.index]["id"]
     local_bgp_asn         = var.hub[count.index]["bgp_asn_hub"]
     local_router-id       = var.fgt-active-ni_ips["mgmt"]
     local_network         = var.hub[count.index]["cidr"]

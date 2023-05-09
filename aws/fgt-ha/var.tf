@@ -70,15 +70,19 @@ variable "instance_type" {
 
 variable "fgt_ni_0" {
   type    = string
-  default = "mgmt"
+  default = "public"
 }
 variable "fgt_ni_1" {
   type    = string
-  default = "public"
+  default = "private"
 }
 variable "fgt_ni_2" {
   type    = string
-  default = "private"
+  default = "mgmt"
+}
+variable "fgt_ni_3" {
+  type    = string
+  default = "ha"
 }
 
 // License Type to create FortiGate-VM

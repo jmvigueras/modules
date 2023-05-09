@@ -30,7 +30,8 @@ module "fgt_hub_config" {
   fgt-active-ni_ips    = module.fgt_hub_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips   = module.fgt_hub_vpc.fgt-passive-ni_ips
 
-  config_fgcp = true
+  config_fgcp = local.fgt_hub_cluster_type == "fgcp" ? true : false
+  config_fgsp = local.fgt_hub_cluster_type == "fgsp" ? true : false
   config_hub  = true
   hub         = local.hub
 

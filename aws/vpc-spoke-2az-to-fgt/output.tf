@@ -32,7 +32,7 @@ output "subnet_az2_ids" {
 
 output "nsg_ids" {
   value = {
-    vm   = aws_security_group.nsg-vpc-vm.id
+    vm = aws_security_group.nsg-vpc-vm.id
   }
 }
 

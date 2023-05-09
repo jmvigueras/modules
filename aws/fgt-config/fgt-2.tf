@@ -6,7 +6,7 @@ data "template_file" "fgt_passive" {
   template = file("${path.module}/templates/fgt-all.conf")
 
   vars = {
-    fgt_id         = var.config_spoke ? "${var.spoke["id"]}-2" : "${var.hub["id"]}-2"
+    fgt_id         = var.config_spoke ? "${var.spoke["id"]}-2" : "${var.hub[0]["id"]}-2"
     admin_port     = var.admin_port
     admin_cidr     = var.admin_cidr
     adminusername  = "admin"
@@ -31,12 +31,12 @@ data "template_file" "fgt_passive" {
     fgt_sdn-config         = data.template_file.fgt_sdn-config.rendered
     fgt_ha-fgcp-config     = var.config_fgcp ? data.template_file.fgt_ha-fgcp-passive-config.rendered : ""
     fgt_ha-fgsp-config     = var.config_fgsp ? data.template_file.fgt_ha-fgsp-passive-config.rendered : ""
-    fgt_bgp-config         = var.config_spoke || var.config_hub ? "" : data.template_file.fgt_bgp-config.rendered
+    fgt_bgp-config         = data.template_file.fgt_bgp-config.rendered
     fgt_static-config      = var.vpc-spoke_cidr != null ? data.template_file.fgt_passive_static-config.rendered : ""
-    fgt_sdwan-config       = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
+    fgt_sdwan-config       = var.config_spoke ? var.config_fgsp ? join("\n", data.template_file.fgt_passive_sdwan-config.*.rendered) : join("\n", data.template_file.fgt_active_sdwan-config.*.rendered) : ""
     fgt_tgw-gre-config     = var.config_tgw-gre ? data.template_file.fgt_passive_tgw-gre-config.rendered : ""
     fgt_vxlan-config       = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
-    fgt_vpn-config         = var.config_hub ? var.config_fgsp ? data.template_file.fgt_vpn-config.1.rendered : data.template_file.fgt_vpn-config.0.rendered : ""
+    fgt_vpn-config         = var.config_hub ? join("\n", data.template_file.fgt_passive_vpn-config.*.rendered) : ""
     fgt_gwlb-geneve-config = var.config_gwlb-geneve ? data.template_file.fgt_passive_gwlb-geneve-config.rendered : ""
     fgt_fmg-config         = var.config_fmg ? data.template_file.fgt_2_fmg-config.rendered : ""
     fgt_faz-config         = var.config_faz ? data.template_file.fgt_2_faz-config.rendered : ""
@@ -73,6 +73,61 @@ data "template_file" "fgt_passive_static-config" {
   })
 }
 
+data "template_file" "fgt_passive_sdwan-config" {
+  count    = var.hubs != null ? length(var.hubs) : 0
+  template = file("${path.module}/templates/fgt-sdwan.conf")
+  vars = {
+    hub_id            = var.hubs[count.index]["id"]
+    hub_ipsec_id      = "${var.hubs[count.index]["id"]}_ipsec_${count.index + 1}"
+    hub_vpn_psk       = var.hubs[count.index]["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hubs[count.index]["vpn_psk"]
+    hub_external_ip   = var.hubs[count.index]["external_ip"]
+    hub_private_ip    = var.hubs[count.index]["hub_ip"]
+    site_private_ip   = var.hubs[count.index]["site_ip"]
+    hub_bgp_asn       = var.hubs[count.index]["bgp_asn"]
+    hck_ip            = var.hubs[count.index]["hck_ip"]
+    hub_cidr          = var.hubs[count.index]["cidr"]
+    network_id        = var.hubs[count.index]["network_id"]
+    ike_version       = var.hubs[count.index]["ike_version"]
+    dpd_retryinterval = var.hubs[count.index]["dpd_retryinterval"]
+    local_id          = "${var.spoke["id"]}-2"
+    local_bgp_asn     = var.spoke["bgp-asn"]
+    local_router_id   = var.fgt-passive-ni_ips["mgmt"]
+    local_network     = var.spoke["cidr"]
+    sdwan_port        = var.ports[var.hubs[count.index]["sdwan_port"]]
+    private_port      = var.ports["private"]
+    count             = count.index + 1
+  }
+}
+
+data "template_file" "fgt_passive_vpn-config" {
+  count    = length(var.hub)
+  template = file("${path.module}/templates/fgt-vpn.conf")
+  vars = {
+    hub_private_ip        = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0), 1)
+    hub_remote_ip         = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0), 2)
+    network_id            = var.hub[count.index]["network_id"]
+    ike_version           = var.hub[count.index]["ike_version"]
+    dpd_retryinterval     = var.hub[count.index]["dpd_retryinterval"]
+    local_id              = var.hub[count.index]["id"]
+    local_bgp_asn         = var.hub[count.index]["bgp_asn_hub"]
+    local_router-id       = var.fgt-passive-ni_ips["mgmt"]
+    local_network         = var.hub[count.index]["cidr"]
+    mode_cfg              = var.hub[count.index]["mode_cfg"]
+    site_private_ip_start = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0), 3)
+    site_private_ip_end   = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0), 14)
+    site_private_ip_mask  = cidrnetmask(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0))
+    site_bgp_asn          = var.hub[count.index]["bgp_asn_spoke"]
+    vpn_psk               = var.hub[count.index]["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hub[count.index]["vpn_psk"]
+    vpn_cidr              = cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0)
+    vpn_port              = var.ports[var.hub[count.index]["vpn_port"]]
+    vpn_name              = "vpn-${var.hub[count.index]["vpn_port"]}"
+    private_port          = var.ports["private"]
+    // route_map_out         = "rm_out_aspath_${var.config_fgsp ? 1 : 0}"
+    route_map_out = ""
+    count         = count.index + 1
+  }
+}
+
 data "template_file" "fgt_passive_tgw-gre-config" {
   template = file("${path.module}/templates/aws_fgt-tgw.conf")
   vars = {
@@ -86,15 +141,14 @@ data "template_file" "fgt_passive_tgw-gre-config" {
     local_ip         = cidrhost(var.tgw_inside_cidr[1], 1)
     remote_ip_1      = cidrhost(var.tgw_inside_cidr[1], 2)
     remote_ip_2      = cidrhost(var.tgw_inside_cidr[1], 3)
-    route_map_out    = var.config_fgsp ? "rm_prepending_out_1" : ""
+    route_map_out    = var.config_fgsp ? "rm_out_aspath_1" : ""
     public_port      = var.public_port
-    local_bgp-asn    = var.config_hub ? var.hub["bgp-asn_hub"] : var.config_spoke ? var.spoke["bgp-asn"] : var.bgp-asn_default
+    local_bgp-asn    = var.config_hub ? var.hub[0]["bgp_asn_hub"] : var.config_spoke ? var.spoke["bgp-asn"] : var.bgp_asn_default
   }
 }
 
 data "template_file" "fgt_passive_gwlb-geneve-config" {
-  template = file("${path.module}/templates/aws_fgt-gwlb-geneve.conf")
-  vars = {
+  template = templatefile("${path.module}/templates/aws_fgt-gwlb-geneve.conf", {
     gwlbe_ip_az1    = var.gwlbe_ip[0]
     gwlbe_ip_az2    = var.gwlbe_ip[1]
     subnet-az1-gwlb = var.subnet_active_cidrs["gwlb"]
@@ -102,7 +156,8 @@ data "template_file" "fgt_passive_gwlb-geneve-config" {
     private_port    = var.private_port
     public_port     = var.public_port
     private_gw      = cidrhost(var.subnet_passive_cidrs["private"], 1)
-  }
+    e-w_cidrs       = var.gwlb_e-w_cidrs
+  })
 }
 
 data "template_file" "fgt_2_faz-config" {

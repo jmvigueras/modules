@@ -12,15 +12,15 @@ resource "aws_route_table" "rt-spoke-to-tgw" {
     gateway_id = aws_internet_gateway.igw-vpc.id
   }
   route {
-    cidr_block           = "172.16.0.0/12"
+    cidr_block         = "172.16.0.0/12"
     transit_gateway_id = var.tgw_id
   }
   route {
-    cidr_block           = "192.168.0.0/16"
+    cidr_block         = "192.168.0.0/16"
     transit_gateway_id = var.tgw_id
   }
   route {
-    cidr_block           = "10.0.0.0/8"
+    cidr_block         = "10.0.0.0/8"
     transit_gateway_id = var.tgw_id
   }
   tags = {
