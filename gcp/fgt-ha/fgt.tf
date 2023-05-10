@@ -83,7 +83,9 @@ resource "google_compute_instance" "fgt-active" {
 # FGT PASSIVE VM
 #------------------------------------------------------------------------------------------------------------
 locals {
-  fgt-2_logdisk_name = "${var.prefix}-fgt-2-disk-${random_string.randon_str.result}"
+  fgt-2_logdisk_name   = "${var.prefix}-fgt-2-disk-${random_string.randon_str.result}"
+  fgt-2_mgmt_public_ip = var.fgt-passive-ni_ips != null && var.fgt_passive ? google_compute_address.passive-mgmt-public-ip.0.address : null
+  fgt-2_public_ip      = var.fgt-passive-ni_ips != null && var.fgt_passive && var.config_fgsp ? google_compute_address.passive-public-ip.0.address : null
 }
 
 # Create log disk for passive
@@ -139,7 +141,7 @@ resource "google_compute_instance" "fgt-passive_fgcp" {
     subnetwork = var.subnet_names["mgmt"]
     network_ip = var.fgt-passive-ni_ips["mgmt"]
     access_config {
-      nat_ip = google_compute_address.passive-mgmt-public-ip.0.address
+      nat_ip = local.fgt-2_mgmt_public_ip
     }
   }
 
@@ -179,7 +181,7 @@ resource "google_compute_instance" "fgt-passive_fgsp" {
     subnetwork = var.subnet_names["public"]
     network_ip = var.fgt-passive-ni_ips["public"]
     access_config {
-      nat_ip = google_compute_address.passive-public-ip.0.address
+      nat_ip = local.fgt-2_public_ip
     }
   }
   network_interface {
@@ -190,7 +192,7 @@ resource "google_compute_instance" "fgt-passive_fgsp" {
     subnetwork = var.subnet_names["mgmt"]
     network_ip = var.fgt-passive-ni_ips["mgmt"]
     access_config {
-      nat_ip = google_compute_address.passive-mgmt-public-ip.0.address
+      nat_ip = local.fgt-2_mgmt_public_ip
     }
   }
 
