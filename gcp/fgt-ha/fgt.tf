@@ -113,7 +113,7 @@ resource "google_compute_address" "passive-public-ip" {
 
 # Create FGT passive instance (FGCP cluster)
 resource "google_compute_instance" "fgt-passive_fgcp" {
-  count          = var.fgt-passive-ni_ips != null && var.fgt_passive && var.config_fgsp ? 0 : 1
+  count          = var.fgt-passive-ni_ips != null && var.fgt_passive && !var.config_fgsp ? 1 : 0
   name           = var.fgt_ha_fgsp ? "${var.prefix}-fgt-2" : "${var.prefix}-fgt-passive"
   machine_type   = var.machine
   zone           = var.zone2
