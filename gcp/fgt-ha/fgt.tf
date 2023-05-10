@@ -79,10 +79,13 @@ resource "google_compute_instance" "fgt-active" {
   }
 }
 
-
 #------------------------------------------------------------------------------------------------------------
 # FGT PASSIVE VM
 #------------------------------------------------------------------------------------------------------------
+locals {
+  fgt-2_logdisk_name = "${var.prefix}-fgt-2-disk-${random_string.randon_str.result}"
+}
+
 # Create log disk for passive
 resource "google_compute_disk" "passive-logdisk" {
   count = var.fgt-passive-ni_ips != null && var.fgt_passive ? 1 : 0
@@ -122,7 +125,7 @@ resource "google_compute_instance" "fgt-passive_fgcp" {
     }
   }
   attached_disk {
-    source = google_compute_disk.passive-logdisk.0.name
+    source = local.fgt-2_logdisk_name
   }
   network_interface {
     subnetwork = var.subnet_names["public"]
@@ -170,7 +173,7 @@ resource "google_compute_instance" "fgt-passive_fgsp" {
     }
   }
   attached_disk {
-    source = google_compute_disk.passive-logdisk.0.name
+    source = local.fgt-2_logdisk_name
   }
   network_interface {
     subnetwork = var.subnet_names["public"]
