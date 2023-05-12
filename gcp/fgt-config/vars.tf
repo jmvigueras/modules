@@ -46,19 +46,21 @@ variable "spoke" {
 // Details to crate VPN connections
 variable "hubs" {
   type = list(map(string))
-  default = [
+  default =
+  [
     {
-      id                = "HUB1"
-      bgp-asn           = "65000"
-      public-ip         = "11.11.11.11"
-      hub-ip            = "172.20.30.1"
-      site-ip           = "172.20.30.10" // set to "" if VPN mode-cfg is enable
-      hck-srv-ip        = "172.20.30.1"
+      id                = "HUB"
+      bgp_asn           = "65000"
+      external_ip       = "11.11.11.11"
+      hub_ip            = "172.20.30.1"
+      site_ip           = "172.20.30.10" // set to "" if VPN mode_cfg is enable
+      hck_ip            = "172.20.30.1"
       vpn_psk           = "secret"
       cidr              = "172.20.30.0/24"
-      ike-version       = "2"
+      ike_version       = "2"
       network_id        = "1"
-      dpd-retryinterval = "5"
+      dpd_retryinterval = "5"
+      sdwan_port        = "public"
     }
   ]
 }

@@ -82,20 +82,23 @@ data "template_file" "fgt_sdwan-config" {
   template = file("${path.module}/templates/fgt-sdwan.conf")
   vars = {
     hub_id            = var.hubs[count.index]["id"]
-    hub_ipsec-id      = "${var.hubs[count.index]["id"]}_ipsec_${count.index + 1}"
-    hub_vpn_psk       = var.hubs[count.index]["vpn_psk"]
-    hub_public-ip     = var.hubs[count.index]["public-ip"]
-    hub_private-ip    = var.hubs[count.index]["hub-ip"]
-    site_private-ip   = var.hubs[count.index]["site-ip"]
-    hub_bgp-asn       = var.hubs[count.index]["bgp-asn"]
-    hck-srv-ip        = var.hubs[count.index]["hck-srv-ip"]
+    hub_ipsec_id      = "${var.hubs[count.index]["id"]}_ipsec_${count.index + 1}"
+    hub_vpn_psk       = var.hubs[count.index]["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hubs[count.index]["vpn_psk"]
+    hub_external_ip   = var.hubs[count.index]["external_ip"]
+    hub_private_ip    = var.hubs[count.index]["hub_ip"]
+    site_private_ip   = var.hubs[count.index]["site_ip"]
+    hub_bgp_asn       = var.hubs[count.index]["bgp_asn"]
+    hck_ip            = var.hubs[count.index]["hck_ip"]
     hub_cidr          = var.hubs[count.index]["cidr"]
     network_id        = var.hubs[count.index]["network_id"]
-    ike-version       = var.hubs[count.index]["ike-version"]
-    dpd-retryinterval = var.hubs[count.index]["dpd-retryinterval"]
-    localid           = var.spoke["id"]
-    sdwan_port        = var.public_port
-    private_port      = var.private_port
+    ike_version       = var.hubs[count.index]["ike_version"]
+    dpd_retryinterval = var.hubs[count.index]["dpd_retryinterval"]
+    local_id          = var.spoke["id"]
+    local_bgp_asn     = var.spoke["bgp_asn"]
+    local_router_id   = var.fgt-active-ni_ips["mgmt"]
+    local_network     = var.spoke["cidr"]
+    sdwan_port        = var.ports[var.hubs[count.index]["sdwan_port"]]
+    private_port      = var.ports["private"]
     count             = count.index + 1
   }
 }
