@@ -39,7 +39,7 @@ variable "spoke" {
   default = {
     id      = "fgt"
     cidr    = "172.30.0.0/23"
-    bgp-asn = "65000"
+    bgp_asn = "65000"
   }
 }
 

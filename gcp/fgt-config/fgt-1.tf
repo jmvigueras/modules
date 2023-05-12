@@ -127,7 +127,7 @@ data "template_file" "fgt_vpn-config" {
 data "template_file" "fgt_spoke_bgp-config" {
   template = file("${path.module}/templates/fgt-bgp.conf")
   vars = {
-    bgp-asn   = var.spoke["bgp-asn"]
+    bgp-asn   = var.spoke["bgp_asn"]
     router-id = var.fgt-active-ni_ips["mgmt"]
     network   = var.spoke["cidr"]
     role      = "spoke"
