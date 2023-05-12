@@ -46,8 +46,7 @@ variable "spoke" {
 // Details to crate VPN connections
 variable "hubs" {
   type = list(map(string))
-  default =
-  [
+  default = [
     {
       id                = "HUB"
       bgp_asn           = "65000"
