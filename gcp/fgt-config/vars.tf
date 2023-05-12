@@ -263,6 +263,16 @@ variable "subnet_cidrs" {
   default = null
 }
 
+variable "ports" {
+  type = map(string)
+  default = {
+    public  = "port1"
+    private = "port2"
+    mgtm    = "port3"
+    ha_port = "port3"
+  }
+}
+
 variable "mgmt_port" {
   type    = string
   default = "port3"
