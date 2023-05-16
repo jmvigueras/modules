@@ -23,7 +23,7 @@ locals {
   fgt_version      = "latest"
 
   admin_port = "8443"
-  admin_cidr = "${chomp(data.http.my-public-ip.body)}/32"
+  admin_cidr = "${chomp(data.http.my-public-ip.response_body)}/32"
 
   fgt_vnet_cidr = "172.30.0.0/23"
 

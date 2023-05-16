@@ -15,8 +15,8 @@ locals {
   #-----------------------------------------------------------------------------------------------------
   # LB
   #-----------------------------------------------------------------------------------------------------
-  config_gwlb        = true
-  ilb_ip             = cidrhost(module.fgt_spoke_vnet.subnet_cidrs["private"], 9)
+  config_gwlb        = false
+  ilb_ip             = cidrhost(module.fgt_hub_vnet.subnet_cidrs["private"], 9)
   backend-probe_port = "8008"
 
   gwlb_ip = cidrhost(module.fgt_spoke_vnet.subnet_cidrs["private"], 8)
@@ -34,10 +34,10 @@ locals {
   vhub_vnet-spoke_cidrs = ["172.30.18.0/23"]
 
   #-----------------------------------------------------------------------------------------------------
-  # FGT
+  # FGT (general variables)
   #-----------------------------------------------------------------------------------------------------
   admin_port     = "8443"
-  admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
+  admin_cidr     = "${chomp(data.http.my-public-ip.response_body)}/32"
   admin_username = "azureadmin"
   admin_password = "Terraform123#"
 
@@ -98,7 +98,7 @@ locals {
 
   spoke = {
     id      = "spoke-1"
-    cidr    = "172.30.0.0/24"
+    cidr    = "192.168.0.0/24"
     bgp_asn = "65000"
   }
 

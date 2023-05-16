@@ -28,6 +28,8 @@ module "fgt_spoke_config" {
   config_spoke = true
   spoke        = local.spoke
   hubs         = local.hubs
+
+  vpc-spoke_cidr = [module.fgt_spoke_vnet.subnet_cidrs["bastion"]]
 }
 
 // Create FGT cluster spoke
@@ -67,7 +69,7 @@ module "fgt_spoke_vnet" {
 
 // Create VM in spoke vNet
 module "vm_fgt_spoke_bastion" {
-  source = "../../new-vm_rsa-ssh"
+  source = "../../new-vm_rsa-ssh_v2"
 
   prefix                   = "${local.prefix}-spoke-vhub"
   location                 = local.location
@@ -77,9 +79,8 @@ module "vm_fgt_spoke_bastion" {
   admin_username           = local.admin_username
   rsa-public-key           = tls_private_key.ssh.public_key_openssh
 
-  vm_ni_ids = [
-    module.fgt_spoke_vnet.bastion-ni_id
-  ]
+  subnet_id   = module.fgt_spoke_vnet.subnet_ids["bastion"]
+  subnet_cidr = module.fgt_spoke_vnet.subnet_cidrs["bastion"]
 }
 
 

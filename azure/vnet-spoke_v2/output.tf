@@ -1,13 +1,13 @@
 
-output "vnet_ids" {
+output "vnet_id" {
   value = azurerm_virtual_network.vnet-spoke.id
 }
 
-output "vnet_names" {
+output "vnet_name" {
   value = azurerm_virtual_network.vnet-spoke.name
 }
 
-output "vnet_cidrs" {
+output "vnet_cidr" {
   value = azurerm_virtual_network.vnet-spoke.address_space[0]
 }
 
@@ -38,6 +38,6 @@ output "subnet_cidrs" {
   }
 }
 
-output "nsg_ids" {
+output "nsg_id" {
   value = azurerm_network_security_group.nsg_spoke.id
 }

@@ -8,7 +8,7 @@ locals {
   prefix                   = "demo-fgt-ha-4ports" // prefix added to all resources created
 
   admin_port     = "8443"
-  admin_cidr     = "${chomp(data.http.my-public-ip.body)}/32"
+  admin_cidr     = "${chomp(data.http.my-public-ip.response_body)}/32"
   admin_username = "azureadmin"
   admin_password = "Terraform123#"
 

@@ -21,11 +21,11 @@ output "fgt_spoke" {
 }
 
 output "vm_fgt_hub_vnet-spoke" {
-  value = module.vm_fgt_hub_vnet-spoke.vm_name
+  value = module.vm_fgt_hub_vnet-spoke.*.vm_name
 }
 
 output "vm_vhub_vnet-spoke" {
-  value = module.vm_vhub_vnet-spoke.vm_name
+  value = module.vm_vhub_vnet-spoke.*.vm_name
 }
 
 output "vm_fgt_spoke_bastion-spoke" {

@@ -31,7 +31,7 @@ data "template_file" "fgt_passive" {
     fgt_sdn-config        = data.template_file.fgt_2_sdn-config.rendered
     fgt_ha-fgcp-config    = var.config_fgcp ? data.template_file.fgt_ha-fgcp-passive-config.rendered : ""
     fgt_ha-fgsp-config    = var.config_fgsp ? data.template_file.fgt_ha-fgsp-passive-config.rendered : ""
-    fgt_bgp-config        = var.config_spoke || var.config_hub ? "" : data.template_file.fgt_bgp-config.rendered
+    fgt_bgp-config        = data.template_file.fgt_bgp-config.rendered
     fgt_static-config     = var.vpc-spoke_cidr != null ? data.template_file.fgt_static-config.rendered : ""
     fgt_sdwan-config      = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
     fgt_vpn-config        = var.config_hub ? join("\n", data.template_file.fgt_vpn-passive-config.*.rendered) : ""
@@ -89,6 +89,7 @@ data "template_file" "fgt_vpn-passive-config" {
   template = file("${path.module}/templates/fgt-vpn.conf")
   vars = {
     hub_private_ip        = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0), 1)
+    hub_remote_ip         = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0), 2)
     network_id            = var.hub[count.index]["network_id"]
     ike_version           = var.hub[count.index]["ike_version"]
     dpd_retryinterval     = var.hub[count.index]["dpd_retryinterval"]
@@ -97,7 +98,7 @@ data "template_file" "fgt_vpn-passive-config" {
     local_router-id       = var.fgt-passive-ni_ips["mgmt"]
     local_network         = var.hub[count.index]["cidr"]
     mode_cfg              = var.hub[count.index]["mode_cfg"]
-    site_private_ip_start = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0), 2)
+    site_private_ip_start = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0), 3)
     site_private_ip_end   = cidrhost(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0), 14)
     site_private_ip_mask  = cidrnetmask(cidrsubnet(var.hub[count.index]["vpn_cidr"], 1, var.config_fgsp ? 1 : 0))
     site_bgp_asn          = var.hub[count.index]["bgp_asn_spoke"]
@@ -106,8 +107,9 @@ data "template_file" "fgt_vpn-passive-config" {
     vpn_port              = var.ports[var.hub[count.index]["vpn_port"]]
     vpn_name              = "vpn-${var.hub[count.index]["vpn_port"]}"
     private_port          = var.ports["private"]
-    route_map_out         = "rm_prepending_out_${var.config_fgsp ? 1 : 0}"
-    count                 = count.index + 1
+    // route_map_out         = "rm_out_aspath_${var.config_fgsp ? 1 : 0}"
+    route_map_out = ""
+    count         = count.index + 1
   }
 }
 
@@ -124,7 +126,7 @@ data "template_file" "fgt_vxlan-passive-config" {
     private_port    = var.ports["private"]
     vpn_name        = "vpn-${var.ports[var.hub_peer_vxlan[count.index]["vxlan_port"]]}"
     vxlan_name      = var.hub_peer_vxlan_name
-    route_map_out   = "rm_prepending_out_${var.config_fgsp ? 1 : 0}"
+    route_map_out   = "rm_out_aspath_${var.config_fgsp ? 1 : 0}"
     local_router-id = var.fgt-active-ni_ips["mgmt"]
     local_bgp_asn   = var.config_hub ? var.hub[0]["bgp_asn_hub"] : var.config_spoke ? var.spoke["bgp_asn"] : var.bgp_asn_default
     count           = count.index + 1
