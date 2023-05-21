@@ -18,7 +18,7 @@ locals {
   onramp = {
     id      = "fgt"
     cidr    = "172.30.0.0/23" //minimum range to create proxy subnet
-    bgp-asn = "65000"
+    bgp_asn = "65000"
   }
   vpc_spoke-subnet_cidrs = ["172.30.10.0/23"]
 
