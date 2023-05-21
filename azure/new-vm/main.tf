@@ -36,5 +36,5 @@ resource "azurerm_linux_virtual_machine" "vm" {
 }
 
 data "template_file" "lnx_custom_data" {
-  template = file("${path.module}/templates/customdata-lnx.tpl")
+  template = file("${path.module}/templates/user-data.tpl")
 }
