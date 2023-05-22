@@ -4,7 +4,7 @@ apt-get install apache2 -y
 apt-get install -y iperf iperf3 curl netcat
 # Retrieve instance name and IP address from Azure metadata service
 NAME=$(curl -s -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/name")
-IP=$(curl -s -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip" | awk -F'[/:]' '{print $4}')
+IP=$(curl -s -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip")
 # Create index.html file with instance name and IP address
 cat <<EOF > /var/www/html/index.html
 <!DOCTYPE html>
