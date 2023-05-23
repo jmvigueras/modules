@@ -3,7 +3,6 @@
 # Active Passive High Availability MultiAZ with AWS Transit Gateway with VPC standard attachment
 #-----------------------------------------------------------------------------------------------------
 locals {
-  count = 2 // number of VPC spokes attached to TGW
   #-----------------------------------------------------------------------------------------------------
   # General variables
   #-----------------------------------------------------------------------------------------------------
@@ -28,7 +27,7 @@ locals {
     bgp-asn = "65000"
   }
 
-  vpc-spoke_cidr = ["172.30.100.0/23", module.fgt_onramp_vpc.subnet_az1_cidrs["bastion"]]
+  vpc_tgw_spoke_cidrs = ["172.30.100.0/24", "172.30.101.0/24"]
 
   tgw_bgp-asn     = "65515"
   tgw_cidr        = ["172.30.10.0/24"]

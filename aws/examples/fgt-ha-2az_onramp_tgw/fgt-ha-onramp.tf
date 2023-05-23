@@ -21,7 +21,7 @@ module "fgt_onramp_config" {
   config_spoke = true
   spoke        = local.onramp
 
-  vpc-spoke_cidr = local.vpc-spoke_cidr
+  vpc-spoke_cidr = concat(local.vpc_tgw_spoke_cidrs, [module.fgt_onramp_vpc.subnet_az1_cidrs["bastion"]])
 }
 // Create FGT
 module "fgt_onramp" {
@@ -75,7 +75,7 @@ module "fgt_onramp_vpc" {
 }
 // Create VPC spoke attached to TGW
 module "vpc_tgw-spoke" {
-  count  = local.count
+  count  = length(local.vpc_tgw_spoke_cidrs)
   source = "../../vpc-spoke-2az-to-tgw"
 
   prefix     = "${local.prefix}-tgw-spoke-${count.index + 1}"
@@ -83,7 +83,7 @@ module "vpc_tgw-spoke" {
   admin_port = local.admin_port
   region     = local.region
 
-  vpc-spoke_cidr        = cidrsubnet(local.vpc-spoke_cidr[0], ceil(log(local.count, 2)), count.index)
+  vpc-spoke_cidr        = local.vpc_tgw_spoke_cidrs[count.index]
   tgw_id                = module.tgw.tgw_id
   tgw_rt-association_id = module.tgw.rt_vpc-spoke_id
   tgw_rt-propagation_id = [module.tgw.rt_default_id, module.tgw.rt-vpc-sec-N-S_id, module.tgw.rt-vpc-sec-E-W_id]
@@ -100,7 +100,7 @@ resource "aws_ec2_transit_gateway_route" "spoke_tgw_route" {
 #------------------------------------------------------------------------------
 // Create test VM on VPC TGW spoke
 module "vm_onramp_az1" {
-  count  = local.count
+  count  = length(local.vpc_tgw_spoke_cidrs)
   source = "../../new-instance"
 
   prefix  = "${local.prefix}-spoke-${count.index}-az1"
@@ -110,7 +110,7 @@ module "vm_onramp_az1" {
   security_groups = [module.vpc_tgw-spoke[count.index].nsg_ids["vm"]]
 }
 module "vm_onramp_az2" {
-  count  = local.count
+  count  = length(local.vpc_tgw_spoke_cidrs)
   source = "../../new-instance"
 
   prefix = "${local.prefix}-spoke-${count.index}-az2"
