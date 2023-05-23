@@ -101,17 +101,21 @@ resource "aws_ec2_transit_gateway_route" "spoke_tgw_route" {
 // Create test VM on VPC TGW spoke
 module "vm_onramp_az1" {
   count  = local.count
-  source = "../../new-instance_ni"
+  source = "../../new-instance"
 
   prefix  = "${local.prefix}-spoke-${count.index}-az1"
-  ni_id   = module.vpc_tgw-spoke[count.index].az1-vm-ni_id
   keypair = aws_key_pair.keypair.key_name
+
+  subnet_id       = module.vpc_tgw-spoke[count.index].subnet_az1_ids["vm"]
+  security_groups = [module.vpc_tgw-spoke[count.index].nsg_ids["vm"]]
 }
 module "vm_onramp_az2" {
   count  = local.count
-  source = "../../new-instance_ni"
+  source = "../../new-instance"
 
-  prefix  = "${local.prefix}-spoke-${count.index}-az2"
-  ni_id   = module.vpc_tgw-spoke[count.index].az2-vm-ni_id
+  prefix = "${local.prefix}-spoke-${count.index}-az2"
   keypair = aws_key_pair.keypair.key_name
+
+  subnet_id       = module.vpc_tgw-spoke[count.index].subnet_az2_ids["vm"]
+  security_groups = [module.vpc_tgw-spoke[count.index].nsg_ids["vm"]]
 }

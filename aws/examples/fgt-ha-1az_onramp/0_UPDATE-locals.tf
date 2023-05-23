@@ -16,7 +16,7 @@ locals {
   # FGT
   #-----------------------------------------------------------------------------------------------------
   admin_port = "8443"
-  admin_cidr = "${chomp(data.http.my-public-ip.body)}/32"
+  admin_cidr = "${chomp(data.http.my-public-ip.response_body)}/32"
 
   instance_type = "c6i.large"
   fgt_build     = "build1396"

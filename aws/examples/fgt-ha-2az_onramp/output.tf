@@ -8,7 +8,7 @@ output "fgt" {
     username     = "admin"
     fgt-1_pass   = module.fgt.fgt_active_id
     fgt-2_pass   = module.fgt.fgt_passive_id
-    admin_cidr   = "${chomp(data.http.my-public-ip.body)}/32"
+    admin_cidr   = "${chomp(data.http.my-public-ip.response_body)}/32"
     api_key      = module.fgt_config.api_key
   }
 }

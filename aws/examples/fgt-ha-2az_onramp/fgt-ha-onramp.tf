@@ -58,7 +58,6 @@ module "vm_bastion_az1" {
   source = "../../new-instance"
 
   prefix = "${local.prefix}-onramp-az1"
-  // ni_id   = module.fgt_vpc.bastion-ni_ids["az1"]
   keypair = aws_key_pair.keypair.key_name
 
   subnet_id       = module.fgt_vpc.subnet_az1_ids["bastion"]
@@ -68,7 +67,6 @@ module "vm_bastion_az2" {
   source = "../../new-instance"
 
   prefix = "${local.prefix}-onramp-az2"
-  //  ni_id   = module.fgt_vpc.bastion-ni_ids["az2"]
   keypair = aws_key_pair.keypair.key_name
 
   subnet_id       = module.fgt_vpc.subnet_az2_ids["bastion"]
