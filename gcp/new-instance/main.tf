@@ -13,7 +13,7 @@ resource "google_compute_instance" "instance" {
   machine_type = var.machine_type
   zone         = var.zone
 
-  tags = ["${var.subnet_name[count.index]}-t-route", "${var.subnet_name[count.index]}-t-fwr"]
+  tags = concat(["${var.subnet_name[count.index]}-t-route"], ["${var.subnet_name[count.index]}-t-fwr"], var.tags)
 
   boot_disk {
     initialize_params {

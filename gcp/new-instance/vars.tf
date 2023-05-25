@@ -38,15 +38,20 @@ variable "machine_type" {
   default = "e2-small"
 }
 
-// SSH RSA public key for KeyPair if not exists
+# SSH RSA public key for KeyPair if not exists
 variable "rsa-public-key" {
   type    = string
   default = null
 }
 
-// GCP user name launch Terrafrom
+# GCP user name launch Terrafrom
 variable "gcp-user_name" {
   type    = string
   default = null
 }
 
+# Tags
+variable "tags" {
+  type    = list(string)
+  default = [""]
+}
