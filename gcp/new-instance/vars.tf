@@ -53,5 +53,5 @@ variable "gcp-user_name" {
 # Tags
 variable "tags" {
   type    = list(string)
-  default = [""]
+  default = ["tag-default"]
 }
