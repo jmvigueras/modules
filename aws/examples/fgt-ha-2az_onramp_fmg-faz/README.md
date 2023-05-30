@@ -3,10 +3,6 @@
 
 This deployment will create a Fortigate Cluster Active/Passive in two Availabitly Zone (AZ) and FortiManager and FortiAnalyzer instances in AZ1.
 
-## Requirements
-* [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) >= 1.0.0
-* Check particulars requiriments for each deployment (AWS) 
-
 ## Deployment Overview
 
 - New VPC with subnets in each AZ: Management (MGMT), Public, Private, Bastion, TGW and GWLB. (Only MGMT, Public and Private are needed for this setting).
@@ -18,6 +14,9 @@ This deployment will create a Fortigate Cluster Active/Passive in two Availabitl
 
 ![FortiGate reference architecture overview](images/image1.png)
 
+## Requirements
+* [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) >= 1.0.0
+* Check particulars requiriments for each deployment (AWS) 
 
 ## Deployment
 * Clone the repository.
@@ -30,5 +29,6 @@ This deployment will create a Fortigate Cluster Active/Passive in two Availabitl
 This a personal repository with goal of testing and demo Fortinet solutions on the Cloud. No support is provided and must be used by your own responsability. Cloud Providers will charge for this deployments, please take it in count before proceed.
 
 ## License
-Based on Fortinet repositories with original [License](https://github.com/fortinet/fortigate-terraform-deploy/blob/master/LICENSE) © Fortinet Technologies. All rights reserved.
+[License](./LICENSE)
+
 
