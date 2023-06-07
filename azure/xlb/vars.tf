@@ -68,6 +68,16 @@ variable "ilb_ip" {
   default = null
 }
 
+// Floating IPs
+varibale "elb_floating_ip" {
+  type = bool
+  default = false
+}
+varibale "ilb_floating_ip" {
+  type = bool
+  default = false
+}
+
 // Fortigate vxlan vdi and port config
 variable "gwlb_vxlan" {
   type = map(string)
