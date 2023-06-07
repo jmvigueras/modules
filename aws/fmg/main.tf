@@ -1,6 +1,6 @@
 # Create and attach the eip to the units
 resource "aws_eip" "fmg_eip_public" {
-  vpc               = true
+  domain            = "vpc"
   network_interface = aws_network_interface.ni-fmg-public.id
   tags = {
     Name = "${var.prefix}-fmg_eip_public"
