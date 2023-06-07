@@ -41,6 +41,7 @@ data "template_file" "fgt_passive" {
     fgt_gwlb-vxlan-config = var.config_gwlb-vxlan ? data.template_file.fgt_gwlb-vxlan-config.rendered : ""
     fgt_fmg-config        = var.config_fmg ? data.template_file.fgt_2_fmg-config.rendered : ""
     fgt_faz-config        = var.config_faz ? data.template_file.fgt_2_faz-config.rendered : ""
+    fgt_xlb-config        = var.config_xlb ? data.template_file.fgt_xlb-config.rendered : ""
     fgt_extra-config      = var.fgt_passive_extra-config
   }
 }

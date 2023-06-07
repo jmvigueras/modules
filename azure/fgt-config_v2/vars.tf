@@ -104,6 +104,22 @@ variable "hub" {
   ]
 }
 #-----------------------------------------------------------------------------------
+# Variables for xLB 
+# - config_xlb = false (default) 
+#-----------------------------------------------------------------------------------
+variable "config_xlb" {
+  type    = bool
+  default = false
+}
+variable "ilb_ip" {
+  type = string 
+  default = ""
+}
+variable "elb_ip" {
+  type = string 
+  default = ""
+}
+#-----------------------------------------------------------------------------------
 # Predefined variables for HUB vxlan
 # - config_vxlan = false (default)
 #-----------------------------------------------------------------------------------
