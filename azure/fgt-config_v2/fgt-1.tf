@@ -252,8 +252,8 @@ data "template_file" "fgt_1_fmg-config" {
 data "template_file" "fgt_xlb-config" {
   template = templatefile("${path.module}/templates/az_fgt-xlb.conf", {
     private_port = var.private_port
-    ilb_ip       = var.ilb_ip
     public_port  = var.public_port
-    ilb_ip       = var.elb_ip
+    ilb_ip       = var.ilb_ip
+    elb_ip       = var.elb_ip
   })
 }
