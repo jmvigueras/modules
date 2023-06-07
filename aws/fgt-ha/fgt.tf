@@ -31,7 +31,8 @@ resource "aws_eip" "fgt_passive_eip_mgmt" {
 # Create EIP passive FGT if FGSP true
 resource "aws_eip" "fgt_passive_eip_public" {
   count             = var.fgt_ha_fgsp ? 1 : 0
-  domain            = "vpc"
+  //domain           = "vpc"
+  vpc               = true
   network_interface = var.fgt-passive-ni_ids["public"]
   tags = {
     Name = "${var.prefix}-fgt_passive_eip_public"
