@@ -1,6 +1,7 @@
 # Create and attach the eip to the units
 resource "aws_eip" "faz_eip_public" {
-  domain            = "vpc"
+  //domain           = "vpc"
+  vpc               = true
   network_interface = aws_network_interface.ni-faz-public.id
   tags = {
     Name = "${var.prefix}-faz_eip_public"

@@ -3,7 +3,8 @@
 # ------------------------------------------------------------------
 # Create EIP active public NI
 resource "aws_eip" "fgt_active_eip_public" {
-  domain           = "vpc"
+  //domain           = "vpc"
+  vpc               = true
   network_interface = var.fgt-active-ni_ids["public"]
   tags = {
     Name = "${var.prefix}-fgt_active_eip_public"
@@ -11,7 +12,8 @@ resource "aws_eip" "fgt_active_eip_public" {
 }
 # Create EIP active MGTM NI
 resource "aws_eip" "fgt_active_eip_mgmt" {
-  domain           = "vpc"
+  //domain           = "vpc"
+  vpc               = true
   network_interface = var.fgt-active-ni_ids["mgmt"]
   tags = {
     Name = "${var.prefix}-fgt_active_eip_mgmt"
@@ -19,7 +21,8 @@ resource "aws_eip" "fgt_active_eip_mgmt" {
 }
 # Create EIP passive MGTM NI
 resource "aws_eip" "fgt_passive_eip_mgmt" {
-  domain           = "vpc"
+  //domain           = "vpc"
+  vpc               = true
   network_interface = var.fgt-passive-ni_ids["mgmt"]
   tags = {
     Name = "${var.prefix}-fgt_passive_eip_mgmt"
