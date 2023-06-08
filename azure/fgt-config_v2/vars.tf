@@ -87,6 +87,7 @@ variable "hub" {
       dpd_retryinterval = "5"
       mode_cfg          = true
       vpn_port          = "public"
+      local_gw          = ""
     },
     {
       id                = "HUB"
@@ -100,6 +101,7 @@ variable "hub" {
       dpd_retryinterval = "5"
       mode_cfg          = true
       vpn_port          = "private"
+      local_gw          = ""
     }
   ]
 }

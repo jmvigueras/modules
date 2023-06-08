@@ -97,6 +97,7 @@ data "template_file" "fgt_vpn-passive-config" {
     local_bgp_asn         = var.hub[count.index]["bgp_asn_hub"]
     local_router-id       = var.fgt-passive-ni_ips["mgmt"]
     local_network         = var.hub[count.index]["cidr"]
+    local_gw              = var.hub[count.index]["local_gw"]
     mode_cfg              = var.hub[count.index]["mode_cfg"]
     site_private_ip_start = cidrhost(var.hub[count.index]["vpn_cidr"], 15)
     site_private_ip_end   = cidrhost(var.hub[count.index]["vpn_cidr"], 30)
