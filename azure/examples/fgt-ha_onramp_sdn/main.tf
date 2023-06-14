@@ -64,7 +64,7 @@ module "fgt" {
 // Module VNET for FGT
 // - This module will generate VNET and network intefaces for FGT cluster
 module "fgt_vnet" {
-  source = "../../vnet-fgt"
+  source = "../../vnet-fgt_v2"
 
   prefix              = local.prefix
   location            = local.location

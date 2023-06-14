@@ -58,7 +58,7 @@ module "fgt_hub" {
 // Module VNET for FGT
 // - This module will generate VNET and network intefaces for FGT cluster
 module "fgt_hub_vnet" {
-  source = "../../vnet-fgt"
+  source = "../../vnet-fgt_v2"
 
   prefix              = "${local.prefix}-hub"
   location            = local.location
@@ -68,6 +68,8 @@ module "fgt_hub_vnet" {
   vnet-fgt_cidr = local.hub[0]["cidr"]
   admin_port    = local.admin_port
   admin_cidr    = local.admin_cidr
+
+  config_xlb = true // module variable to associate a public IP to fortigate's public interface (when using External LB, true means not to configure a public IP)
 }
 
 // Create load balancers
