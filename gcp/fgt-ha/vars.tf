@@ -59,7 +59,7 @@ variable "license_file_2" {
 
 variable "fgt_version" {
   type    = string
-  default = "724"
+  default = "725"
 }
 
 variable "fgt_passive" {

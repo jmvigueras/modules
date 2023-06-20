@@ -1,7 +1,7 @@
 #! /bin/bash
 apt-get update
-apt-get install apache2 -y
-apt-get install -y iperf iperf3 curl netcat
+apt-get -y install apache2
+apt-get -y install iperf3 curl netcat
 # Retrieve instance name and IP address from Azure metadata service
 INSTANCE_NAME=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/name?api-version=2021-02-01&format=text")
 INSTANCE_IP=$(curl -H Metadata:true "http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipAddress/0/privateIpAddress?api-version=2021-02-01&format=text")

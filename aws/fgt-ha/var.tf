@@ -94,5 +94,5 @@ variable "license_type" {
 
 variable "fgt_build" {
   type    = string
-  default = "build1396"
+  default = "build1517"
 }
