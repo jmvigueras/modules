@@ -75,7 +75,7 @@ resource "google_compute_instance" "fgt-active" {
   }
   scheduling {
     preemptible       = false
-    automatic_restart = false
+    automatic_restart = true
   }
 }
 
@@ -154,8 +154,8 @@ resource "google_compute_instance" "fgt-passive_fgcp" {
   }
 
   scheduling {
-    preemptible       = true
-    automatic_restart = false
+    preemptible       = false
+    automatic_restart = true
   }
 }
 
@@ -205,8 +205,8 @@ resource "google_compute_instance" "fgt-passive_fgsp" {
   }
 
   scheduling {
-    preemptible       = true
-    automatic_restart = false
+    preemptible       = false
+    automatic_restart = true
   }
 }
 
@@ -216,12 +216,12 @@ resource "google_compute_instance" "fgt-passive_fgsp" {
 #------------------------------------------------------------------------------------------------------------
 data "google_compute_image" "fgt_image_payg" {
   project = "fortigcp-project-001"
-  // filter  = "name=fortinet-fgtondemand-${var.fgt_version}*"
-  filter = "name=fortinet-fgtondemand-724-20230310*"
+  filter  = "name=fortinet-fgtondemand-${var.fgt_version}*"
+  //filter = "name=fortinet-fgtondemand-724-20230310*"
 }
 
 data "google_compute_image" "fgt_image_byol" {
   project = "fortigcp-project-001"
-  // filter  = "name=fortinet-fgt-${var.fgt_version}*"
-  filter = "name=fortinet-fgt-724-20230310*"
+  filter  = "name=fortinet-fgt-${var.fgt_version}*"
+  //filter = "name=fortinet-fgt-724-20230310*"
 }

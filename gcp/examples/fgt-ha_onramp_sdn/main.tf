@@ -80,6 +80,7 @@ module "vm_spoke" {
 # Create private routes in VPC private to FGT
 #------------------------------------------------------------------------------------------------------------
 resource "google_compute_route" "private_route_to_fgt_default" {
+  depends_on  = [module.fgt_vpc] 
   name        = "${local.prefix}-private-route-default-to-fgt"
   dest_range  = "0.0.0.0/0"
   network     = module.fgt_vpc.vpc_names["private"]
