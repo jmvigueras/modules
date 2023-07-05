@@ -19,7 +19,7 @@ locals {
   admin_cidr = "${chomp(data.http.my-public-ip.response_body)}/32"
 
   instance_type = "c6i.large"
-  fgt_build     = "build1396"
+  fgt_build     = "build1517"
   license_type  = "payg"
 
   fgt_cluster_type = "fgsp"
