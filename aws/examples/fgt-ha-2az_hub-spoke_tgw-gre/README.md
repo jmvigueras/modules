@@ -1,7 +1,7 @@
-# Forigate cluster deployment in 2 AZ
+# Forigate cluster deployment in 2 AZ within a SDWAN scenario with 2 HUBs and 2 Spokes
 ## Introduction
 
-This deployment will create a Fortigate Cluster Active/Passive in two Availabitly Zone (AZ)
+This deployment will create different types of Fortigate Cluster (FGCP and FGSP) in two Availabitly Zone (AZ). One of the cluster is configured as HUB1 with two fortigates in a FGSP cluster (Active/Active) and BGP peered with an AWS Transit Gateway (TGW) with two more VPC attached for testing. Another FGCP cluster (Active/Pasive) is acting as HUB2 and deploy in a independent VPC. Another two cluster are deployed acting as Spoke connected to both HUBs. 
 
 ## Deployment Overview
 
@@ -13,7 +13,7 @@ This deployment will create a Fortigate Cluster Active/Passive in two Availabitl
 
 ## Diagram overview
 
-- VPC inspection
+- HUB and Spoke SDWAN scenario
 
 ![FortiGate reference architecture overview](images/image1.png)
 

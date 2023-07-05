@@ -17,7 +17,7 @@ locals {
   #-----------------------------------------------------------------------------------------------------
   license_type = "payg"
   fgt_size     = "Standard_F4"
-  fgt_version  = "6.4.11"
+  fgt_version  = "latest"
 
   fgt_vnet_cidr = "172.30.0.0/24"
 
