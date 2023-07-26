@@ -1,0 +1,24 @@
+// Create dynamic group for FGT instances
+resource "oci_identity_dynamic_group" "fgt_iam_group" {
+    compartment_id = var.tenancy_ocid
+    description    = "Dynamic Identity group for FGT instances"
+    matching_rule  = "Any {instance.id = '${oci_core_instance.fgt_1.id}',instance.id = '${oci_core_instance.fgt_2.id}'}"
+    name           = "${var.prefix}-iam-group-fgt"
+}
+// Create policy
+resource "oci_identity_policy" "fgt_iam_group_policy" {
+  name           = "${var.prefix}-iam-group-fgt-policy"
+  description    = "Policy for SDN connector FGT"
+  compartment_id = var.tenancy_ocid
+
+  statements = [
+    "Allow dynamic-group ${oci_identity_dynamic_group.fgt_iam_group.name} to read compartments in tenancy",
+    "Allow dynamic-group ${oci_identity_dynamic_group.fgt_iam_group.name} to read instances in tenancy",
+    "Allow dynamic-group ${oci_identity_dynamic_group.fgt_iam_group.name} to read vnic-attachments in tenancy",
+    "Allow dynamic-group ${oci_identity_dynamic_group.fgt_iam_group.name} to read private-ips in tenancy",
+    "Allow dynamic-group ${oci_identity_dynamic_group.fgt_iam_group.name} to read public-ips in tenancy",
+    "Allow dynamic-group ${oci_identity_dynamic_group.fgt_iam_group.name} to manage private-ips in tenancy",
+    "Allow dynamic-group ${oci_identity_dynamic_group.fgt_iam_group.name} to manage public-ips in tenancy",
+    "Allow dynamic-group ${oci_identity_dynamic_group.fgt_iam_group.name} to manage vnics in tenancy"
+  ]
+}

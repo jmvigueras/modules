@@ -43,6 +43,7 @@ module "fgt_spoke" {
 
   admin_username = local.admin_username
   admin_password = local.admin_password
+  fgt_version    = local.fgt_version
 
   fgt-active-ni_ids  = module.fgt_spoke_vnet.fgt-active-ni_ids
   fgt-passive-ni_ids = module.fgt_spoke_vnet.fgt-passive-ni_ids
