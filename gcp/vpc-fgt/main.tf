@@ -89,17 +89,7 @@ resource "google_compute_firewall" "allow-public-fgt" {
   network = google_compute_network.vpc_public.name
 
   allow {
-    protocol = "udp"
-    ports    = ["500", "4500", "4789", "${var.backend-probe_port}"]
-  }
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80", "443", "8080", "8000", "${var.backend-probe_port}"]
-  }
-
-  allow {
-    protocol = "icmp"
+    protocol = "all"
   }
 
   source_ranges = ["0.0.0.0/0"]
