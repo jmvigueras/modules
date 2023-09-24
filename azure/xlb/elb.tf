@@ -51,48 +51,13 @@ resource "azurerm_lb_backend_address_pool_address" "elb_backend_fgt_2" {
   ip_address              = var.fgt-passive-ni_ips["public"]
 }
 // Create Load Balancing Rules
-resource "azurerm_lb_rule" "elb_rule_tcp_80" {
+resource "azurerm_lb_rule" "elb_listeners" {
+  for_each                       = var.elb_listeners
   loadbalancer_id                = azurerm_lb.elb.id
-  name                           = "elb-rule-http"
-  protocol                       = "Tcp"
-  frontend_port                  = 80
-  backend_port                   = 80
-  frontend_ip_configuration_name = "${var.prefix}-elb-frontend"
-  probe_id                       = azurerm_lb_probe.elb_probe.id
-  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elb_backend.id]
-  load_distribution              = "SourceIP"
-  enable_floating_ip             = var.elb_floating_ip
-}
-resource "azurerm_lb_rule" "elb_rule_upd_500" {
-  loadbalancer_id                = azurerm_lb.elb.id
-  name                           = "elb-rule-udp-500"
-  protocol                       = "Udp"
-  frontend_port                  = 500
-  backend_port                   = 500
-  frontend_ip_configuration_name = "${var.prefix}-elb-frontend"
-  probe_id                       = azurerm_lb_probe.elb_probe.id
-  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elb_backend.id]
-  load_distribution              = "SourceIP"
-  enable_floating_ip             = var.elb_floating_ip
-}
-resource "azurerm_lb_rule" "elb_rule_udp_4500" {
-  loadbalancer_id                = azurerm_lb.elb.id
-  name                           = "elb-rule-udp-4500"
-  protocol                       = "Udp"
-  frontend_port                  = 4500
-  backend_port                   = 4500
-  frontend_ip_configuration_name = "${var.prefix}-elb-frontend"
-  probe_id                       = azurerm_lb_probe.elb_probe.id
-  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elb_backend.id]
-  load_distribution              = "SourceIP"
-  enable_floating_ip             = var.elb_floating_ip
-}
-resource "azurerm_lb_rule" "elb_rule_udp_4789" {
-  loadbalancer_id                = azurerm_lb.elb.id
-  name                           = "elb-rule-udp-4789"
-  protocol                       = "Udp"
-  frontend_port                  = 4789
-  backend_port                   = 4789
+  name                           = "elb-rule-${each.key}-${lower(each.value)}"
+  protocol                       = each.value
+  frontend_port                  = each.key
+  backend_port                   = each.key
   frontend_ip_configuration_name = "${var.prefix}-elb-frontend"
   probe_id                       = azurerm_lb_probe.elb_probe.id
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.elb_backend.id]

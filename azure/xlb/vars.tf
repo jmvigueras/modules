@@ -78,6 +78,18 @@ variable "ilb_floating_ip" {
   default = false
 }
 
+// List of ports to open (listernes)
+variable "elb_listeners" {
+  type = map(string)
+  default = {
+    "80"   = "Tcp"
+    "443"  = "Tcp"
+    "500"  = "Udp"
+    "4500" = "Udp"
+    "4789" = "Udp"
+  }
+}
+
 // Fortigate vxlan vdi and port config
 variable "gwlb_vxlan" {
   type = map(string)

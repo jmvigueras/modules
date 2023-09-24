@@ -45,6 +45,16 @@ module "xlb-fgt" {
     port_ext = "10800"
     port_int = "10801"
   }
+  // (Optional - List of listeners)
+  elb_listeners = {
+    "80"   = "Tcp"
+    "443"  = "Tcp"
+    "500"  = "Udp"
+    "4500" = "Udp"
+    "4789" = "Udp"
+    "6379" = "Tcp"
+    "6443" = "Tcp"
+  }
 }
 
 
