@@ -103,6 +103,14 @@ data "template_file" "fgt_ha-fgsp-active-config" {
   }
 }
 
+data "template_file" "fgt_standalone-config" {
+  template = file("${path.module}/templates/fgt-standalone.conf")
+  vars = {
+    mgmt_port = var.mgmt_port
+    mgmt_gw   = cidrhost(var.subnet_cidrs["mgmt"], 1)
+  }
+}
+
 data "template_file" "fgt_sdwan-config" {
   count    = var.hubs != null ? length(var.hubs) : 0
   template = file("${path.module}/templates/fgt-sdwan.conf")

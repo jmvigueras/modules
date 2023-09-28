@@ -19,6 +19,7 @@ locals {
       dpd_retryinterval = "5"
       mode_cfg          = true
       vpn_port          = "public"
+      local_gw          = ""
     },
     {
       id                = "HUB1"
@@ -32,6 +33,7 @@ locals {
       dpd_retryinterval = "5"
       mode_cfg          = true
       vpn_port          = "private"
+      local_gw          = ""
     }
   ]
   hub2 = [
@@ -47,6 +49,7 @@ locals {
       dpd_retryinterval = "5"
       mode_cfg          = true
       vpn_port          = "public"
+      local_gw          = ""
     },
     {
       id                = "HUB2"
@@ -60,6 +63,7 @@ locals {
       dpd_retryinterval = "5"
       mode_cfg          = true
       vpn_port          = "private"
+      local_gw          = ""
     }
   ]
   #-----------------------------------------------------------------------------------------------------
