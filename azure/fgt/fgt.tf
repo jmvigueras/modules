@@ -4,6 +4,7 @@
 resource "azurerm_virtual_machine" "fgt" {
   name                         = "${var.prefix}-fgt-${var.suffix}"
   location                     = var.location
+  zones                        = [var.zone]
   resource_group_name          = var.resource_group_name
   network_interface_ids        = [var.fgt_ni_ids[var.fgt_ni_0], var.fgt_ni_ids[var.fgt_ni_1], var.fgt_ni_ids[var.fgt_ni_2]]
   primary_network_interface_id = var.fgt_ni_ids[var.fgt_ni_0]
@@ -68,3 +69,4 @@ resource "random_string" "random" {
   numeric = false
   upper   = false
 }
+

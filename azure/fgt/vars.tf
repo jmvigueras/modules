@@ -58,6 +58,11 @@ variable "location" {
   default = "francecentral"
 }
 
+variable "zone" {
+  type    = string
+  default = "1"
+}
+
 // Azure resourcers tags
 variable "tags" {
   type = map(any)
@@ -112,3 +117,4 @@ variable "license" {
   type    = string
   default = "/license.txt"
 }
+
