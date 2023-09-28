@@ -47,6 +47,7 @@ data "template_file" "fgt_active" {
     mgmt_gw      = cidrhost(var.subnet_cidrs["mgmt"], 1)
 
     fgt_sdn-config        = data.template_file.fgt_1_sdn-config.rendered
+    fgt_standalone-config = !var.config_fgsp ? !var.config_fgcp ? data.template_file.fgt_standalone-config.rendered : "" : ""
     fgt_ha-fgcp-config    = var.config_fgcp ? data.template_file.fgt_ha-fgcp-active-config.rendered : ""
     fgt_ha-fgsp-config    = var.config_fgsp ? data.template_file.fgt_ha-fgsp-active-config.rendered : ""
     fgt_bgp-config        = data.template_file.fgt_bgp-config.rendered
