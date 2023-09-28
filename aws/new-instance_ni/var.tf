@@ -61,3 +61,8 @@ variable "iam_profile" {
   type    = string
   default = null
 }
+
+variable "linux_os" {
+  type    = string
+  default = "ubuntu"
+}

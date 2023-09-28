@@ -4,7 +4,7 @@
 // Create Amazon Linux EC2 Instance
 resource "aws_instance" "vm" {
   count         = var.iam_profile != null ? 0 : 1
-  ami           = data.aws_ami.ami_ubuntu.id
+  ami           = var.linux_os == "ubuntu" ? data.aws_ami.ami_ubuntu.id : data.aws_ami.ami_amazon_linux_2.id
   instance_type = var.instance_type
   key_name      = var.keypair
   user_data     = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
@@ -29,7 +29,7 @@ resource "aws_instance" "vm" {
 // Create Amazon Linux EC2 Instance
 resource "aws_instance" "vm_iam_profile" {
   count                = var.iam_profile != null ? 1 : 0
-  ami                  = data.aws_ami.ami_ubuntu.id
+  ami                  = var.linux_os == "ubuntu" ? data.aws_ami.ami_ubuntu.id : data.aws_ami.ami_amazon_linux_2.id
   instance_type        = var.instance_type
   iam_instance_profile = var.iam_profile
   key_name             = var.keypair
@@ -53,7 +53,6 @@ resource "aws_instance" "vm_iam_profile" {
   }
 }
 
-
 // Retrieve AMI info
 data "aws_ami" "ami_ubuntu" {
   most_recent = true
@@ -68,18 +67,20 @@ data "aws_ami" "ami_ubuntu" {
     values = ["hvm"]
   }
 }
-/*
+
 // Amazon Linux 2 AMI
-data "aws_ami" "ami_amazon-linux-2" {
+data "aws_ami" "ami_amazon_linux_2" {
   most_recent = true
-  owners      = ["amazon"]  
-  
+
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
   filter {
     name   = "name"
     values = ["amzn2-ami-hvm*"]
   }
 }
-*/
 
 
 

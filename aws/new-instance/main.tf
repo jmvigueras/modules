@@ -4,7 +4,7 @@
 // Create Amazon Linux EC2 Instance (default)
 resource "aws_instance" "vm" {
   count                       = var.iam_profile != null ? 0 : 1
-  ami                         = data.aws_ami.ami_ubuntu.id
+  ami                         = var.linux_os == "ubuntu" ? data.aws_ami.ami_ubuntu.id : data.aws_ami.ami_amazon_linux_2.id
   instance_type               = var.instance_type
   key_name                    = var.keypair
   user_data                   = var.user_data == null ? file("${path.module}/templates/user-data.sh") : var.user_data
@@ -62,5 +62,18 @@ data "aws_ami" "ami_ubuntu" {
   }
 }
 
+// Amazon Linux 2 AMI
+data "aws_ami" "ami_amazon_linux_2" {
+  most_recent = true
+
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm*"]
+  }
+}
 
 
