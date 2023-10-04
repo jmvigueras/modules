@@ -224,7 +224,7 @@ resource "azurerm_network_interface_security_group_association" "ni-active-mgmt-
 }
 resource "azurerm_network_interface_security_group_association" "ni-active-public-nsg" {
   network_interface_id      = local.fgt-1_ni_public_id
-  network_security_group_id = azurerm_network_security_group.nsg-public.id
+  network_security_group_id = azurerm_network_security_group.nsg-public-default.id
 }
 # - Connect the security group to the network interfaces FGT passive
 resource "azurerm_network_interface_security_group_association" "ni-passive-mgmt-nsg" {
@@ -233,7 +233,7 @@ resource "azurerm_network_interface_security_group_association" "ni-passive-mgmt
 }
 resource "azurerm_network_interface_security_group_association" "ni-passive-public-nsg" {
   network_interface_id      = local.fgt-2_ni_public_id
-  network_security_group_id = azurerm_network_security_group.nsg-public.id
+  network_security_group_id = azurerm_network_security_group.nsg-public-default.id
 }
 #-------------------------------------------------------------------------------------
 # Associate NSG to subnet
