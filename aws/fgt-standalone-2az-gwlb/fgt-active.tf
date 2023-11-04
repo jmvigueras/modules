@@ -4,7 +4,7 @@
 
 // Creat public IP for master member
 resource "aws_eip" "fgt_eip-mgmt" {
-  vpc               = true
+  domain            = "vpc"
   network_interface = var.fgt-active-ni_ids["mgmt"]
   tags = {
     Name = "${var.prefix}-eip-master-mgmt"

@@ -42,13 +42,13 @@ locals {
   admin_password = "Terraform123#"
 
   license_type = "payg"
-  fgt_size     = "Standard_F4"
+  fgt_size     = "Standard_F4s"
   fgt_version  = "latest"
 
   #-----------------------------------------------------------------------------------------------------
   # FGT HUB
   #-----------------------------------------------------------------------------------------------------
-  hub_cluster_type = "fgsp"
+  hub_cluster_type = "fgcp"
 
   hub = [
     {

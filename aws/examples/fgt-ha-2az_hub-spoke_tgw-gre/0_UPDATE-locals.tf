@@ -3,7 +3,7 @@
 # Active Passive High Availability MultiAZ with AWS Transit Gateway with VPC standard attachment
 #-----------------------------------------------------------------------------------------------------
 locals {
-  count = 2 // number of VPC spokes attached to TGW and number of FGT spoke in SDWAN
+  count = 1 // number of VPC spokes attached to TGW and number of FGT spoke in SDWAN
   #-----------------------------------------------------------------------------------------------------
   # General variables
   #-----------------------------------------------------------------------------------------------------

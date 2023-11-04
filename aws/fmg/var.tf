@@ -60,7 +60,7 @@ variable "fmg_ami" {
 // AMI
 variable "fmg_build" {
   type    = string
-  default = "build1334"
+  default = "build1460"
 }
 
 variable "keypair" {

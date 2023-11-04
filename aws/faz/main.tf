@@ -1,7 +1,6 @@
 # Create and attach the eip to the units
 resource "aws_eip" "faz_eip_public" {
-  //domain           = "vpc"
-  vpc               = true
+  domain           = "vpc"
   network_interface = aws_network_interface.ni-faz-public.id
   tags = {
     Name = "${var.prefix}-faz_eip_public"
@@ -71,7 +70,7 @@ data "template_file" "faz_config" {
 
 # Get the last AMI Images from AWS MarektPlace FGT PAYG
 data "aws_ami_ids" "faz_amis_payg" {
-  owners = ["679593333241"]
+  owners = ["aws-marketplace"]
 
   filter {
     name   = "name"
@@ -80,7 +79,7 @@ data "aws_ami_ids" "faz_amis_payg" {
 }
 
 data "aws_ami_ids" "faz_amis_byol" {
-  owners = ["679593333241"]
+  owners = ["aws-marketplace"]
 
   filter {
     name   = "name"

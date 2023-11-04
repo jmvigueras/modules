@@ -23,16 +23,16 @@ module "fgt_hub_config" {
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
 
-  config_fgcp       = local.hub_cluster_type == "fgcp" ? true : false
-  config_fgsp       = local.hub_cluster_type == "fgsp" ? true : false
-  config_hub        = true
-  config_vhub       = true
-  config_ars        = true
-  config_vxlan      = true
-  hub               = local.hub
-  hub_peer_vxlan    = local.hub_peer_vxlan
-  vhub_peer         = module.vwan.virtual_router_ips
-  rs_peer           = module.rs.rs_peer
+  config_fgcp    = local.hub_cluster_type == "fgcp" ? true : false
+  config_fgsp    = local.hub_cluster_type == "fgsp" ? true : false
+  config_hub     = true
+  config_vhub    = true
+  config_ars     = true
+  config_vxlan   = true
+  hub            = local.hub
+  hub_peer_vxlan = local.hub_peer_vxlan
+  vhub_peer      = module.vwan.virtual_router_ips
+  rs_peer        = module.rs.rs_peer
 
   vpc-spoke_cidr = [module.fgt_hub_vnet.subnet_cidrs["bastion"]]
 }

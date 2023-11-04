@@ -60,7 +60,7 @@ variable "faz_ami" {
 // AMI
 variable "faz_build" {
   type    = string
-  default = "build1334"
+  default = "build1460"
 }
 
 variable "keypair" {

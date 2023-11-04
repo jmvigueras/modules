@@ -34,7 +34,7 @@ variable "license_type" {
 
 variable "faz_version" {
   type    = string
-  default = "722"
+  default = "724"
 }
 
 // SSH RSA public key for KeyPair if not exists
