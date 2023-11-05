@@ -37,7 +37,7 @@ resource "google_compute_instance" "fgt-active" {
   zone           = var.zone1
   can_ip_forward = "true"
 
-  tags = ["${var.prefix}-t-fwr-fgt-mgmt", "${var.prefix}-t-fwr-fgt-public", "${var.prefix}-t-fwr-fgt-private"]
+  tags = ["${var.subnet_names["mgmt"]}-t-fwr", "${var.subnet_names["public"]}-t-fwr", "${var.subnet_names["private"]}-t-fwr"]
 
   boot_disk {
     initialize_params {
@@ -119,7 +119,7 @@ resource "google_compute_instance" "fgt-passive_fgcp" {
   zone           = var.zone2
   can_ip_forward = "true"
 
-  tags = ["${var.prefix}-t-fwr-fgt-mgmt", "${var.prefix}-t-fwr-fgt-public", "${var.prefix}-t-fwr-fgt-private"]
+  tags = ["${var.subnet_names["mgmt"]}-t-fwr", "${var.subnet_names["public"]}-t-fwr", "${var.subnet_names["private"]}-t-fwr"]
 
   boot_disk {
     initialize_params {
@@ -167,7 +167,7 @@ resource "google_compute_instance" "fgt-passive_fgsp" {
   zone           = var.zone2
   can_ip_forward = "true"
 
-  tags = ["${var.prefix}-t-fwr-fgt-mgmt", "${var.prefix}-t-fwr-fgt-public", "${var.prefix}-t-fwr-fgt-private"]
+  tags = ["${var.subnet_names["mgmt"]}-t-fwr", "${var.subnet_names["public"]}-t-fwr", "${var.subnet_names["private"]}-t-fwr"]
 
   boot_disk {
     initialize_params {

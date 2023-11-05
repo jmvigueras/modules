@@ -80,7 +80,7 @@ resource "google_compute_firewall" "allow-mgmt-fgt" {
   }
 
   source_ranges = [var.admin_cidr]
-  target_tags   = ["${var.prefix}-t-fwr-fgt-mgmt"]
+  target_tags   = ["${var.prefix}-subnet-mgmt-t-fwr"]
 }
 
 # Firewall Rule External PUBLIC
@@ -93,7 +93,7 @@ resource "google_compute_firewall" "allow-public-fgt" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["${var.prefix}-t-fwr-fgt-public"]
+  target_tags   = ["${var.prefix}-subnet-public-t-fwr"]
 }
 
 # Firewall Rule Internal FGT PRIVATE
@@ -106,7 +106,7 @@ resource "google_compute_firewall" "allow-private-fgt" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["${var.prefix}-t-fwr-fgt-private"]
+  target_tags   = ["${var.prefix}-subnet-private-t-fwr"]
 }
 
 # Firewall Rule Internal Bastion
@@ -119,5 +119,5 @@ resource "google_compute_firewall" "allow-bastion-vm" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["${var.prefix}-t-fwr-bastion"]
+  target_tags   = ["${var.prefix}-subnet-bastion-t-fwr"]
 }
