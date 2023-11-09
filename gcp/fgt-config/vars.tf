@@ -299,12 +299,21 @@ variable "license_file_1" {
   type    = string
   default = "./licenses/license1.lic"
 }
-
 // license file for the passive fgt
 variable "license_file_2" {
   // Change to your own byol license file, license2.lic
   type    = string
   default = "./licenses/license2.lic"
+}
+
+// FortiFlex tokens
+variable "fortiflex_token_1" {
+  type    = string
+  default = ""
+}
+variable "fortiflex_token_2" {
+  type    = string
+  default = ""
 }
 
 variable "keypair" {

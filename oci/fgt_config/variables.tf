@@ -263,6 +263,15 @@ variable "license_file_2" {
   type    = string
   default = "./licenses/license2.lic"
 }
+// FortiFlex tokens
+variable "fortiflex_token_1" {
+  type    = string
+  default = ""
+}
+variable "fortiflex_token_2" {
+  type    = string
+  default = ""
+}
 // SSH RSA public key for KeyPair if not exists
 variable "rsa_public_key" {
   type    = string

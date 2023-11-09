@@ -26,14 +26,15 @@ data "template_file" "fgt_active" {
   template = file("${path.module}/templates/fgt-all.conf")
 
   vars = {
-    fgt_id         = var.config_spoke ? "${var.spoke["id"]}-1" : "${var.hub[0]["id"]}-1"
-    admin_port     = var.admin_port
-    admin_cidr     = var.admin_cidr
-    adminusername  = "admin"
-    type           = var.license_type
-    license_file   = var.license_file_1
-    rsa-public-key = trimspace(var.rsa-public-key)
-    api_key        = var.api_key == null ? random_string.api_key.result : var.api_key
+    fgt_id          = var.config_spoke ? "${var.spoke["id"]}-1" : "${var.hub[0]["id"]}-1"
+    admin_port      = var.admin_port
+    admin_cidr      = var.admin_cidr
+    adminusername   = "admin"
+    type            = var.license_type
+    license_file    = var.license_file_1
+    fortiflex_token = var.fortiflex_token_1
+    rsa-public-key  = trimspace(var.rsa-public-key)
+    api_key         = var.api_key == null ? random_string.api_key.result : var.api_key
 
     public_port  = var.public_port
     public_ip    = var.fgt-active-ni_ips["public"]

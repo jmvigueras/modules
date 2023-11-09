@@ -12,6 +12,7 @@ data "template_file" "fgt_2" {
     adminusername  = "admin"
     type           = var.license_type
     license_file   = var.license_file_2
+    fortiflex_token = var.fortiflex_token_2
     rsa_public_key = var.rsa_public_key
     api_key        = var.api_key
 

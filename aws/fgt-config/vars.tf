@@ -339,6 +339,16 @@ variable "license_file_2" {
   default = "./licenses/license2.lic"
 }
 
+// FortiFlex tokens
+variable "fortiflex_token_1" {
+  type    = string
+  default = ""
+}
+variable "fortiflex_token_2" {
+  type    = string
+  default = ""
+}
+
 variable "keypair" {
   description = "Provide a keypair for accessing the FortiGate instances"
   type        = string

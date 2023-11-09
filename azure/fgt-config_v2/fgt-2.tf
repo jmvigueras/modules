@@ -12,6 +12,7 @@ data "template_file" "fgt_passive" {
     adminusername  = "admin"
     type           = var.license_type
     license_file   = var.license_file_2
+    fortiflex_token = var.fortiflex_token_2
     rsa-public-key = var.rsa-public-key
     api_key        = var.api_key == null ? random_string.api_key.result : var.api_key
 

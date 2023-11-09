@@ -6,14 +6,15 @@ data "template_file" "fgt_passive" {
   template = file("${path.module}/templates/fgt-all.conf")
 
   vars = {
-    fgt_id         = var.config_spoke ? "${var.spoke["id"]}-2" : "${var.hub[0]["id"]}-2"
-    admin_port     = var.admin_port
-    admin_cidr     = var.admin_cidr
-    adminusername  = "admin"
-    type           = var.license_type
-    license_file   = var.license_file_2
-    rsa-public-key = var.rsa-public-key
-    api_key        = var.api_key
+    fgt_id          = var.config_spoke ? "${var.spoke["id"]}-2" : "${var.hub[0]["id"]}-2"
+    admin_port      = var.admin_port
+    admin_cidr      = var.admin_cidr
+    adminusername   = "admin"
+    type            = var.license_type
+    license_file    = var.license_file_2
+    fortiflex_token = var.fortiflex_token_2
+    rsa-public-key  = var.rsa-public-key
+    api_key         = var.api_key
 
     public_port  = var.public_port
     public_ip    = var.fgt-passive-ni_ips["public"]
