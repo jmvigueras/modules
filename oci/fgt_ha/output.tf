@@ -15,7 +15,7 @@ output "fgt_2_public_ip_mgmt" {
 }
 
 output "fgt_1_public_ip_public" {
-  value = oci_core_instance.fgt_1_vnic_public_ip_sec.ip_address
+  value = oci_core_public_ip.fgt_1_vnic_public_ip_sec.ip_address
 }
 
 output "fgt_vcn_rt_to_fgt_id" {
