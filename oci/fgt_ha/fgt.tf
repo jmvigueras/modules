@@ -23,7 +23,7 @@ resource "oci_core_instance" "fgt_1" {
     assign_public_ip = true
     hostname_label   = "fgt-1"
     private_ip       = var.fgt_1_vnic_ips["mgmt"]
-    nsg_ids          = [var.fgt_nsg_ids["mgmt"]] 
+    nsg_ids          = [var.fgt_nsg_ids["mgmt"]]
   }
   source_details {
     source_type = "image"
@@ -52,12 +52,12 @@ resource "oci_core_vnic_attachment" "fgt_1_vnic_public" {
     assign_public_ip       = false
     skip_source_dest_check = false
     private_ip             = var.fgt_1_vnic_ips["public"]
-    nsg_ids                = [var.fgt_nsg_ids["public"]] 
+    nsg_ids                = [var.fgt_nsg_ids["public"]]
   }
 }
 // FGT-1 public VNIC: create secondary private IP
 resource "oci_core_private_ip" "fgt_1_vnic_public_ip_sec" {
-  vnic_id = element(oci_core_vnic_attachment.fgt_1_vnic_public.*.vnic_id, 0)
+  vnic_id        = element(oci_core_vnic_attachment.fgt_1_vnic_public.*.vnic_id, 0)
   display_name   = "fgt-1-public-sec"
   hostname_label = "fgt-1-public"
   ip_address     = var.fgt_1_ips["public"]
@@ -66,8 +66,8 @@ resource "oci_core_private_ip" "fgt_1_vnic_public_ip_sec" {
 resource "oci_core_public_ip" "fgt_1_vnic_public_ip_sec" {
   compartment_id = var.compartment_ocid
   lifetime       = var.public_ip_lifetime
-  display_name  = "fgt-1-public-sec"
-  private_ip_id = oci_core_private_ip.fgt_1_vnic_public_ip_sec.id
+  display_name   = "fgt-1-public-sec"
+  private_ip_id  = oci_core_private_ip.fgt_1_vnic_public_ip_sec.id
 }
 #---------------------------------------------------------------------------------------------------
 # - FGT-1 Private VNIC
@@ -84,7 +84,7 @@ resource "oci_core_vnic_attachment" "fgt_1_vnic_private" {
     assign_public_ip       = false
     skip_source_dest_check = true
     private_ip             = var.fgt_1_vnic_ips["private"]
-    nsg_ids                = [var.fgt_nsg_ids["private"]] 
+    nsg_ids                = [var.fgt_nsg_ids["private"]]
   }
 }
 // FGT-1 public VNIC: create secondary IP
@@ -135,7 +135,7 @@ resource "oci_core_instance" "fgt_2" {
     assign_public_ip = true
     hostname_label   = "fgt-2"
     private_ip       = var.fgt_2_vnic_ips["mgmt"]
-    nsg_ids          = [var.fgt_nsg_ids["mgmt"]] 
+    nsg_ids          = [var.fgt_nsg_ids["mgmt"]]
   }
   source_details {
     source_type = "image"
@@ -164,7 +164,7 @@ resource "oci_core_vnic_attachment" "fgt_2_vnic_public" {
     assign_public_ip       = false
     skip_source_dest_check = false
     private_ip             = var.fgt_2_vnic_ips["public"]
-    nsg_ids                = [var.fgt_nsg_ids["public"]] 
+    nsg_ids                = [var.fgt_nsg_ids["public"]]
   }
 }
 #---------------------------------------------------------------------------------------------------
@@ -182,7 +182,7 @@ resource "oci_core_vnic_attachment" "fgt_2_vnic_private" {
     assign_public_ip       = false
     skip_source_dest_check = true
     private_ip             = var.fgt_2_vnic_ips["private"]
-    nsg_ids                = [var.fgt_nsg_ids["private"]] 
+    nsg_ids                = [var.fgt_nsg_ids["private"]]
   }
 }
 #---------------------------------------------------------------------------------------------------

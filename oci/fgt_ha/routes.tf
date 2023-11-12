@@ -12,7 +12,7 @@ resource "oci_core_route_table" "rt_to_fgt" {
   }
 }
 // Create Route Table attachment for subnet bastion
-resource "oci_core_route_table_attachment" "rt_to_fgt_attach_bastion" {   
+resource "oci_core_route_table_attachment" "rt_to_fgt_attach_bastion" {
   subnet_id      = var.fgt_subnet_ids["bastion"]
   route_table_id = oci_core_route_table.rt_to_fgt.id
 }

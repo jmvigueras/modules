@@ -20,17 +20,17 @@ variable "tags" {
 }
 
 variable "region" {
-  type = string
+  type    = string
   default = "eu-frankfurt-1"
 }
 
 variable "region_ad_1" {
-  type = string
+  type    = string
   default = "1"
 }
 
 variable "region_ad_2" {
-  type = string
+  type    = string
   default = "2"
 }
 
@@ -54,12 +54,12 @@ variable "fgt_config_2" {
   default = ""
 }
 
-variable "vm_image_ocid" { 
-  default =  "ocid1.image.oc1..aaaaaaaalj3fxkjxnru4i5725rl45iur3ducp5fy5dmulwzjtepathmtxbta"
+variable "vm_image_ocid" {
+  default = "ocid1.image.oc1..aaaaaaaalj3fxkjxnru4i5725rl45iur3ducp5fy5dmulwzjtepathmtxbta"
 }
 
 variable "fgt_image_ids" {
-  type    = map(string)
+  type = map(string)
   default = {
     byol = "ocid1.image.oc1..aaaaaaaalj3fxkjxnru4i5725rl45iur3ducp5fy5dmulwzjtepathmtxbta"
     payg = "ocid1.image.oc1..aaaaaaaatwwtthsopj6iqfg762xpwnsmsnuzwhpwad7lw6slfjrao2f3bnha"
@@ -100,32 +100,32 @@ variable "license_type" {
 }
 
 variable "fgt_subnet_ids" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "fgt_vcn_id" {
-  type = string
+  type    = string
   default = null
 }
 
 variable "fgt_1_ips" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "fgt_2_vnic_ips" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "fgt_1_vnic_ips" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
 variable "fgt_2_ips" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
@@ -136,7 +136,7 @@ variable "public_ip_lifetime" {
 }
 
 variable "fgt_nsg_ids" {
-  type = map(string)
+  type    = map(string)
   default = null
 }
 
