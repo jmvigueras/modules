@@ -8,3 +8,8 @@ output "subnet_ids" {
   }
 }
 
+output "subnet_cidrs" {
+  value = {
+    vm = cidrsubnet(var.vcn_cidr, 1, 0)
+  }
+}

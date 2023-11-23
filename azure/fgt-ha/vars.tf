@@ -97,7 +97,7 @@ variable "fgt_sku" {
   type = map(string)
   default = {
     byol = "fortinet_fg-vm"
-    payg = "fortinet_fg-vm_payg_2022"
+    payg = "fortinet_fg-vm_payg_2023"
   }
 }
 
