@@ -24,7 +24,7 @@ resource "aws_network_interface" "ni-active-public" {
 resource "aws_network_interface" "ni-active-private" {
   subnet_id         = var.subnet_az1_ids["private"]
   security_groups   = [aws_security_group.nsg-vpc-sec-private.id]
-  private_ips       = local.fgt-2_ni_private_ips
+  private_ips       = local.fgt-1_ni_private_ips
   source_dest_check = false
   tags = {
     Name = "${var.prefix}-ni-active-private"
